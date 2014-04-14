@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="ImLazy.ControlPanel.Views.ActionsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:views="clr-namespace:ImLazy.ControlPanel.Views"
+             xmlns:util="clr-namespace:ImLazy.ControlPanel.Util"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <DataTemplate x:Key="ActionItemTemplate">
+            <Grid Margin="0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <views:AddinSelectView />
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="Add" Width="75" VerticalAlignment="Top" Command="{Binding Parent.NewActionCommand}"/>
+                    <Button Content="Delete" Width="75" VerticalAlignment="Top" Command="{Binding Parent.DeleteActionCommand}" CommandParameter="{Binding }"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+    	<TreeView
+    		x:Name="treeView"
+    		ItemsSource="{Binding }"
+    		ItemTemplate="{StaticResource ActionItemTemplate}"
+    		HorizontalContentAlignment="Stretch">
+		</TreeView>
+    </Grid>
+</UserControl>

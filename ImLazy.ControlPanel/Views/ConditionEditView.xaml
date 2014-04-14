@@ -1,0 +1,89 @@
+﻿<UserControl x:Class="ImLazy.ControlPanel.Views.ConditionEditView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:views="clr-namespace:ImLazy.ControlPanel.Views"
+             xmlns:util="clr-namespace:ImLazy.ControlPanel.Util"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <HierarchicalDataTemplate x:Key="ConditionViewModelTemplate" ItemsSource="{Binding SubConditions}">
+            <Grid Margin="0,5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <views:AddinSelectView />
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="Add" Width="75" VerticalAlignment="Top" Command="{Binding Parent.NewConditionLeafCommand}"/>
+                    <Button Content="Add Sub" Width="75" VerticalAlignment="Top" Command="{Binding Parent.NewConditionBranchCommand}"/>
+                    <Button Content="Delete" Width="75" VerticalAlignment="Top" Command="{Binding Parent.DeleteConditionCommand}" CommandParameter="{Binding }"/>
+                </StackPanel>
+            </Grid>
+        </HierarchicalDataTemplate>
+        <ControlTemplate x:Key="TreeViewItemControlTemplate1" TargetType="{x:Type TreeViewItem}">
+            <GroupBox Height="Auto" Width="Auto" Margin="0,5" HorizontalContentAlignment="Stretch" >
+                <GroupBox.Header>
+                    <!-- you bind MainView in Header="{Binding  Condition.MainView}" in GroupBox. An error will occur when reopen the window
+                     which contained this view -->
+                    <ContentPresenter Content="{Binding MainView}"/>
+                </GroupBox.Header>
+                <Grid>
+                    <ToggleButton Visibility="Collapsed" x:Name="Expander" ClickMode="Press" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" />
+                    <Border Visibility="Collapsed" x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                        <ContentPresenter x:Name="PART_Header" ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                    </Border>
+                    <ItemsPresenter x:Name="ItemsHost"/>
+                </Grid>
+            </GroupBox>
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsExpanded" Value="false">
+                    <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
+                </Trigger>
+                <Trigger Property="HasItems" Value="false">
+                    <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
+                </Trigger>
+                <Trigger Property="IsSelected" Value="true">
+                    <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                </Trigger>
+                <MultiTrigger>
+                    <MultiTrigger.Conditions>
+                        <Condition Property="IsSelected" Value="true"/>
+                        <Condition Property="IsSelectionActive" Value="false"/>
+                    </MultiTrigger.Conditions>
+                    <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
+                </MultiTrigger>
+                <Trigger Property="IsEnabled" Value="false">
+                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+        <util:ConditionItemContainerStyleSelector
+            x:Key="selector">
+            <util:ConditionItemContainerStyleSelector.NestedStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="Template" Value="{StaticResource TreeViewItemControlTemplate1}"/>
+                    <Setter Property="IsExpanded" Value="True"/>
+                </Style>
+            </util:ConditionItemContainerStyleSelector.NestedStyle>
+        </util:ConditionItemContainerStyleSelector>
+    </UserControl.Resources>
+    <Grid>
+        <GroupBox DataContext="{Binding}">
+            <GroupBox.Header>
+                <ContentPresenter Content="{Binding Condition.MainView}"/>
+            </GroupBox.Header>
+            <TreeView
+    		    x:Name="treeView"
+    		    ItemContainerStyleSelector="{StaticResource selector}"
+    		    ItemsSource="{Binding }"
+    		    ItemTemplate="{StaticResource ConditionViewModelTemplate}"
+    		    HorizontalContentAlignment="Stretch"
+                VerticalAlignment="Stretch" >
+            </TreeView>
+        </GroupBox>
+    </Grid>
+</UserControl>

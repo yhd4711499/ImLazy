@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{9E2CCB85-22B1-4AAE-9DC0-1D23E6156825}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ImLazy</RootNamespace>
+    <AssemblyName>ImLazy</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Addins\ConditionsConfigAddin.cs" />
+    <Compile Include="Addins\ConditionsConfigAddinView.xaml.cs">
+      <DependentUpon>ConditionsConfigAddinView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Data\ActionAddinInfo.cs" />
+    <Compile Include="Data\AddinInfo.cs" />
+    <Compile Include="Data\AddinInfoFactory.cs" />
+    <Compile Include="Data\ConditionCorp.cs" />
+    <Compile Include="Data\ConditionLeaf.cs" />
+    <Compile Include="Data\ConditionMode.cs" />
+    <Compile Include="Data\DataItemBase.cs" />
+    <Compile Include="Data\Folder.cs" />
+    <Compile Include="Data\IAddinInfo.cs" />
+    <Compile Include="Data\IBranch.cs" />
+    <Compile Include="Data\ICorp.cs" />
+    <Compile Include="Data\ILeaf.cs" />
+    <Compile Include="Data\ConditionBranch.cs" />
+    <Compile Include="Data\Rule.cs" />
+    <Compile Include="Data\RuleProperty.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RunTime\CacheMap.cs" />
+    <Compile Include="RunTime\AddinHost.cs" />
+    <Compile Include="RunTime\AppEnvironment.cs" />
+    <Compile Include="RunTime\ConfigNames.cs" />
+    <Compile Include="RunTime\DataStorage.cs" />
+    <Compile Include="RunTime\Engine.cs" />
+    <Compile Include="RunTime\Executor.cs" />
+    <Compile Include="RunTime\LogManager.cs" />
+    <Compile Include="System\ICloneable.cs" />
+    <Compile Include="Util\ConfigurationHelper.cs" />
+    <Compile Include="Util\DataCreationUtil.cs" />
+    <Compile Include="Util\EnumHelper.cs" />
+    <Compile Include="Util\MementoUtil.cs" />
+    <Compile Include="Util\ObjectCopier.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ImLazy.Contracts\ImLazy.Contracts.csproj">
+      <Project>{55146d10-f793-4b90-b07a-d796eb9af9f2}</Project>
+      <Name>ImLazy.Contracts</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Addins\ConditionsConfigAddinView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
