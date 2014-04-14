@@ -24,7 +24,7 @@ namespace ImLazy.ControlPanel.ViewModel
     public class MainViewModel : ViewModelBase
     {
         #region View models
-
+        // test1
         public ObservableCollection<RuleViewModel> Rules { get; private set; }
         public ObservableCollection<ConditionCorpViewModel> Conditions { get; private set; }
         public ObservableCollection<ActionViewModel> Actions { get; private set; }
