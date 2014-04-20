@@ -76,6 +76,7 @@
     <Compile Include="Util\ConfigurationHelper.cs" />
     <Compile Include="Util\DataCreationUtil.cs" />
     <Compile Include="Util\EnumHelper.cs" />
+    <Compile Include="Util\FolderUtil.cs" />
     <Compile Include="Util\MementoUtil.cs" />
     <Compile Include="Util\ObjectCopier.cs" />
   </ItemGroup>

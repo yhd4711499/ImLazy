@@ -1,9 +1,11 @@
-﻿using ImLazy.RunTime;
+﻿using System.Threading;
+using ImLazy.RunTime;
 using log4net;
 using System;
 using System.ServiceProcess;
 using System.Timers;
 using LogManager = ImLazy.RunTime.LogManager;
+using Timer = System.Timers.Timer;
 
 namespace ImLazy.Service
 {
@@ -54,6 +56,7 @@ namespace ImLazy.Service
 
 		protected override void OnStart(string[] args)
 		{
+            Thread.Sleep(10000);
             Log.Debug("Timer Starting...");
 		    if (TryInitTimer())
 		    {

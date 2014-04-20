@@ -20,28 +20,22 @@ namespace ImLazy.ControlPanel.Views
 
         private void btnInstall_Click(object sender, RoutedEventArgs e)
         {
-            var currentDirectory = Environment.CurrentDirectory;
-            Environment.CurrentDirectory = currentDirectory + "\\Service";
             var process = new Process
             {
                 StartInfo = {UseShellExecute = false, FileName = "Install.bat", CreateNoWindow = true}
             };
             process.Start();
             lblLog.Text = "安装成功";
-            Environment.CurrentDirectory = currentDirectory;
         }
 
         private void btnUninstall_Click(object sender, RoutedEventArgs e)
         {
-            var currentDirectory = Environment.CurrentDirectory;
-            Environment.CurrentDirectory = currentDirectory + "\\Service";
             var process = new Process
             {
                 StartInfo = {UseShellExecute = false, FileName = "Uninstall.bat", CreateNoWindow = true}
             };
             process.Start();
             lblLog.Text = "卸载成功";
-            Environment.CurrentDirectory = currentDirectory;
         }
 
         private void btnCheckStatus_Click(object sender, RoutedEventArgs e)

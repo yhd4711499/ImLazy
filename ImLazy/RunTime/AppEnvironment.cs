@@ -1,16 +1,21 @@
 ﻿using System;
 using System.IO;
+using ImLazy.Util;
+using Microsoft.Win32;
 
 namespace ImLazy.RunTime
 {
-    static class AppEnvironment
+    public static class AppEnvironment
     {
-        public static readonly String LocalStorageFolder = Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ImLazy");
+        public static string LocalStorageFolder { get; private set; }
 
-        static AppEnvironment()
+        public static void InitRegistry(string mainExeFilePath)
         {
-            Directory.CreateDirectory(LocalStorageFolder);
+// ReSharper disable PossibleNullReferenceException
+            var r = Registry.LocalMachine.OpenSubKey("SOFTWARE", true).CreateSubKey("Ornithopter").CreateSubKey("ImLazy");
+            r.SetValue("mainExePath", mainExeFilePath);
+// ReSharper restore PossibleNullReferenceException
+            LocalStorageFolder = mainExeFilePath;
         }
     }
 }

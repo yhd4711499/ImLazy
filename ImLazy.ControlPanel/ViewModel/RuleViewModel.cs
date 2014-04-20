@@ -10,7 +10,7 @@ using System.Windows;
 namespace ImLazy.ControlPanel.ViewModel
 {
     /// <summary>
-    /// To hold the Rule data in Folder. It contains a RuleNeutualViewModel and it's property
+    /// To hold the Rule data in Folder.
     /// </summary>
     public class RuleViewModel : ViewModelBase
     {

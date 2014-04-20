@@ -10,6 +10,7 @@ namespace ImLazy.RunTime
 {
     public class Executor
     {
+        private readonly object _lockObj = new object();
         private readonly CacheMap<Func<string, SerializableDictionary<string, object>, bool>> _conditionCacheMap;
         private readonly CacheMap<Action<string, SerializableDictionary<string, object>>> _actionCacheMap;
         private readonly CacheMap<Rule> _ruleCacheMap;
@@ -59,7 +60,10 @@ namespace ImLazy.RunTime
 
         public void Execute(IEnumerable<Folder> folders)
         {
-            folders.ForEach(Do);
+            lock (_lockObj)
+            {
+                folders.ForEach(Do);
+            }
         }
 
         private static readonly ILog Log = LogManager.GetLogger(typeof(Executor));

@@ -14,6 +14,7 @@ namespace ImLazy.RunTime
     /// </summary>
     public class AddinHost
     {
+        private static readonly object lockObj = new object();
         private static readonly ILog Log = LogManager.GetLogger(typeof(AddinHost));
 
         #region Singleton
@@ -56,46 +57,50 @@ namespace ImLazy.RunTime
 
         static void LoadAllAddins()
         {
-            #region Load addins
+            lock (lockObj)
+            {
+            
+                #region Load addins
 
-            // Load addins from \Addins folder and this (ImLazy.dll) assembly
-            Log.Info("Loading addins from '\\Addins' subfolder ...");
-            var catalog = new AggregateCatalog();
-            catalog.Catalogs.Add(new DirectoryCatalog("Addins"));
-            catalog.Catalogs.Add(new AssemblyCatalog(typeof (AddinHost).Assembly));
-            var container = new CompositionContainer(catalog);
-            container.ComposeParts(_instance);
+                // Load addins from \Addins folder and this (ImLazy.dll) assembly
+                Log.Info("Loading addins from '\\Addins' subfolder ...");
+                var catalog = new AggregateCatalog();
+                catalog.Catalogs.Add(new DirectoryCatalog("Addins"));
+                catalog.Catalogs.Add(new AssemblyCatalog(typeof (AddinHost).Assembly));
+                var container = new CompositionContainer(catalog);
+                container.ComposeParts(_instance);
 
-            #endregion
+                #endregion
 
 
-            #region Print loaded addins to log
-            var f = new Func<IEnumerable<IAddinMetadata>, String>(c =>
-                {
-                    var addinMetadatas = c as IAddinMetadata[] ?? c.ToArray();
-                    if (addinMetadatas.Count() != 0)
+                #region Print loaded addins to log
+                var f = new Func<IEnumerable<IAddinMetadata>, String>(c =>
                     {
-                        var sb = new StringBuilder("");
-                        foreach (var item in addinMetadatas)
+                        var addinMetadatas = c as IAddinMetadata[] ?? c.ToArray();
+                        if (addinMetadatas.Count() != 0)
                         {
-                            sb.Append("\t\t");
-                            sb.AppendLine(item.Type.Name);
+                            var sb = new StringBuilder("");
+                            foreach (var item in addinMetadatas)
+                            {
+                                sb.Append("\t\t");
+                                sb.AppendLine(item.Type.Name);
+                            }
+                            return sb.ToString();
                         }
-                        return sb.ToString();
-                    }
-                    return String.Empty;
-                });
-            Log.InfoFormat("Load addins finished.\n\tConditionAddins has {0}\n{1}\tActionAddins has {2}\n{3}\tOtherddins has {4}\n{5}",
-                _instance.ConditionAddins.Count(),
-                f(_instance.ConditionAddins.Select(_=>_.Metadata)),
-                _instance.ActionAddins.Count(),
-                f(_instance.ActionAddins.Select(_=>_.Metadata)),
-                _instance.OtherAddins.Count(),
-                f(_instance.OtherAddins.Select(_ => _.Metadata)));
-            #endregion
+                        return String.Empty;
+                    });
+                Log.InfoFormat("Load addins finished.\n\tConditionAddins has {0}\n{1}\tActionAddins has {2}\n{3}\tOtherddins has {4}\n{5}",
+                    _instance.ConditionAddins.Count(),
+                    f(_instance.ConditionAddins.Select(_=>_.Metadata)),
+                    _instance.ActionAddins.Count(),
+                    f(_instance.ActionAddins.Select(_=>_.Metadata)),
+                    _instance.OtherAddins.Count(),
+                    f(_instance.OtherAddins.Select(_ => _.Metadata)));
+                #endregion
 
 
-            _instance.BuildCache();
+                _instance.BuildCache();
+            }
         }
 
         public void BuildCache()

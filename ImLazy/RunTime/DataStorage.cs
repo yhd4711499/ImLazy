@@ -14,6 +14,7 @@ namespace ImLazy.RunTime
     /// </summary>
     public class DataStorage
     {
+        private static readonly object LockObj = new object();
         //private static readonly ILog Log = LogManager.GetLogger(typeof (DataStorage));
         private static readonly String FilePath = Path.Combine(AppEnvironment.LocalStorageFolder, "data.xml");
 
@@ -25,12 +26,18 @@ namespace ImLazy.RunTime
         {
             get
             {
-                if (_instance == null)
+                lock (LockObj)
                 {
-                    _instance = DataCreationUtil.TryCreateFromFile<DataStorage>(FilePath);
-                    _instance.Rules.ForEach(_ => CacheMap<object>.RuleCacheMap.Put(_.Key,_.Value));
+                    if (_instance == null)
+                    {
+                        _instance = DataCreationUtil.TryCreateFromFile<DataStorage>(FilePath);
+                    }
+                    if (_instance != null)
+                        _instance.Rules.ForEach(_ => CacheMap<object>.RuleCacheMap.Put(_.Key, _.Value));
+                    else
+                        _instance = DataStorage.Create();
                 }
-                return _instance ?? (_instance = DataStorage.Create());
+                return _instance;
             }
         }
 

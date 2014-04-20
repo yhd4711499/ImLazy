@@ -1,4 +1,7 @@
-﻿using ImLazy.ControlPanel.ViewModel;
+﻿using System.IO;
+using System.Reflection;
+using ImLazy.ControlPanel.ViewModel;
+using ImLazy.RunTime;
 using log4net;
 using System.Windows;
 using LogManager = ImLazy.RunTime.LogManager;
@@ -10,7 +13,7 @@ namespace ImLazy.ControlPanel
 	/// </summary>
 	public partial class App : Application
 	{
-        static ILog Log = LogManager.GetLogger(typeof(App));
+        //static ILog Log = LogManager.GetLogger(typeof(App));
         private static ViewModelLocator _locator;
         public static ViewModelLocator Locator
         {
@@ -25,12 +28,13 @@ namespace ImLazy.ControlPanel
         }
         static App()
         {
-            Log.Info("App started.");
+            //Log.Info("App started.");
+            AppEnvironment.InitRegistry(System.AppDomain.CurrentDomain.BaseDirectory);
         }
 
         ~App()
         {
-            Log.Info("App finished.");
+            //Log.Info("App finished.");
         }
 	}
 }
