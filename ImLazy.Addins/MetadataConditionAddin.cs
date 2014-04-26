@@ -44,14 +44,14 @@ namespace ImLazy.Addins
         /// </summary>
         static readonly List<ConditionOpeartion> Opeartions = new List<ConditionOpeartion>
         {
-            GetOperation<string>("equals",(a,b)=>a.ToString().Equals(b.ToString())),
+            GetOperation<string>("equals",(a,b)=>a.ToString().Equals(b.ToString(), StringComparison.InvariantCultureIgnoreCase)),
             GetOperation<string>("contains",(a,b)=>a.ToString().Contains(b.ToString())),
-            GetOperation<string>("starts with",(a,b)=>a.ToString().StartsWith(b.ToString())),
-            GetOperation<string>("ends with",(a,b)=>a.ToString().EndsWith(b.ToString())),
-            GetOperation<string>("not equals",(a,b)=>!a.ToString().Equals(b.ToString())),
+            GetOperation<string>("starts with",(a,b)=>a.ToString().StartsWith(b.ToString(), StringComparison.InvariantCultureIgnoreCase)),
+            GetOperation<string>("ends with",(a,b)=>a.ToString().EndsWith(b.ToString(), StringComparison.InvariantCultureIgnoreCase)),
+            GetOperation<string>("not equals",(a,b)=>!a.ToString().Equals(b.ToString(), StringComparison.InvariantCultureIgnoreCase)),
             GetOperation<string>("not contains",(a,b)=>!a.ToString().Contains(b.ToString())),
-            GetOperation<string>("not starts with",(a,b)=>!a.ToString().StartsWith(b.ToString())),
-            GetOperation<string>("not ends with",(a,b)=>!a.ToString().EndsWith(b.ToString())),
+            GetOperation<string>("not starts with",(a,b)=>!a.ToString().StartsWith(b.ToString(), StringComparison.InvariantCultureIgnoreCase)),
+            GetOperation<string>("not ends with",(a,b)=>!a.ToString().EndsWith(b.ToString(), StringComparison.InvariantCultureIgnoreCase)),
             GetOperation<long>(">",(a,b)=>(long)a > (long)b),
             GetOperation<long>(">=",(a,b)=>(long)a >= (long)b),
             GetOperation<long>("=",(a,b)=>(long)a == (long)b),
@@ -62,11 +62,11 @@ namespace ImLazy.Addins
 
         static MetadataConditionAddin()
         {
-            Log.Info("Initiating ...");
+            Log.Debug("Initiating ...");
             try
             {
                 LoadAllProperties(typeof(SystemProperties));
-                Log.Info("Sorting system properties...");
+                Log.Debug("Sorting system properties...");
                 Properties.Sort((a, b) => 
                 {
                     var indexA = PriorityMap.FindIndex(_ => _.Equals(a.PropertyKey));
@@ -77,7 +77,7 @@ namespace ImLazy.Addins
                         return -1;
                     return 1;
                 });
-                Log.Info("MetadataConditionAddin Initiated.");
+                Log.Debug("MetadataConditionAddin Initiated.");
             }
             catch (Exception ex)
             {
@@ -87,7 +87,7 @@ namespace ImLazy.Addins
 
         static void LoadAllProperties(Type root)
         {
-            Log.InfoFormat("Loading properties in {0}...", root);
+            Log.DebugFormat("Loading properties in {0}...", root);
             foreach (var item in root.GetNestedTypes())
             {
                 foreach (var key in item.GetProperties())
@@ -103,6 +103,10 @@ namespace ImLazy.Addins
         public const string TargetProperty = "TargetProperty";
         public const string TargetType = "TargetType";
         #endregion
+
+#region Constaints
+        private const char Spliter = ',';
+#endregion
 
         #region Utils
         /// <summary>
@@ -127,10 +131,10 @@ namespace ImLazy.Addins
         #region API
         public bool IsMatch(string filePath, SerializableDictionary<string, object> arg)
         {
-            Log.Info("Begin match.");
+            Log.Debug("Begin match.");
 
             var symbol = arg.TryGetValue<string>(ConfigNames.Symbol);
-            var matchObject = arg.TryGetValue(ConfigNames.TargetObject);
+            var matchObjects = arg.TryGetValue(ConfigNames.TargetObject);
             var targetProperty = arg.TryGetValue<string>(TargetProperty);
 
             // get property object
@@ -159,11 +163,13 @@ namespace ImLazy.Addins
                 Log.WarnFormat("The value of [{0}] in [{1}] is null!", targetProperty, filePath);
                 return false;
             }
-            // dose the value matcth the given matchObject
-            Log.DebugFormat("Matching {0} {1} {2}", value, operationCache.Name, matchObject);
-            var result = operationCache.IsMatch(value, matchObject);
 
-            Log.InfoFormat("Done matching : {0}", result);
+            // dose the value matcth any of the given matchObjects ?
+            var matchStrings = ((string) matchObjects).Split(Spliter);
+            Log.DebugFormat("Matching {0} {1} [{2}]", value, operationCache.Name, String.Join(",", matchStrings));
+            var result = matchStrings.Any(_ => operationCache.IsMatch(value, _)); //operationCache.IsMatch(value, matchObjects);
+
+            Log.DebugFormat("Done matching : {0}", result);
             return result;
 
         }

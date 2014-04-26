@@ -31,15 +31,15 @@ namespace ImLazy.RunTime
 
         static AddinHost()
         {
-            Log.Info("AddinHost initiating...");
+            Log.Debug("AddinHost initiating...");
             _instance.LoadAddins();
             _instance.BuildCache();
-            Log.Info("AddinHost initiated.");
+            Log.Debug("AddinHost initiated.");
         }
 
         ~AddinHost()
         {
-            Log.Info("AddinHost finalized.");
+            Log.Debug("AddinHost finalized.");
         }
 
         #region Addins
@@ -64,7 +64,7 @@ namespace ImLazy.RunTime
             lock (LockObj)
             {
                 #region Load addins
-                Log.Info("Loading addins from '\\Addins' subfolder and self (AddinHost.dll)...");
+                Log.Debug("Loading addins from '\\Addins' subfolder and self (AddinHost.dll)...");
                 var catalog = new AggregateCatalog();
                 catalog.Catalogs.Add(new DirectoryCatalog("Addins"));
                 catalog.Catalogs.Add(new AssemblyCatalog(typeof (AddinHost).Assembly));
@@ -78,7 +78,7 @@ namespace ImLazy.RunTime
                     var addinMetadatas = c as IAddinMetadata[] ?? c.ToArray();
                     return !addinMetadatas.Any() ? String.Empty: String.Join("\n\t\t", addinMetadatas.Select(_=>_.Type.Name));
                 });
-                Log.InfoFormat("Load addins finished.\n\tConditionAddins has {0}\n\t\t{1}\n\tActionAddins has {2}\n\t\t{3}\n\tOtherddins has {4}\n\t\t{5}",
+                Log.DebugFormat("Load addins finished.\n\tConditionAddins has {0}\n\t\t{1}\n\tActionAddins has {2}\n\t\t{3}\n\tOtherddins has {4}\n\t\t{5}",
                     ConditionAddins.Count(),
                     f(ConditionAddins.Select(_ => _.Metadata)),
                     ActionAddins.Count(),

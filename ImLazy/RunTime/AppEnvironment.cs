@@ -12,8 +12,7 @@ namespace ImLazy.RunTime
         {
             try
             {
-                var r = Registry.LocalMachine.OpenSubKey("SOFTWARE", false).OpenSubKey("Ornithopter").OpenSubKey("ImLazy");
-                LocalStorageFolder = (string)r.GetValue("mainExePath");
+                ReadRegistry();
 
             }
             catch (Exception ex)
@@ -29,11 +28,32 @@ namespace ImLazy.RunTime
             }
         }
 
+        private static void ReadRegistry()
+        {
+            var r = Registry.LocalMachine.OpenSubKey("SOFTWARE", false).OpenSubKey("Ornithopter").OpenSubKey("ImLazy");
+            LocalStorageFolder = (string)r.GetValue("mainExePath");
+        }
+
         public static void InitRegistry(string mainExeFilePath)
         {
-            var r = Registry.LocalMachine.OpenSubKey("SOFTWARE", true).CreateSubKey("Ornithopter").CreateSubKey("ImLazy");
-            r.SetValue("mainExePath", mainExeFilePath);
-            LocalStorageFolder = mainExeFilePath;
+            try
+            {
+                ReadRegistry();
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    var r = Registry.LocalMachine.OpenSubKey("SOFTWARE", true).CreateSubKey("Ornithopter").CreateSubKey("ImLazy");
+                    r.SetValue("mainExePath", mainExeFilePath);
+                    LocalStorageFolder = mainExeFilePath;
+                }
+                catch (Exception)
+                {
+                }
+                throw;
+            }
+            
         }
     }
     // ReSharper restore PossibleNullReferenceException

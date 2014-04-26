@@ -115,6 +115,7 @@ namespace ImLazy.ControlPanel.ViewModel
                                };
                                if (w.ShowDialog() == true)
                                {
+                                   SetMemento(memento);
                                    FolderParent.SaveRuleCommand.Execute(ruleVm);
                                }
                            }));
@@ -233,6 +234,7 @@ namespace ImLazy.ControlPanel.ViewModel
             var memento = mementoObj as Memento;
             if (memento == null) throw new ArgumentNullException("memento");
             Property = memento.Property;
+            Rule = memento.Rule;
         }
 
         private class Memento

@@ -15,14 +15,14 @@ namespace ImLazy.RunTime
         }
         static void InitLogger()
         {
-            var fa = new FileAppender
+/*            var fa = new FileAppender
             {
                 File = Path.Combine(AppEnvironment.LocalStorageFolder, "log.log"),
                 Layout = new PatternLayout("%d[%t]%-5p %c [%x] - %m%n")
             };
             fa.ActivateOptions();
             BasicConfigurator.Configure(fa
-                , (new ConsoleAppender { Layout = new PatternLayout("%d[%t]%-5p %c [%x] - %m%n") }));
+                , (new ConsoleAppender { Layout = new PatternLayout("%d[%t]%-5p %c [%x] - %m%n") }));*/
         }
 
         public static ILog GetLogger(Type type)

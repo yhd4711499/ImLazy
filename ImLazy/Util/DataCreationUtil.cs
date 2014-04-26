@@ -25,7 +25,7 @@ namespace ImLazy.Util
             var result = default(T);
             try
             {
-                Log.InfoFormat("Creating instance of {0} from path: {1}", typeof(T), filePath);
+                Log.DebugFormat("Creating instance of {0} from path: {1}", typeof(T), filePath);
                 if (File.Exists(filePath))
                 {
                     using (var stream = new StreamReader(filePath))
@@ -33,11 +33,11 @@ namespace ImLazy.Util
                         var xs = new XmlSerializer(typeof(T));
                         result = (T)xs.Deserialize(stream);
                     }
-                    Log.Info("Creating instance finished.");
+                    Log.Debug("Creating instance finished.");
                 }
                 else
                 {
-                    Log.Info("File not exist. Return null instead.");
+                    Log.Debug("File not exist. Return null instead.");
                 }
             }
             catch (Exception ex)
@@ -58,13 +58,13 @@ namespace ImLazy.Util
         {
             try
             {
-                Log.InfoFormat("Saving instance of {0} to path: {1}", typeof(T), filePath);
+                Log.DebugFormat("Saving instance of {0} to path: {1}", typeof(T), filePath);
                 using (var stream = new StreamWriter(filePath, false))
                 {
                     var xs = new XmlSerializer(typeof(T));
                     xs.Serialize(stream, data);
                 }
-                Log.Info("Saving instance finished.");
+                Log.Debug("Saving instance finished.");
             }
             catch (Exception ex)
             {

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 
@@ -21,6 +22,13 @@ namespace ImLazy.Util
                 if (!Directory.Exists(acc.ToString()))
                     Directory.CreateDirectory(acc.ToString());
             }
+        }
+
+        public static void ToFolder(string filePath, string targetPath,Action<string,string> action)
+        {
+            var name = Path.GetFileName(filePath);
+            var fullPath = Path.Combine(targetPath, name);
+            action(filePath, fullPath);
         }
     }
 }
