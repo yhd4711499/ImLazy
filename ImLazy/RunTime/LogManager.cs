@@ -1,38 +1,36 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using log4net;
-using log4net.Appender;
 using log4net.Config;
-using log4net.Layout;
 
 namespace ImLazy.RunTime
 {
     public static class LogManager
     {
+        private static readonly Dictionary<Type, ILog> CachedLogs; 
         static LogManager()
         {
+            CachedLogs = new Dictionary<Type, ILog>();
             InitLogger();
         }
         static void InitLogger()
         {
-/*            var fa = new FileAppender
-            {
-                File = Path.Combine(AppEnvironment.LocalStorageFolder, "log.log"),
-                Layout = new PatternLayout("%d[%t]%-5p %c [%x] - %m%n")
-            };
-            fa.ActivateOptions();
-            BasicConfigurator.Configure(fa
-                , (new ConsoleAppender { Layout = new PatternLayout("%d[%t]%-5p %c [%x] - %m%n") }));*/
+            XmlConfigurator.Configure();
         }
 
         public static ILog GetLogger(Type type)
         {
-            return log4net.LogManager.GetLogger(type);
+            ILog log;
+            if (CachedLogs.TryGetValue(type, out log))
+                return log;
+            log = log4net.LogManager.GetLogger(type);
+            CachedLogs[type] = log;
+            return log;
         }
 
-        public static ILog GetLogger(String name)
+        public static ILog GetLogger(this object obj)
         {
-            return log4net.LogManager.GetLogger(name);
+            return GetLogger(obj.GetType());
         }
     }
 }

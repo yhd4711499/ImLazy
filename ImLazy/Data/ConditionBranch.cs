@@ -20,6 +20,7 @@ namespace ImLazy.Data
             AddinType = typeof(ConditionsConfigAddin).FullName;
         }
 
+// ReSharper disable once MemberCanBePrivate.Global
         public List<ConditionCorp> SubConditions { get; set; }
 
         public override void Save(SerializableDictionary<string, object> config)

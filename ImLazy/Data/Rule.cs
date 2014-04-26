@@ -14,6 +14,7 @@ namespace ImLazy.Data
 // ReSharper disable MemberCanBePrivate.Global
         public ConditionBranch ConditionBranch { get; set; }
 // ReSharper restore MemberCanBePrivate.Global
+// ReSharper disable once MemberCanBePrivate.Global
         public List<ActionAddinInfo> Actions { get; set; }
 
         /// <summary>

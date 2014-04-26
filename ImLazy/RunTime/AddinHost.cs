@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Linq;
-using System.Text;
 using ImLazy.Contracts;
 using log4net;
 
@@ -43,23 +42,25 @@ namespace ImLazy.RunTime
         }
 
         #region Addins
-
+        // ReSharper disable UnusedAutoPropertyAccessor.Local
         [ImportMany]
         public IEnumerable<Lazy<IActionAddin, IActionAddinMetadata>> ActionAddins { get; private set; }
 
         [ImportMany]
+
         public IEnumerable<Lazy<IConditionAddin, IConditionAddinMetadata>> ConditionAddins { get; private set; }
+
 
         [ImportMany]
         private IEnumerable<Lazy<IAddin, IAddinMetadata>> OtherAddins { get; set; }
-
+        // ReSharper restore UnusedAutoPropertyAccessor.Local
         #endregion
 
         /// <summary>
         /// Load addins from \Addins folder and this (ImLazy.dll) assembly
         /// <para>TS:true</para>
         /// </summary>
-        public void LoadAddins()
+        private void LoadAddins()
         {
             lock (LockObj)
             {

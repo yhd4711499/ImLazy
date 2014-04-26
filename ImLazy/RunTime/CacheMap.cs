@@ -6,13 +6,18 @@ using ImLazy.Data;
 namespace ImLazy.RunTime
 {
     /// <summary>
-    /// 缓存，使用<see cref="CacheMap{object}"/>来获取静态属性
+    /// 缓存，使用
+    /// <see>
+    ///     <cref>CacheMap{object}</cref>
+    /// </see>
+    ///     来获取静态属性
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class CacheMap<T> where T:class 
     {
         #region Singleton
 
+// ReSharper disable StaticFieldInGenericType
         private static readonly CacheMap<Func<string, SerializableDictionary<string, object>, bool>> _conditionCacheMap = new CacheMap<Func<string, SerializableDictionary<string, object>, bool>>();
 
         /// <summary>
@@ -52,6 +57,7 @@ namespace ImLazy.RunTime
         {
             get { return _viewCreatorCacheMap; }
         }
+// ReSharper restore StaticFieldInGenericType
         #endregion
 
         private readonly Dictionary<string, T> _cache = new Dictionary<string, T>();

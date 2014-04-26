@@ -4,8 +4,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:views="clr-namespace:ImLazy.ControlPanel.Views"
-    xmlns:util="clr-namespace:ImLazy.ControlPanel.Util"
-    xmlns:vm="clr-namespace:ImLazy.ControlPanel.ViewModel"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" xmlns:Behaviors="clr-namespace:ImLazy.ControlPanel.Behaviors"
     x:Class="ImLazy.ControlPanel.Views.RuleDetailView" 
     mc:Ignorable="d" 

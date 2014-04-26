@@ -1,6 +1,6 @@
-﻿using ImLazy.ControlPanel.ViewModel;
+﻿using System;
+using ImLazy.ControlPanel.ViewModel;
 using ImLazy.RunTime;
-using System.Windows;
 using log4net;
 using LogManager = ImLazy.RunTime.LogManager;
 
@@ -9,7 +9,7 @@ namespace ImLazy.ControlPanel
 	/// <summary>
 	/// App.xaml 的交互逻辑
 	/// </summary>
-	public partial class App : Application
+	public partial class App
 	{
         static readonly ILog Log = LogManager.GetLogger(typeof(App));
         private static ViewModelLocator _locator;
@@ -20,7 +20,7 @@ namespace ImLazy.ControlPanel
         static App()
         {
             Log.Info("Controal panel started.");
-            AppEnvironment.InitRegistry(System.AppDomain.CurrentDomain.BaseDirectory);
+            AppEnvironment.InitRegistry(AppDomain.CurrentDomain.BaseDirectory);
         }
 
         ~App()

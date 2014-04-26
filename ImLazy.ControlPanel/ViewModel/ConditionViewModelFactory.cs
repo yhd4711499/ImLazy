@@ -8,10 +8,9 @@ namespace ImLazy.ControlPanel.ViewModel
         {
             if(corp is ConditionBranch)
                 return new ConditionBranchViewModel(corp as ConditionBranch, parent);
-            else if(corp is ConditionLeaf)
+            if(corp is ConditionLeaf)
                 return new ConditionLeafViewModel(corp as ConditionLeaf, parent);
-            else
-                return new ConditionCorpViewModel(corp, parent);
+            return new ConditionCorpViewModel(corp, parent);
         }
     }
 }

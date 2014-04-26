@@ -25,7 +25,7 @@ namespace ImLazy.ControlPanel.Views
                 StartInfo = {UseShellExecute = false, FileName = "Install.bat", CreateNoWindow = true}
             };
             process.Start();
-            lblLog.Text = "安装成功";
+            LblLog.Text = "安装成功";
         }
 
         private void btnUninstall_Click(object sender, RoutedEventArgs e)
@@ -35,13 +35,13 @@ namespace ImLazy.ControlPanel.Views
                 StartInfo = {UseShellExecute = false, FileName = "Uninstall.bat", CreateNoWindow = true}
             };
             process.Start();
-            lblLog.Text = "卸载成功";
+            LblLog.Text = "卸载成功";
         }
 
         private void btnCheckStatus_Click(object sender, RoutedEventArgs e)
         {
             var serviceController = new ServiceController("ServiceTest");
-            lblCheckStatus.Text = serviceController.Status.ToString();
+            LblCheckStatus.Text = serviceController.Status.ToString();
         }
 
         private void btnStart_Click(object sender, RoutedEventArgs e)
@@ -55,11 +55,11 @@ namespace ImLazy.ControlPanel.Views
                     serviceController.Refresh();
                     Thread.Sleep(100);
                 }
-                lblStatus.Text = "服务已启动";
+                LblStatus.Text = "服务已启动";
             }
             else
             {
-                lblStatus.Text = "此时无法启动服务，请稍后重试";
+                LblStatus.Text = "此时无法启动服务，请稍后重试";
             }
 
         }
@@ -75,10 +75,10 @@ namespace ImLazy.ControlPanel.Views
                     serviceController.Refresh();
                     Thread.Sleep(100);
                 }
-                lblStatus.Text = "服务已停止";
+                LblStatus.Text = "服务已停止";
             }
             else
-                lblStatus.Text = "服务不能停止";
+                LblStatus.Text = "服务不能停止";
         }
 
         private void btnPauseContinue_Click(object sender, RoutedEventArgs e)
@@ -89,20 +89,20 @@ namespace ImLazy.ControlPanel.Views
                 if (serviceController.Status == ServiceControllerStatus.Running)
                 {
                     serviceController.Pause();
-                    lblStatus.Text = "服务已暂停";
+                    LblStatus.Text = "服务已暂停";
                 }
                 else if (serviceController.Status == ServiceControllerStatus.Paused)
                 {
                     serviceController.Continue();
-                    lblStatus.Text = "服务已继续";
+                    LblStatus.Text = "服务已继续";
                 }
                 else
                 {
-                    lblStatus.Text = "服务未处于暂停和启动状态";
+                    LblStatus.Text = "服务未处于暂停和启动状态";
                 }
             }
             else
-                lblStatus.Text = "服务不能暂停";
+                LblStatus.Text = "服务不能暂停";
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

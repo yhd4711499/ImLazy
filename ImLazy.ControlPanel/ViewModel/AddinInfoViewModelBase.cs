@@ -51,6 +51,7 @@ namespace ImLazy.ControlPanel.ViewModel
 
     public abstract class AddinInfoViewModelBase : ViewModelBase
     {
+// ReSharper disable once MemberCanBeProtected.Global
         public ViewModelBase Parent { get; protected set; }
 
         private IEditView _mainView;

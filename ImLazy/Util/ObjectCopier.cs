@@ -5,15 +5,15 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ImLazy.Util
 {
-    /// <span class="code-SummaryComment"><summary></span>
+    /// <span class="code-SummaryComment"></span>
     /// Provides a method for performing a deep copy of an object.
     /// Binary Serialization is used to perform the copy.
-    /// <span class="code-SummaryComment"></summary></span>
+    /// <span class="code-SummaryComment"></span>
     public static class ObjectCopier
     {
-        /// <span class="code-SummaryComment"><summary></span>
+        /// <span class="code-SummaryComment"><summary/></span>
         /// Perform a deep Copy of the object.
-        /// <span class="code-SummaryComment"></summary></span>
+        /// <span class="code-SummaryComment"></span>
         /// <span class="code-SummaryComment"><typeparam name="T">The type of object being copied.</typeparam></span>
         /// <span class="code-SummaryComment"><param name="source">The object instance to copy.</param></span>
         /// <span class="code-SummaryComment"><returns>The copied object.</returns></span>
@@ -25,7 +25,7 @@ namespace ImLazy.Util
             }
 
             // Don't serialize a null object, simply return the default for that object
-            if (Object.ReferenceEquals(source, null))
+            if (ReferenceEquals(source, null))
             {
                 return default(T);
             }

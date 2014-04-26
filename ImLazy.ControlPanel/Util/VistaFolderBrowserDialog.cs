@@ -139,18 +139,9 @@ namespace ImLazy.ControlPanel.Util
         /// <summary>
         /// Displays the folder browser dialog.
         /// </summary>
-        /// <returns>If the user clicks the OK button, <see langword="true" /> is returned; otherwise, <see langword="false" />.</returns>
-        public bool? ShowDialog()
-        {
-            return ShowDialog(null);
-        }
-
-        /// <summary>
-        /// Displays the folder browser dialog.
-        /// </summary>
         /// <param name="owner">Handle to the window that owns the dialog.</param>
         /// <returns>If the user clicks the OK button, <see langword="true" /> is returned; otherwise, <see langword="false" />.</returns>
-        public bool? ShowDialog(Window owner)
+        public bool? ShowDialog(Window owner = null)
         {
             var ownerHandle = owner == null ? NativeMethods.GetActiveWindow() : new WindowInteropHelper(owner).Handle;
             return IsVistaFolderDialogSupported ? RunDialog(ownerHandle) : RunDialogDownlevel(ownerHandle);
@@ -198,13 +189,16 @@ namespace ImLazy.ControlPanel.Util
             }
             try
             {
-                var info = new NativeMethods.BROWSEINFO();
-                info.hwndOwner = owner;
-                info.lpfn = BrowseCallbackProc;
-                info.lpszTitle = Description;
-                info.pidlRoot = rootItemIdList;
-                info.pszDisplayName = new string('\0', 260);
-                info.ulFlags = NativeMethods.BrowseInfoFlags.NewDialogStyle | NativeMethods.BrowseInfoFlags.ReturnOnlyFsDirs;
+                var info = new NativeMethods.BROWSEINFO
+                {
+                    hwndOwner = owner,
+                    lpfn = BrowseCallbackProc,
+                    lpszTitle = Description,
+                    pidlRoot = rootItemIdList,
+                    pszDisplayName = new string('\0', 260),
+                    ulFlags =
+                        NativeMethods.BrowseInfoFlags.NewDialogStyle | NativeMethods.BrowseInfoFlags.ReturnOnlyFsDirs
+                };
                 if( !ShowNewFolderButton )
                     info.ulFlags |= NativeMethods.BrowseInfoFlags.NoNewFolderButton;
                 resultItemIdList = NativeMethods.SHBrowseForFolder(ref info);
@@ -220,16 +214,12 @@ namespace ImLazy.ControlPanel.Util
             }
             finally
             {
-                if( rootItemIdList != null )
                 {
                     var malloc = NativeMethods.SHGetMalloc();
                     malloc.Free(rootItemIdList);
                     Marshal.ReleaseComObject(malloc);
                 }
-                if( resultItemIdList != null )
-                {
-                    Marshal.FreeCoTaskMem(resultItemIdList);
-                }
+                Marshal.FreeCoTaskMem(resultItemIdList);
             }
         }
 

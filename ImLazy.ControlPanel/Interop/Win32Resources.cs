@@ -8,10 +8,10 @@ using System.Text;
 
 namespace ImLazy.ControlPanel.Interop
 {
-    class Win32Resources : IDisposable
+    sealed class Win32Resources : IDisposable
     {
-        private SafeModuleHandle _moduleHandle;
-        private const int _bufferSize = 500;
+        private readonly SafeModuleHandle _moduleHandle;
+        private const int BufferSize = 500;
 
         public Win32Resources(string module)
         {
@@ -24,7 +24,7 @@ namespace ImLazy.ControlPanel.Interop
         {
             CheckDisposed();
 
-            var buffer = new StringBuilder(_bufferSize);
+            var buffer = new StringBuilder(BufferSize);
             if( NativeMethods.LoadString(_moduleHandle, id, buffer, buffer.Capacity + 1) == 0 )
                 throw new Win32Exception(Marshal.GetLastWin32Error());
             return buffer.ToString();
@@ -38,7 +38,7 @@ namespace ImLazy.ControlPanel.Interop
             var source = LoadString(id);
 
             // For some reason FORMAT_MESSAGE_FROM_HMODULE doesn't work so we use this way.
-            var flags = NativeMethods.FormatMessageFlags.FORMAT_MESSAGE_ALLOCATE_BUFFER | NativeMethods.FormatMessageFlags.FORMAT_MESSAGE_ARGUMENT_ARRAY | NativeMethods.FormatMessageFlags.FORMAT_MESSAGE_FROM_STRING;
+            const NativeMethods.FormatMessageFlags flags = NativeMethods.FormatMessageFlags.FORMAT_MESSAGE_ALLOCATE_BUFFER | NativeMethods.FormatMessageFlags.FORMAT_MESSAGE_ARGUMENT_ARRAY | NativeMethods.FormatMessageFlags.FORMAT_MESSAGE_FROM_STRING;
 
             var sourcePtr = Marshal.StringToHGlobalAuto(source);
             try
@@ -58,7 +58,7 @@ namespace ImLazy.ControlPanel.Interop
             return result;
         }
 
-        protected virtual void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if( disposing )
                 _moduleHandle.Dispose();
@@ -77,6 +77,7 @@ namespace ImLazy.ControlPanel.Interop
         public void Dispose()
         {
             Dispose(true);
+// ReSharper disable once GCSuppressFinalizeForTypeWithoutDestructor
             GC.SuppressFinalize(this);
         }
 

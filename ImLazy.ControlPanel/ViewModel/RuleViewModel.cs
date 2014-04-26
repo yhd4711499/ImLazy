@@ -176,7 +176,7 @@ namespace ImLazy.ControlPanel.ViewModel
         {
             Rule = rule;
             Actions = new ObservableCollection<ActionViewModel>();
-            Conditions = new ObservableCollection<ConditionCorpViewModel>()
+            Conditions = new ObservableCollection<ConditionCorpViewModel>
             {
                 new ConditionBranchViewModel(rule.ConditionBranch, null)
             };
@@ -232,7 +232,7 @@ namespace ImLazy.ControlPanel.ViewModel
         private void SetMemento(object mementoObj)
         {
             var memento = mementoObj as Memento;
-            if (memento == null) throw new ArgumentNullException("memento");
+            if (memento == null) throw new ArgumentNullException("mementoObj");
             Property = memento.Property;
             Rule = memento.Rule;
         }

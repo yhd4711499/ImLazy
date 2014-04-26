@@ -5,10 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:views="clr-namespace:ImLazy.ControlPanel.Views"
              xmlns:util="clr-namespace:ImLazy.ControlPanel.Util"
+             xmlns:viewModel="clr-namespace:ImLazy.ControlPanel.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <HierarchicalDataTemplate x:Key="ConditionViewModelTemplate" ItemsSource="{Binding SubConditions}">
+        <HierarchicalDataTemplate x:Key="ConditionViewModelTemplate" ItemsSource="{Binding SubConditions}"
+                                  DataType="viewModel:ConditionBranchViewModel">
             <Grid Margin="0,5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -77,8 +79,7 @@
                 <ContentPresenter Content="{Binding Condition.MainView}"/>
             </GroupBox.Header>
             <TreeView
-    		    x:Name="treeView"
-    		    ItemContainerStyleSelector="{StaticResource selector}"
+                ItemContainerStyleSelector="{StaticResource selector}"
     		    ItemsSource="{Binding }"
     		    ItemTemplate="{StaticResource ConditionViewModelTemplate}"
     		    HorizontalContentAlignment="Stretch"

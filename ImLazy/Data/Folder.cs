@@ -9,6 +9,7 @@ namespace ImLazy.Data
         /// <summary>
         /// An <see cref="List{RuleProperty}"/> to store properties of rules.
         /// </summary>
+// ReSharper disable once MemberCanBePrivate.Global
         public List<RuleProperty> RuleProperties { get; set; }
         [XmlAttribute]
         public String FolderPath { get; set; }

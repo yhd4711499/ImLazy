@@ -9,7 +9,7 @@ namespace ImLazy.ControlPanel.Views
     /// <summary>
     /// AddinSelectView.xaml 的交互逻辑
     /// </summary>
-    public partial class AddinSelectView : UserControl
+    public partial class AddinSelectView
     {
         AddinInfoViewModelBase _dataContext;
 

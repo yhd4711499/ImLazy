@@ -9,12 +9,11 @@ namespace ImLazy.Service
 		/// </summary>
 		static void Main()
 		{
-			ServiceBase[] ServicesToRun;
-			ServicesToRun = new ServiceBase[] 
-			{ 
-				new RootService() 
-			};
-			ServiceBase.Run(ServicesToRun);
+		    var servicesToRun = new ServiceBase[] 
+		    { 
+		        new RootService() 
+		    };
+		    ServiceBase.Run(servicesToRun);
 		}
 	}
 }

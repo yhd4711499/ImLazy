@@ -131,28 +131,15 @@ namespace System.Collections.Generic
 
         #endregion
         #region Private Properties
+// ReSharper disable once MemberCanBePrivate.Global
         protected XmlSerializer ValueSerializer
         {
-            get
-            {
-                if (_valueSerializer == null)
-                {
-                    _valueSerializer = new XmlSerializer(typeof(TVal));
-                }
-                return _valueSerializer;
-            }
+            get { return _valueSerializer ?? (_valueSerializer = new XmlSerializer(typeof (TVal))); }
         }
 
         private XmlSerializer KeySerializer
         {
-            get
-            {
-                if (_keySerializer == null)
-                {
-                    _keySerializer = new XmlSerializer(typeof(TKey));
-                }
-                return _keySerializer;
-            }
+            get { return _keySerializer ?? (_keySerializer = new XmlSerializer(typeof (TKey))); }
         }
         #endregion
         #region Private Members

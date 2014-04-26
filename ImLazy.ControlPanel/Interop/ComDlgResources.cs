@@ -15,16 +15,16 @@ namespace ImLazy.ControlPanel.Interop
             ConfirmSaveAs = 435
         }
 
-        private static Win32Resources _resources = new Win32Resources("comdlg32.dll");
+        private static readonly Win32Resources Resources = new Win32Resources("comdlg32.dll");
 
         public static string LoadString(ComDlgResourceId id)
         {
-            return _resources.LoadString((uint)id);
+            return Resources.LoadString((uint)id);
         }
 
         public static string FormatString(ComDlgResourceId id, params string[] args)
         {
-            return _resources.FormatString((uint)id, args);
+            return Resources.FormatString((uint)id, args);
         }
     }
 }

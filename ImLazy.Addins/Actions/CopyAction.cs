@@ -1,11 +1,6 @@
-﻿using System;
-using ImLazy.Contracts;
-using System.Collections.Generic;
+﻿using ImLazy.Contracts;
 using System.IO;
-using ImLazy.Util;
 using System.ComponentModel.Composition;
-using ImLazy.Addins.ContentViews;
-using log4net;
 
 namespace ImLazy.Addins.Actions
 {

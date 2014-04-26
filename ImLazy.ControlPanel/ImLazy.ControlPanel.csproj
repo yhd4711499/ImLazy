@@ -87,7 +87,6 @@
     <Compile Include="Interop\ShellWrapperDefinitions.cs" />
     <Compile Include="Interop\Win32Resources.cs" />
     <Compile Include="Util\ConditionItemContainerStyleSelector.cs" />
-    <Compile Include="Util\ConditionItemTemplateSelector.cs" />
     <Compile Include="Util\MyVisualTreeHelper.cs" />
     <Compile Include="Util\NativeMethods.cs" />
     <Compile Include="Util\SafeHandles.cs" />
@@ -102,9 +101,6 @@
     <Compile Include="ViewModel\ConditionBranchViewModel.cs" />
     <Compile Include="ViewModel\RuleViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="Views\ActionSelectView.xaml.cs">
-      <DependentUpon>ActionSelectView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\AddinSelectView.xaml.cs">
       <DependentUpon>AddinSelectView.xaml</DependentUpon>
     </Compile>
@@ -135,10 +131,6 @@
     <Page Include="Resources\Templates\Default\ItemTemplates.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ActionSelectView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\AddinSelectView.xaml">
       <SubType>Designer</SubType>

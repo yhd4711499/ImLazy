@@ -17,7 +17,7 @@ namespace ImLazy.Addins
     [Export(typeof(IConditionAddin))]
     public class MetadataConditionAddin : IConditionAddin
     {
-        static readonly ILog Log = LogManager.GetLogger("ImLazy.Addins.MetadataConditionAddin");
+        static readonly ILog Log = LogManager.GetLogger(typeof(MetadataConditionAddin));
 
         #region Class Initiation
         /// <summary>
@@ -104,9 +104,9 @@ namespace ImLazy.Addins
         public const string TargetType = "TargetType";
         #endregion
 
-#region Constaints
-        private const char Spliter = ',';
-#endregion
+        #region Constaints
+                private const char Spliter = ',';
+        #endregion
 
         #region Utils
         /// <summary>

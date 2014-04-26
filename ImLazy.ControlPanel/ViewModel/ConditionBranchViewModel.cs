@@ -12,10 +12,10 @@ namespace ImLazy.ControlPanel.ViewModel
     /// </summary>
     public class ConditionBranchViewModel : ConditionCorpViewModel
     {
-        //private ConditionCorp _conditionBranchAs;
+// ReSharper disable once MemberCanBePrivate.Global
         public ConditionBranch ConditionCorp
         {
-            get { return base.AddinInfo as ConditionBranch; }
+            get { return AddinInfo as ConditionBranch; }
         }
 
         public new ConditionBranchViewModel Parent
@@ -91,10 +91,7 @@ namespace ImLazy.ControlPanel.ViewModel
             ConditionCorp c;
             if (isBranch)
             {
-                c = new ConditionBranch()
-                {
-                    //Parent = ConditionCorp
-                };
+                c = new ConditionBranch();
                 vm = new ConditionBranchViewModel(c as ConditionBranch, this);
             }
             else
@@ -113,7 +110,7 @@ namespace ImLazy.ControlPanel.ViewModel
         /// And also delete from the pending list if neccesary.
         /// </summary>
         /// <param name="p"></param>
-        protected void DeleteCondition(ConditionCorpViewModel p)
+        private void DeleteCondition(ConditionCorpViewModel p)
         {
             SubConditions.Remove(p);
             if (SubConditions.Count == 0)
@@ -139,10 +136,7 @@ namespace ImLazy.ControlPanel.ViewModel
             get
             {
                 return _newConditionBranchCommand
-                    ?? (_newConditionBranchCommand = new RelayCommand(() =>
-                    {
-                        NewCondition(true); ;
-                    }));
+                    ?? (_newConditionBranchCommand = new RelayCommand(() => NewCondition(true)));
             }
         }
 
@@ -171,10 +165,7 @@ namespace ImLazy.ControlPanel.ViewModel
                 {
                     throw new Exception("Unknown state!");
                 }
-                else
-                {
-                    _addPendingConditions.ForEach(_ => ConditionCorp.Add(_));
-                }
+                _addPendingConditions.ForEach(_ => ConditionCorp.Add(_));
 
                 _addPendingConditions = null;
             }

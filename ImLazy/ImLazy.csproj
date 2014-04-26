@@ -72,12 +72,10 @@
     <Compile Include="RunTime\Engine.cs" />
     <Compile Include="RunTime\Executor.cs" />
     <Compile Include="RunTime\LogManager.cs" />
-    <Compile Include="System\ICloneable.cs" />
     <Compile Include="Util\ConfigurationHelper.cs" />
     <Compile Include="Util\DataCreationUtil.cs" />
     <Compile Include="Util\EnumHelper.cs" />
     <Compile Include="Util\FolderUtil.cs" />
-    <Compile Include="Util\MementoUtil.cs" />
     <Compile Include="Util\ObjectCopier.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +92,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="System\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

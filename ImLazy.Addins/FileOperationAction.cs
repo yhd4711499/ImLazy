@@ -1,4 +1,5 @@
-﻿using ImLazy.Contracts;
+﻿/*
+using ImLazy.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,7 @@ namespace ImLazy.Addins
 
         internal static IEnumerable<ActionOpeartion> GetAvailSymbols(Type type)
         {
-            return Opeartions.Where(_ => _.TargetType.Equals(type));
+            return Opeartions.Where(_ => _.TargetType == type);
         }
 
         #endregion
@@ -69,3 +70,4 @@ namespace ImLazy.Addins
         }
     }
 }
+*/

@@ -35,7 +35,7 @@ namespace ImLazy.RunTime
                     if (_instance != null)
                         _instance.Rules.ForEach(_ => CacheMap<object>.RuleCacheMap.Put(_.Key, _.Value));
                     else
-                        _instance = DataStorage.Create();
+                        _instance = Create();
                 }
                 return _instance;
             }
@@ -78,6 +78,7 @@ namespace ImLazy.RunTime
         #region Data
 
         [XmlIgnore]
+// ReSharper disable MemberCanBePrivate.Global
         public List<ConditionCorp> Conditions { get; set; }
 
         [XmlIgnore]
@@ -86,6 +87,7 @@ namespace ImLazy.RunTime
         public SerializableDictionary<Guid, Rule> Rules { get; set; }
 
         public List<Folder> Folders { get; set; }
+// ReSharper restore MemberCanBePrivate.Global
 
         #endregion
 

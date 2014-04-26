@@ -6,7 +6,7 @@ namespace ImLazy.ControlPanel.Util
 {
     public class ConditionItemContainerStyleSelector : StyleSelector 
     {
-        public Style NestedStyle { get; set; }
+        public Style NestedStyle { private get; set; }
 
         public override Style SelectStyle(object item, DependencyObject container)
         {

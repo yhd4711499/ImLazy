@@ -25,11 +25,12 @@ namespace ImLazy.ControlPanel.ViewModel
     {
         #region View models
 
+// ReSharper disable MemberCanBePrivate.Global
         public ObservableCollection<RuleViewModel> Rules { get; private set; }
         public ObservableCollection<ConditionCorpViewModel> Conditions { get; private set; }
         public ObservableCollection<ActionViewModel> Actions { get; private set; }
         public ObservableCollection<FolderViewModel> Folders { get; private set; }
-
+// ReSharper restore MemberCanBePrivate.Global
         #endregion
 
         #region Commands

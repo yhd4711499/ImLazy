@@ -8,7 +8,7 @@ using ImLazy.ControlPanel.Util;
 
 namespace ImLazy.ControlPanel.Interop
 {
-    [ComImport(),
+    [ComImport,
     Guid(IIDGuid.IModalWindow),
     InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IModalWindow
@@ -19,7 +19,7 @@ namespace ImLazy.ControlPanel.Interop
         int Show([In] IntPtr parent);
     }
 
-    [ComImport(),
+    [ComImport,
     Guid(IIDGuid.IFileDialog),
     InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IFileDialog : IModalWindow
@@ -103,7 +103,7 @@ namespace ImLazy.ControlPanel.Interop
         void SetFilter([MarshalAs(UnmanagedType.Interface)] IntPtr pFilter);
     }
 
-    [ComImport(),
+    [ComImport,
     Guid(IIDGuid.IFileOpenDialog),
     InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IFileOpenDialog : IFileDialog
@@ -194,7 +194,7 @@ namespace ImLazy.ControlPanel.Interop
         void GetSelectedItems([MarshalAs(UnmanagedType.Interface)] out IShellItemArray ppsai);
     }
 
-    [ComImport(),
+    [ComImport,
     Guid(IIDGuid.IFileSaveDialog),
     InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IFileSaveDialog : IFileDialog

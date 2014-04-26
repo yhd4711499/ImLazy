@@ -20,7 +20,7 @@ namespace ImLazy.ControlPanel.Util
             }
         }
 
-        public static bool IsWindowsXPOrLater
+        public static bool IsWindowsXpOrLater
         {
             get
             {
@@ -401,7 +401,7 @@ namespace ImLazy.ControlPanel.Util
 
         #region String Resources
 
-        [Flags()]
+        [Flags]
         public enum FormatMessageFlags
         {
             FORMAT_MESSAGE_ALLOCATE_BUFFER = 0x00000100,
@@ -511,7 +511,7 @@ namespace ImLazy.ControlPanel.Util
             uint ulUserNameMaxChars,
             StringBuilder pszPassword,
             uint ulPaswordMaxChars,
-            [MarshalAs(UnmanagedType.Bool), In(), Out()] ref bool pfSave,
+            [MarshalAs(UnmanagedType.Bool), In, Out] ref bool pfSave,
             CREDUI_FLAGS dwFlags);
 
         [DllImport("credui.dll", CharSet = CharSet.Unicode)]

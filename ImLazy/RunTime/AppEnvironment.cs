@@ -15,11 +15,11 @@ namespace ImLazy.RunTime
                 ReadRegistry();
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 try
                 {
-                    InitRegistry(System.AppDomain.CurrentDomain.BaseDirectory);
+                    InitRegistry(AppDomain.CurrentDomain.BaseDirectory);
                 }
                 catch (Exception)
                 {
