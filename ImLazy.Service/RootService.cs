@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using ImLazy.RunTime;
+﻿using ImLazy.RunTime;
 using log4net;
 using System;
 using System.ServiceProcess;
@@ -33,10 +32,10 @@ namespace ImLazy.Service
             bool result;
             try
             {
-                _timer = new Timer(2000.0);
+                _timer = new Timer(5000.0);
                 _timer.Elapsed += timer_Tick;
                 _timer.Enabled = true;
-                Log.Debug("Timer initiated.");
+                Log.Debug("Timer initiated with 5000.0 ms as interval.");
                 result = true;
             }
             catch (Exception ex)
@@ -56,15 +55,15 @@ namespace ImLazy.Service
 
 		protected override void OnStart(string[] args)
 		{
-            Thread.Sleep(10000);
-            Log.Debug("Timer Starting...");
+            Log.Debug("Service Starting...");
 		    if (TryInitTimer())
 		    {
 		        _timer.Start();
-                Log.Debug("Timer started.");
+                Log.Debug("Service started.");
 		    }
 		    else
 		    {
+                Log.Debug("Failed in starting timer. Stopping service...");
 		        Stop();
 		    }
 		}
@@ -76,7 +75,7 @@ namespace ImLazy.Service
                 _timer.Stop();
                 _timer.Dispose();
             }
-            Log.Debug("Timer stopped.");
+            Log.Debug("Service stopped.");
 		}
 
         protected override void OnPause()
@@ -85,8 +84,8 @@ namespace ImLazy.Service
             if (_timer != null)
             {
                 _timer.Stop();
-                Log.Debug("Timer stopped.");
             }
+            Log.Debug("Service paused.");
         }
 
         protected override void OnContinue()
@@ -95,8 +94,8 @@ namespace ImLazy.Service
             if (_timer != null)
             {
                 _timer.Start();
-                Log.Debug("Timer started.");
             }
+            Log.Debug("Service continued.");
         }
 	}
 }

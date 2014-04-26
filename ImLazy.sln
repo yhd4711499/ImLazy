@@ -1,11 +1,18 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImLazy.Service", "ImLazy.Service\ImLazy.Service.csproj", "{B997FAEC-A6B7-46A3-A064-8B931CA4540C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4853E911-7A66-4436-B0D6-C98A96E07ECD} = {4853E911-7A66-4436-B0D6-C98A96E07ECD}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImLazy.ControlPanel", "ImLazy.ControlPanel\ImLazy.ControlPanel.csproj", "{07445760-082C-4B2B-8E06-53505B3AB01B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4853E911-7A66-4436-B0D6-C98A96E07ECD} = {4853E911-7A66-4436-B0D6-C98A96E07ECD}
+		{B997FAEC-A6B7-46A3-A064-8B931CA4540C} = {B997FAEC-A6B7-46A3-A064-8B931CA4540C}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImLazy", "ImLazy\ImLazy.csproj", "{9E2CCB85-22B1-4AAE-9DC0-1D23E6156825}"
 EndProject

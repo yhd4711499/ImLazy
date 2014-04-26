@@ -62,11 +62,11 @@ namespace ImLazy.Addins
 
         static MetadataConditionAddin()
         {
-            Log.Info("Loading SystemProperties...");
+            Log.Info("Initiating ...");
             try
             {
                 LoadAllProperties(typeof(SystemProperties));
-                Log.Info("Loading Completed. Start sorting...");
+                Log.Info("Sorting system properties...");
                 Properties.Sort((a, b) => 
                 {
                     var indexA = PriorityMap.FindIndex(_ => _.Equals(a.PropertyKey));
@@ -77,16 +77,17 @@ namespace ImLazy.Addins
                         return -1;
                     return 1;
                 });
-                Log.Info("Loading and sorting Finished.");
+                Log.Info("MetadataConditionAddin Initiated.");
             }
             catch (Exception ex)
             {
-                Log.Error("Failed in loading SystemProperties!", ex);
+                Log.Error("Failed in initiating.", ex);
             }
         }
 
         static void LoadAllProperties(Type root)
         {
+            Log.InfoFormat("Loading properties in {0}...", root);
             foreach (var item in root.GetNestedTypes())
             {
                 foreach (var key in item.GetProperties())

@@ -20,7 +20,7 @@ namespace ImLazy.Addins.Actions
             var targetPath = dic.TryGetValue<string>("TargetObject");
             if (File.Exists(targetPath))
             {
-                throw new Exception(String.Format("File exist : {0}. Please tell me what should I do now.", filePath));
+                throw new Exception(String.Format("Target path exist : {0}. Unable to proceed !", targetPath));
             }
             Log.DebugFormat("Copying : {0} -> {1}",filePath, targetPath);
             File.Copy(filePath, targetPath);

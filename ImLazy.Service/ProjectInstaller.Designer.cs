@@ -1,4 +1,4 @@
-﻿namespace WindowsServiceTest
+﻿namespace ImLazy.Service
 {
 	partial class ProjectInstaller
 	{

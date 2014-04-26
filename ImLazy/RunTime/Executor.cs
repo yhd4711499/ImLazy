@@ -10,7 +10,6 @@ namespace ImLazy.RunTime
 {
     public class Executor
     {
-        private readonly object _lockObj = new object();
         private readonly CacheMap<Func<string, SerializableDictionary<string, object>, bool>> _conditionCacheMap;
         private readonly CacheMap<Action<string, SerializableDictionary<string, object>>> _actionCacheMap;
         private readonly CacheMap<Rule> _ruleCacheMap;
@@ -31,39 +30,11 @@ namespace ImLazy.RunTime
             _ruleCacheMap = ruleCacheMap;
         }
 
-        /// <summary>
-        /// 是否满足条件
-        /// </summary>
-        /// <param name="addinType"><see cref="IAddin"/>的类型</param>
-        /// <param name="filePath">文件或目录的路径</param>
-        /// <param name="config">设置</param>
-        /// <returns>是否满足</returns>
-        public bool IsMatch(Type addinType, string filePath, SerializableDictionary<string, object> config)
-        {
-            var func = _conditionCacheMap.Get(addinType.FullName);
-            return func(filePath, config);
-        }
-
-        /// <summary>
-        /// 执行动作
-        /// </summary>
-        /// <param name="addinType"><see cref="IAddin"/>的类型</param>
-        /// <param name="filePath">文件或目录的路径</param>
-        /// <param name="config">设置</param>
-        public void Execute(Type addinType, string filePath, SerializableDictionary<string, object> config)
-        {
-            var func = _actionCacheMap.Get(addinType.FullName);
-            if(func == null)
-                return;
-            func(filePath, config);
-        }
-
         public void Execute(IEnumerable<Folder> folders)
         {
-            lock (_lockObj)
-            {
-                folders.ForEach(Do);
-            }
+            // 每个目录都在各自的线程中运行
+            var enumerable = folders as Folder[] ?? folders.ToArray();
+            enumerable.AsParallel().ForAll(Do);
         }
 
         private static readonly ILog Log = LogManager.GetLogger(typeof(Executor));
@@ -72,14 +43,14 @@ namespace ImLazy.RunTime
         {
             foreach (var rp in folder.RuleProperties)
             {
-                Log.DebugFormat("Finding rule with GUID:{0}...", rp.RuleGuid);
+                Log.DebugFormat("Searching for rule with GUID:{0}...", rp.RuleGuid);
                 var rule = _ruleCacheMap.Get(rp.RuleGuid);
                 if (rule == null)
                 {
-                    Log.Warn("Target rule not found");
+                    Log.Warn("Target rule not found!");
                     continue;
                 }
-                Log.DebugFormat("Target rule was found, which is named [{0}]", rule.Name);
+                Log.DebugFormat("Target rule founded with name:[{0}]", rule.Name);
                 
                 Directory.EnumerateFileSystemEntries(folder.FolderPath).ForEach(fe =>
                 {
@@ -90,11 +61,11 @@ namespace ImLazy.RunTime
                         int successed = 0, failed = 0;
                         rule.Actions.ForEach(action =>
                         {
-                            Log.DebugFormat("Finding action {0} (name : {1}) ...", action.AddinType, action.Name);
+                            Log.DebugFormat("Searching action {0} (name : {1}) ...", action.AddinType, action.Name);
                             var actionMethod = _actionCacheMap.Get(action.AddinType);
                             if (actionMethod == null)
                             {
-                                Log.Warn("action not found!");
+                                Log.Warn("Action not found!");
                                 return;
                             }
                             Log.Debug("Try performing action ...");
@@ -115,7 +86,7 @@ namespace ImLazy.RunTime
                     }
                     else
                     {
-                        Log.Debug("Condition not match. Skip.");
+                        Log.Debug("Condition not match and was Skipped.");
                     }
                 });
             }
@@ -137,13 +108,13 @@ namespace ImLazy.RunTime
                 switch (branch.Mode)
                 {
                     case ConditionMode.All:
-                        return branch.SubConditions.All(c => IsMatch((ConditionCorp)c, filePath));
+                        return branch.SubConditions.All(c => IsMatch(c, filePath));
                     case ConditionMode.None:
-                        return !branch.SubConditions.Any(c => IsMatch((ConditionCorp)c, filePath));
+                        return !branch.SubConditions.Any(c => IsMatch(c, filePath));
                     case ConditionMode.Any:
-                        return branch.SubConditions.Any(c => IsMatch((ConditionCorp)c, filePath));
+                        return branch.SubConditions.Any(c => IsMatch(c, filePath));
                     default:
-                        Log.Error("Can't get " + ConfigNames.Symbol + "for ConditionBranch. Mode is not specified !");
+                        Log.Error("Can't get " + ConfigNames.Symbol + " for ConditionBranch : Mode is not specified !");
                         return false;
                 }
             }

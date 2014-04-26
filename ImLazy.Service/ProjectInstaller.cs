@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Configuration.Install;
 
-
-namespace WindowsServiceTest
+namespace ImLazy.Service
 {
 	[RunInstaller(true)]
 	public partial class ProjectInstaller : Installer
