@@ -8,15 +8,18 @@ namespace ImLazy.Addins
 {
     class ContentProviderAddin : IAddin
     {
+        public const string TargetType = "TargetType";
+
         static readonly Dictionary<string, Func<IEditView>> Creators = new Dictionary<string, Func<IEditView>>
         {
-            {typeof(String).FullName, ()=> new TextContent()},
-            {typeof(Boolean).FullName, ()=> new BoolContent()}
+            {typeof(string).FullName, ()=> new TextContent()},
+            {typeof(long).FullName, ()=> new LongContent()},
+            {typeof(bool).FullName, ()=> new BoolContent()}
         };
 
         public IEditView CreateMainView(SerializableDictionary<string, object> config)
         {
-            var type = config.TryGetValue<string>("TargetType");
+            var type = config.TryGetValue<string>(TargetType);
             Func<IEditView> c;
             if (!Creators.TryGetValue(type, out c)) return null;
             var v = c();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Diagnostics;
 using System.ServiceProcess;
@@ -105,22 +106,27 @@ namespace ImLazy.ControlPanel.Views
                 LblStatus.Text = "服务不能暂停";
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        readonly Executor _executor = new Executor(
+                        CacheMap<object>.ConditionCacheMap,
+                        CacheMap<object>.ActionCacheMap,
+                        CacheMap<object>.RuleCacheMap
+                        );
+        private async void Button_Click(object sender, RoutedEventArgs e)
         {
-            try
-            {
-                var executor = new Executor(
-                CacheMap<object>.ConditionCacheMap,
-                CacheMap<object>.ActionCacheMap,
-                CacheMap<object>.RuleCacheMap
-                );
-                executor.Execute(DataStorage.Instance.Folders);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message + Environment.NewLine + ex.StackTrace);
-            }
-            
+            Stopwatch s = Stopwatch.StartNew();
+            await Task.Run(() =>
+                {
+                    try
+                    {
+                        _executor.Execute(DataStorage.Instance.Folders);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message + Environment.NewLine + ex.StackTrace);
+                    }
+                });
+            s.Stop();
+            MessageBox.Show("完成" + s.ElapsedMilliseconds);
         }
     }
 }

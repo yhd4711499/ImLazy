@@ -79,13 +79,14 @@ namespace ImLazy.ControlPanel.ViewModel
             get
             {
                 return _deleteFolderCommnad
-                    ?? (_deleteFolderCommnad = new RelayCommand<FolderViewModel>(
-                                          p =>
-                                          {
-                                              Folders.Remove(p);
-                                              DataStorage.Instance.Folders.RemoveAll(_ => _.FolderPath.Equals(p.Folder.FolderPath));
-                                              DataStorage.Instance.Save();
-                                          }));
+                       ?? (_deleteFolderCommnad = new RelayCommand<FolderViewModel>(
+                           p =>
+                           {
+                               Folders.Remove(p);
+                               DataStorage.Instance.Folders.RemoveAll(_ => _.FolderPath.Equals(p.Folder.FolderPath));
+                               DataStorage.Instance.Save();
+                           },
+                           p => p != null));
             }
         }
         #endregion

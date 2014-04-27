@@ -4,5 +4,6 @@
     {
         public const string Symbol = "Symbol";
         public const string TargetObject = "TargetObject";
+        public const string TargetProperty = "TargetProperty";
     }
 }

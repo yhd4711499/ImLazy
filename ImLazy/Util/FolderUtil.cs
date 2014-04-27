@@ -24,7 +24,7 @@ namespace ImLazy.Util
             }
         }
 
-        public static void ToFolder(string filePath, string targetPath,Action<string,string> action)
+        public static void ToFolder(string filePath, string targetPath, Action<string,string> action)
         {
             var name = Path.GetFileName(filePath);
             var fullPath = Path.Combine(targetPath, name);

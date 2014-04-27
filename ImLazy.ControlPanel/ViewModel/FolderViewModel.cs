@@ -88,14 +88,14 @@ namespace ImLazy.ControlPanel.ViewModel
             get
             {
                 return _deleteRuleCommand
-                    ?? (_deleteRuleCommand = new RelayCommand<RuleViewModel>(
-                                          p =>
-                                          {
-// ReSharper disable once UnusedVariable
-                                              //DataStorage.Instance.Rules.Remove()
-                                              DataStorage.Instance.Rules.RemoveAll(_ => _.Equals(p.Rule.Guid));
-                                              DataStorage.Instance.Save();
-                                          }));
+                       ?? (_deleteRuleCommand = new RelayCommand<RuleViewModel>(
+                           p =>
+                           {
+                               Rules.Remove(p);
+                               Folder.RuleProperties.RemoveAll(_ => _.RuleGuid.Equals(p.Rule.Guid));
+                               DataStorage.Instance.Save();
+                           },
+                           p => p != null));
             }
         }
         /// <summary>
@@ -116,14 +116,16 @@ namespace ImLazy.ControlPanel.ViewModel
                     }
                 }
             }
+            Rules.CollectionChanged += Rules_CollectionChanged;
         }
 
-/*
-        public void Save()
+        void Rules_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            //Folder.sa
+            if(e.NewItems!=null)
+                e.NewItems.OfType<RuleViewModel>().ForEach(r => CacheMap<object>.RuleCacheMap.Put(r.Rule.Guid, r.Rule));
+            if (e.OldItems != null)
+                e.OldItems.OfType<RuleViewModel>().ForEach(r => CacheMap<object>.RuleCacheMap.Remove(r.Rule.Guid));
         }
-*/
 
         public override string ToString()
         {

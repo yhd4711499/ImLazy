@@ -1,31 +1,30 @@
-﻿using System;
-using ImLazy.Addins.Annotations;
-using ImLazy.Contracts;
-using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
+﻿using ImLazy.Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using ImLazy.Util;
 using ImLazy.RunTime;
 
-namespace ImLazy.Addins
+namespace ImLazy.Addins.Conditions
 {
     /// <summary>
-    /// MetadataConditionAddinView.xaml 的交互逻辑
+    /// SimpleMetadataConditionAddinView.xaml 的交互逻辑
     /// </summary>
-    public partial class MetadataConditionAddinView : IEditView
+    public partial class SimpleMetadataConditionAddinView : IEditView
     {
         static readonly ContentProviderAddin ContentAddin = new ContentProviderAddin();
         SerializableDictionary<string, object> _configuration;
         private bool _isDirty = true;
+
         /// <summary>
-        /// All <see cref="MetadataConditionAddinView"/> should have the same Properties as items source.
+        /// All <see cref="SimpleMetadataConditionAddinView"/> should have the same Properties as items source.
         /// </summary>
-        static readonly IEnumerable<string> ItemsSource = MetadataConditionAddin.Properties.Where(_ => _.CanonicalName != null).Select(_ => _.CanonicalName);
-        public MetadataConditionAddinView()
+        private static readonly Dictionary<string, SimpleMetadataConditionAddin.PropertyOpeartion> ItemsSource = SimpleMetadataConditionAddin.PropertyOpeartions;
+        public SimpleMetadataConditionAddinView()
         {
             InitializeComponent();
             cmb_Properties.ItemsSource = ItemsSource;
+            cmb_Properties.DisplayMemberPath = "Key";
         }
 
         public SerializableDictionary<string, object> Configuration
@@ -37,7 +36,7 @@ namespace ImLazy.Addins
                         {ConfigNames.TargetObject,((IEditView)content_param.Content).Configuration.TryGetValue(ConfigNames.TargetObject)},
                         {ConfigNames.Symbol,cmb_AvailSymbols.SelectedItem.ToString()},
 // ReSharper disable once RedundantCast
-                        {ConfigNames.TargetProperty,(string)cmb_Properties.SelectedItem}
+                        {ConfigNames.TargetProperty, GetSelectedPropertyFullName()}
                     };
                 return _configuration;
             }
@@ -51,14 +50,24 @@ namespace ImLazy.Addins
             }
         }
 
+        private string GetSelectedPropertyFullName()
+        {
+            return SimpleMetadataConditionAddin.GetPropertyOperationName(cmb_Properties.SelectedItem);
+        }
+
+        private KeyValuePair<string, SimpleMetadataConditionAddin.PropertyOpeartion> GetSelectedPropertyPair()
+        {
+            return (KeyValuePair<string, SimpleMetadataConditionAddin.PropertyOpeartion>)cmb_Properties.SelectedItem;
+        }
+
         void cmb_Properties_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _isDirty = true;
-            var propertyName = (string)cmb_Properties.SelectedItem;
-            RefreshAvailSymbols(propertyName);
+            var propertyPair = GetSelectedPropertyPair();
+            RefreshAvailSymbols(propertyPair.Value);
             var dic = new SerializableDictionary<string, object>
             {
-                    {ContentProviderAddin.TargetType, SystemProperties.GetPropertyDescription(propertyName).ValueType.FullName}
+                    {ContentProviderAddin.TargetType, propertyPair.Value.TargetType.FullName}
                 };
             if (_configuration != null)
             {
@@ -70,16 +79,14 @@ namespace ImLazy.Addins
         /// <summary>
         /// Update ItemsSource of cmb_AvailSymbols if dirty.
         /// </summary>
-        /// <param name="canonicalName">Full name of SystemProperty</param>
-        void RefreshAvailSymbols([NotNull] string canonicalName)
+        /// <param name="propertyOpeartion"><see cref="SimpleMetadataConditionAddin.PropertyOpeartion"/></param>
+        void RefreshAvailSymbols(SimpleMetadataConditionAddin.PropertyOpeartion propertyOpeartion)
         {
-            if (canonicalName == null) throw new ArgumentNullException("canonicalName");
             if (!_isDirty)
                 return;
             _isDirty = false;
-            var symbols = MetadataConditionAddin.GetAvailSymbols(
-                SystemProperties.GetPropertyDescription(canonicalName));
-            cmb_AvailSymbols.ItemsSource = symbols.Select(_ => _.Name);
+            var symbols = SimpleMetadataConditionAddin.GetAvailSymbols(propertyOpeartion);
+            cmb_AvailSymbols.ItemsSource = symbols.Select(_ => _.Key);
             cmb_AvailSymbols.SelectedIndex = 0;
         }
 
@@ -91,14 +98,20 @@ namespace ImLazy.Addins
             {
                 return;
             }
-            RefreshAvailSymbols(name);
+            SimpleMetadataConditionAddin.PropertyOpeartion propertyPair;
+            if (!SimpleMetadataConditionAddin.PropertyOpeartions.TryGetValue(name, out propertyPair))
+            {
+                return;
+            }
+
+            RefreshAvailSymbols(propertyPair);
             cmb_AvailSymbols.SelectedItem = _configuration.TryGetValue<string>(ConfigNames.Symbol);
-            var propertyName = _configuration.TryGetValue<string>(ConfigNames.TargetProperty);
-            cmb_Properties.SelectedItem = propertyName;
+            var selectedPo = ItemsSource.FirstOrDefault(_ => _.Key.Equals(name));
+            cmb_Properties.SelectedItem = selectedPo;
             content_param.Content = ContentAddin.CreateMainView(new SerializableDictionary<string, object>
             {
                 {ConfigNames.TargetObject, _configuration.TryGetValue(ConfigNames.TargetObject)},
-                {ContentProviderAddin.TargetType, SystemProperties.GetPropertyDescription(propertyName).ValueType.FullName}
+                {ContentProviderAddin.TargetType, propertyPair.TargetType.FullName}
             });
         }
     }

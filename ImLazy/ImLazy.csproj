@@ -69,7 +69,6 @@
     <Compile Include="RunTime\AppEnvironment.cs" />
     <Compile Include="RunTime\ConfigNames.cs" />
     <Compile Include="RunTime\DataStorage.cs" />
-    <Compile Include="RunTime\Engine.cs" />
     <Compile Include="RunTime\Executor.cs" />
     <Compile Include="RunTime\LogManager.cs" />
     <Compile Include="Util\ConfigurationHelper.cs" />

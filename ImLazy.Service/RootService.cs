@@ -35,7 +35,7 @@ namespace ImLazy.Service
                 _timer = new Timer(5000.0);
                 _timer.Elapsed += timer_Tick;
                 _timer.Enabled = true;
-                Log.Debug("Timer initiated with 5000.0 ms as interval.");
+                Log.Info("Timer initiated with 5000.0 ms as interval.");
                 result = true;
             }
             catch (Exception ex)
@@ -55,15 +55,15 @@ namespace ImLazy.Service
 
 		protected override void OnStart(string[] args)
 		{
-            Log.Debug("Service Starting...");
+            Log.Info("Service Starting...");
 		    if (TryInitTimer())
 		    {
 		        _timer.Start();
-                Log.Debug("Service started.");
+                Log.Info("Service started.");
 		    }
 		    else
 		    {
-                Log.Debug("Failed in starting timer. Stopping service...");
+                Log.Error("Failed in starting timer. Stopping service...");
 		        Stop();
 		    }
 		}
@@ -75,7 +75,7 @@ namespace ImLazy.Service
                 _timer.Stop();
                 _timer.Dispose();
             }
-            Log.Debug("Service stopped.");
+            Log.Info("Service stopped.");
 		}
 
         protected override void OnPause()
@@ -85,7 +85,7 @@ namespace ImLazy.Service
             {
                 _timer.Stop();
             }
-            Log.Debug("Service paused.");
+            Log.Info("Service paused.");
         }
 
         protected override void OnContinue()
@@ -95,7 +95,7 @@ namespace ImLazy.Service
             {
                 _timer.Start();
             }
-            Log.Debug("Service continued.");
+            Log.Info("Service continued.");
         }
 	}
 }

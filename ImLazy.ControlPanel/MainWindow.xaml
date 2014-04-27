@@ -48,9 +48,11 @@
             </Grid>
             <ListBox Grid.Column="0" x:Name="ListBox" ItemsSource="{Binding Folders}" Margin="0,0,0,24"/>
             <Button Grid.Column="0" Content="+" Width="75" VerticalAlignment="Bottom" HorizontalAlignment="Left" Command="{Binding AddFolderCommand}"/>
+            <Button Margin="80,0,0,0" Grid.Column="0" Content="-" Width="75" VerticalAlignment="Bottom" HorizontalAlignment="Left" Command="{Binding DeleteFolderCommand}" CommandParameter="{Binding SelectedItem, ElementName=ListBox}"/>
             <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
             <ListBox x:Name="LstRules" ItemsSource="{Binding Rules}" ItemTemplate="{DynamicResource RuleItemTempalte}" HorizontalContentAlignment="Stretch" Grid.Column="1" Margin="0,0,0,24" DataContext="{Binding SelectedItem, ElementName=ListBox}"/>
             <Button Content="+" Width="75" VerticalAlignment="Bottom" HorizontalAlignment="Left" Command="{Binding AddRuleCommand}" Grid.Column="1" DataContext="{Binding DataContext, ElementName=LstRules}"/>
+            <Button Margin="80,0,0,0" Grid.Column="1" Content="-" Width="75" VerticalAlignment="Bottom" HorizontalAlignment="Left" DataContext="{Binding DataContext, ElementName=LstRules}" Command="{Binding DeleteRuleCommand}" CommandParameter="{Binding SelectedItem, ElementName=LstRules}"/>
             <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
         </Grid>
     </Grid>

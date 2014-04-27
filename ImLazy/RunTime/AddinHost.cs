@@ -30,15 +30,15 @@ namespace ImLazy.RunTime
 
         static AddinHost()
         {
-            Log.Debug("AddinHost initiating...");
+            Log.Info("AddinHost initiating...");
             _instance.LoadAddins();
             _instance.BuildCache();
-            Log.Debug("AddinHost initiated.");
+            Log.Info("AddinHost initiated.");
         }
 
         ~AddinHost()
         {
-            Log.Debug("AddinHost finalized.");
+            Log.Info("AddinHost finalized.");
         }
 
         #region Addins
@@ -65,7 +65,7 @@ namespace ImLazy.RunTime
             lock (LockObj)
             {
                 #region Load addins
-                Log.Debug("Loading addins from '\\Addins' subfolder and self (AddinHost.dll)...");
+                Log.Info("Loading addins from '\\Addins' subfolder and self (AddinHost.dll)...");
                 var catalog = new AggregateCatalog();
                 catalog.Catalogs.Add(new DirectoryCatalog("Addins"));
                 catalog.Catalogs.Add(new AssemblyCatalog(typeof (AddinHost).Assembly));
@@ -79,7 +79,7 @@ namespace ImLazy.RunTime
                     var addinMetadatas = c as IAddinMetadata[] ?? c.ToArray();
                     return !addinMetadatas.Any() ? String.Empty: String.Join("\n\t\t", addinMetadatas.Select(_=>_.Type.Name));
                 });
-                Log.DebugFormat("Load addins finished.\n\tConditionAddins has {0}\n\t\t{1}\n\tActionAddins has {2}\n\t\t{3}\n\tOtherddins has {4}\n\t\t{5}",
+                Log.InfoFormat("Load addins finished.\n\tConditionAddins has {0}\n\t\t{1}\n\tActionAddins has {2}\n\t\t{3}\n\tOtherddins has {4}\n\t\t{5}",
                     ConditionAddins.Count(),
                     f(ConditionAddins.Select(_ => _.Metadata)),
                     ActionAddins.Count(),
@@ -100,7 +100,7 @@ namespace ImLazy.RunTime
             {
                 #region Cache ViewCreator func to CacheMap<object>
 
-                Log.Debug("Building view creators caches...");
+                Log.Info("Building view creators caches...");
 
                 ConditionAddins.ForEach(
                     _ => CacheMap<object>.ViewCreatorCacheMap.Put(_.Metadata.Type.FullName, _.Value.CreateMainView));
@@ -113,14 +113,14 @@ namespace ImLazy.RunTime
 
                 #region Cache addins main func to according cache map
 
-                Log.Debug("Building functions caches...");
+                Log.Info("Building functions caches...");
 
                 ConditionAddins.ForEach(
                     _ => CacheMap<object>.ConditionCacheMap.Put(_.Metadata.Type.FullName, _.Value.IsMatch));
                 ActionAddins.ForEach(
                     _ => CacheMap<object>.ActionCacheMap.Put(_.Metadata.Type.FullName, _.Value.DoAction));
 
-                Log.Debug("Done caching.");
+                Log.Info("Done caching.");
 
                 #endregion
             }

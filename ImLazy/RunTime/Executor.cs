@@ -14,6 +14,19 @@ namespace ImLazy.RunTime
         private readonly CacheMap<Rule> _ruleCacheMap;
 
         /// <summary>
+        /// Used to store LastWriteTime for files scanned.
+        /// <para>When executing, the time stored will be compared to the actual time of </para>
+        /// <para>the file. Followed procedures will be skipped if these two time are the same.</para>
+        /// </summary>
+        private readonly static Dictionary<string, int> Records = new Dictionary<string, int>();
+
+        private static readonly ILog Log = LogManager.GetLogger(typeof(Executor));
+
+        static Executor()
+        {
+        }
+
+        /// <summary>
         /// 初始化Executor
         /// </summary>
         /// <param name="conditionCacheMap">条件</param>
@@ -36,26 +49,37 @@ namespace ImLazy.RunTime
             enumerable.AsParallel().ForAll(Do);
         }
 
-        private static readonly ILog Log = LogManager.GetLogger(typeof(Executor));
-
         private void Do(Folder folder)
         {
-            foreach (var rp in folder.RuleProperties)
+            Directory.EnumerateFileSystemEntries(folder.FolderPath).ForEach(fe =>
             {
-                Log.DebugFormat("Searching for rule with GUID:{0}...", rp.RuleGuid);
-                var rule = _ruleCacheMap.Get(rp.RuleGuid);
-                if (rule == null)
+                // Is the file untouched since last execution?
+                int lastExeTime, lastWriteTime = File.GetLastWriteTime(fe).Millisecond;
+                if (Records.TryGetValue(fe, out lastExeTime) && lastExeTime == lastWriteTime)
                 {
-                    Log.Warn("Target rule not found!");
-                    continue;
+                    // If so, skip it.
+                    Log.DebugFormat("{0} not changed since last exectution. Skip.", fe);
+                    return;
                 }
-                Log.DebugFormat("Target rule founded with name:[{0}]", rule.Name);
-                
-                Directory.EnumerateFileSystemEntries(folder.FolderPath).ForEach(fe =>
+                Records[fe] = lastWriteTime;
+
+                foreach (var rp in folder.RuleProperties)
                 {
+                    // Get the rule by guid
+                    Log.DebugFormat("Searching for rule with GUID:{0}...", rp.RuleGuid);
+                    var rule = _ruleCacheMap.Get(rp.RuleGuid);
+                    if (rule == null)
+                    {
+                        Log.WarnFormat("Target rule [{0}] not found!", rp.RuleGuid);
+                        continue;
+                    }
+                    Log.DebugFormat("Target rule founded with name:[{0}]", rule.Name);
+
+                    // Check file by the conditions of the rule
                     Log.DebugFormat("Checking [{0}] ...", fe);
                     if (IsMatch(rule.ConditionBranch, fe))
                     {
+                        // Execution the actions
                         Log.Debug("ConditionBranch matched. Performing actions...");
                         int successed = 0, failed = 0;
                         rule.Actions.ForEach(action =>
@@ -73,12 +97,14 @@ namespace ImLazy.RunTime
                                 actionMethod(fe, action.Config);
                                 successed++;
                                 Log.Debug("Succeed!");
-                                    
+                                // Remove record to avoid memory leak
+                                Records.Remove(fe);
+
                             }
                             catch (Exception ex)
                             {
                                 failed++;
-                                Log.Error("Action failed!",ex);
+                                Log.Error("Action failed!", ex);
                             }
                         });
                         Log.DebugFormat("Actions all done. Successed:{0}, failed:{1}", successed, failed);
@@ -87,8 +113,8 @@ namespace ImLazy.RunTime
                     {
                         Log.Debug("Condition not match and was Skipped.");
                     }
-                });
-            }
+                }
+            });
         }
 
         private bool IsMatch(ConditionCorp corp ,string filePath)

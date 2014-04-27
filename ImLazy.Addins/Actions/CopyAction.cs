@@ -1,4 +1,5 @@
-﻿using ImLazy.Contracts;
+﻿using ImLazy.Addins.Utils;
+using ImLazy.Contracts;
 using System.IO;
 using System.ComponentModel.Composition;
 
@@ -11,7 +12,7 @@ namespace ImLazy.Addins.Actions
     {
         public CopyAction()
         {
-            SetAction(File.Copy);
+            SetAction(FileSystemUtil.CopyFileOrFolder);
         }
     }
 }

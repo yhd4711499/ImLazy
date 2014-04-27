@@ -102,5 +102,10 @@ namespace ImLazy.RunTime
             T result;
             return _cache.TryGetValue(guid.ToString(), out result) ? result : null;
         }
+
+        public void Remove(Guid guid)
+        {
+            _cache.Remove(guid.ToString());
+        }
     }
 }

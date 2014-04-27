@@ -38,7 +38,8 @@ namespace ImLazy.Addins
         /// <summary>
         /// Recents used keys
         /// </summary>
-        static readonly List<PropertyKey> RecentUsedKeys = new List<PropertyKey>();
+        //static readonly List<PropertyKey> RecentUsedKeys = new List<PropertyKey>();
+
         /// <summary>
         /// Stores all the operation
         /// </summary>
@@ -99,11 +100,6 @@ namespace ImLazy.Addins
         }
         #endregion
 
-        #region Config names
-        public const string TargetProperty = "TargetProperty";
-        public const string TargetType = "TargetType";
-        #endregion
-
         #region Constaints
                 private const char Spliter = ',';
         #endregion
@@ -135,7 +131,7 @@ namespace ImLazy.Addins
 
             var symbol = arg.TryGetValue<string>(ConfigNames.Symbol);
             var matchObjects = arg.TryGetValue(ConfigNames.TargetObject);
-            var targetProperty = arg.TryGetValue<string>(TargetProperty);
+            var targetProperty = arg.TryGetValue<string>(ConfigNames.TargetProperty);
 
             // get property object
             var so = ShellObject.FromParsingName(filePath);
@@ -146,7 +142,7 @@ namespace ImLazy.Addins
             }
             catch (Exception ex)
             {
-                Log.Error(String.Format("Failed in IShellProperty.GetProperty({0})!", targetProperty), ex);
+                Log.Error(String.Format("Failed in IShellProperty.GetProperty({0}) on {1}!", targetProperty, filePath), ex);
                 return false;
             }
             // get operation coresponding to the type
@@ -160,7 +156,7 @@ namespace ImLazy.Addins
             var value = p.ValueAsObject;
             if (value == null)
             {
-                Log.WarnFormat("The value of [{0}] in [{1}] is null!", targetProperty, filePath);
+                Log.DebugFormat("The value of [{0}] in [{1}] is null!", targetProperty, filePath);
                 return false;
             }
 
