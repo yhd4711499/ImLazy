@@ -5,7 +5,6 @@ using System.ComponentModel.Composition;
 
 namespace ImLazy.Addins.Actions
 {
-    [ExportMetadata("Name", "移动")]
     [ExportMetadata("Type", typeof(MoveAction))]
     [Export(typeof(IActionAddin))]
     public class MoveAction : FileActionBase
@@ -13,6 +12,11 @@ namespace ImLazy.Addins.Actions
         public MoveAction()
         {
             SetAction(FileSystemUtil.MoveFileOrFolder);
+        }
+
+        protected override string GetName()
+        {
+            return "MoveAction".Local();
         }
     }
 }

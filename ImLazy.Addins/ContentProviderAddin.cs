@@ -1,4 +1,5 @@
-﻿using ImLazy.Contracts;
+﻿using System.Windows;
+using ImLazy.Contracts;
 using System;
 using System.Collections.Generic;
 using ImLazy.Util;
@@ -24,7 +25,10 @@ namespace ImLazy.Addins
             if (!Creators.TryGetValue(type, out c)) return null;
             var v = c();
             v.Configuration = config;
+            ((FrameworkElement) v).MinWidth = 50;
             return v;
         }
+
+        public string LocalName { get; private set; }
     }
 }

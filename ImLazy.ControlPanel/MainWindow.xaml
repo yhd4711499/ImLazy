@@ -4,56 +4,136 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:viewModel="clr-namespace:ImLazy.ControlPanel.ViewModel"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
         x:Class="ImLazy.ControlPanel.MainWindow"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="480" Width="750">
     <Window.Resources>
         <DataTemplate x:Key="RuleItemTempalte" DataType="viewModel:RuleViewModel">
             <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding Name}"/>
-                <Button Content="..." HorizontalAlignment="Left" Width="15" Grid.Column="1">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <i:InvokeCommandAction Command="{Binding EditCommand}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </Button>
-            </Grid>
+        			<ColumnDefinition Width="*"/>
+        			<ColumnDefinition Width="Auto"/>
+        		</Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Name}"/>
+                    <TextBlock
+        				Text="{Binding Path=Enabled, StringFormat=[{0}], Converter={StaticResource BooleanToStringConverter}}"
+        				Foreground="{StaticResource ColorWarnning}"
+        				Visibility="{Binding Enabled, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
+                    </TextBlock>
+        		</StackPanel>
+        		<Button Content="..." HorizontalAlignment="Left" Width="15" Grid.Column="1" Style="{StaticResource SimbolButtonStyle}">
+        			<i:Interaction.Triggers>
+        				<i:EventTrigger EventName="Click">
+        					<i:InvokeCommandAction Command="{Binding EditCommand}" />
+        				</i:EventTrigger>
+        			</i:Interaction.Triggers>
+        		</Button>
+                <!--
+                It's a little tricky here. The "MouseDoubleClick" event can only be triggered when the InvokeCommandAction
+                is attached to a Control (Grid is not a Control). So I used a ContentControl here to act
+                as a container for InvokeCommandAction.
+                -->
+        		<ContentControl Grid.Column="0" Content="">
+        			<i:Interaction.Triggers>
+        				<i:EventTrigger EventName="MouseDoubleClick">
+        					<i:InvokeCommandAction Command="{Binding EditCommand, Mode=OneWay}"/>
+        				</i:EventTrigger>
+        			</i:Interaction.Triggers>
+        		</ContentControl>
+        	</Grid>
         </DataTemplate>
     </Window.Resources>
     <Window.DataContext>
         <Binding Mode="OneWay" Path="Main" Source="{StaticResource Locator}"/>
     </Window.DataContext>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid>
-            <views:ServiceControlView/>
-        </Grid>
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-            </Grid>
-            <ListBox Grid.Column="0" x:Name="ListBox" ItemsSource="{Binding Folders}" Margin="0,0,0,24"/>
-            <Button Grid.Column="0" Content="+" Width="75" VerticalAlignment="Bottom" HorizontalAlignment="Left" Command="{Binding AddFolderCommand}"/>
-            <Button Margin="80,0,0,0" Grid.Column="0" Content="-" Width="75" VerticalAlignment="Bottom" HorizontalAlignment="Left" Command="{Binding DeleteFolderCommand}" CommandParameter="{Binding SelectedItem, ElementName=ListBox}"/>
-            <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
-            <ListBox x:Name="LstRules" ItemsSource="{Binding Rules}" ItemTemplate="{DynamicResource RuleItemTempalte}" HorizontalContentAlignment="Stretch" Grid.Column="1" Margin="0,0,0,24" DataContext="{Binding SelectedItem, ElementName=ListBox}"/>
-            <Button Content="+" Width="75" VerticalAlignment="Bottom" HorizontalAlignment="Left" Command="{Binding AddRuleCommand}" Grid.Column="1" DataContext="{Binding DataContext, ElementName=LstRules}"/>
-            <Button Margin="80,0,0,0" Grid.Column="1" Content="-" Width="75" VerticalAlignment="Bottom" HorizontalAlignment="Left" DataContext="{Binding DataContext, ElementName=LstRules}" Command="{Binding DeleteRuleCommand}" CommandParameter="{Binding SelectedItem, ElementName=LstRules}"/>
-            <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
-        </Grid>
-    </Grid>
+	<Grid>
+		<TabControl Margin="{StaticResource DefaultMargin}" >
+			<TabItem Header="{Loc Rules}">
+				<Grid Margin="{StaticResource DefaultMargin}">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+                    <GroupBox Header="{Loc Folders}"
+						Grid.Column="0">
+						<Grid>
+							<ListBox
+								SelectedIndex="0"
+								x:Name="ListBox" 
+								ItemsSource="{Binding Folders}" 
+								Margin="0,0,0,24"/>
+							<Button
+								Content="+" 
+								VerticalAlignment="Bottom"
+								HorizontalAlignment="Left"
+								Command="{Binding AddFolderCommand}"
+								Style="{StaticResource SimbolButtonStyle}"/>
+							<Button 
+								Margin="40,0,0,0"
+								Content="-" 
+								VerticalAlignment="Bottom"
+								HorizontalAlignment="Left"
+								Command="{Binding DeleteFolderCommand}" 
+								CommandParameter="{Binding SelectedItem, ElementName=ListBox}"
+								Style="{StaticResource SimbolButtonStyle}"/>
+						</Grid>
+					</GroupBox>
+                    <GroupBox Header="{Loc Rules}"
+						Grid.Column="1">
+                        <Grid>
+                            <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
+                            <ListBox
+								x:Name="LstRules" 
+								ItemsSource="{Binding Rules}" 
+								ItemTemplate="{DynamicResource RuleItemTempalte}" 
+								HorizontalContentAlignment="Stretch" 
+								Margin="0,0,0,24" 
+								DataContext="{Binding SelectedItem, ElementName=ListBox}">
+                            </ListBox>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                            	<Button 
+                            		Content="+" 
+                            		VerticalAlignment="Bottom"
+                            		HorizontalAlignment="Left" 
+                            		Command="{Binding AddRuleCommand}"
+                            		DataContext="{Binding DataContext, ElementName=LstRules}"
+                            		Style="{StaticResource SimbolButtonStyle}"/>
+                            	<Button 
+                            		Content="-" 
+                            		VerticalAlignment="Bottom" 
+                            		HorizontalAlignment="Left" 
+                            		DataContext="{Binding DataContext, ElementName=LstRules}" 
+                            		Command="{Binding DeleteRuleCommand}" 
+                            		CommandParameter="{Binding SelectedItem, ElementName=LstRules}"
+                            		Style="{StaticResource SimbolButtonStyle}" Margin="20,0,0,0"/>
+                            	<Button 
+                            		Content="↑" 
+                            		VerticalAlignment="Bottom" 
+                            		HorizontalAlignment="Left" 
+                            		DataContext="{Binding DataContext, ElementName=LstRules}" 
+                            		Command="{Binding MoveUpRuleCommand}" 
+                            		CommandParameter="{Binding SelectedItem, ElementName=LstRules}"
+                            		Style="{StaticResource SimbolButtonStyle}" Margin="20,0,0,0"/>
+                            	<Button 
+                            		Content="↓" 
+                            		VerticalAlignment="Bottom" 
+                            		HorizontalAlignment="Left" 
+                            		DataContext="{Binding DataContext, ElementName=LstRules}" 
+                            		Command="{Binding MoveDownRuleCommand}" 
+                            		CommandParameter="{Binding SelectedItem, ElementName=LstRules}"
+                            		Style="{StaticResource SimbolButtonStyle}" Margin="20,0,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                        <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
+                    </GroupBox>
+                </Grid>
+			</TabItem>
+			<TabItem Header="{Loc Settings}">
+				<Grid>
+					<views:ServiceControlView Margin="{StaticResource DefaultMargin}"/>
+				</Grid>
+			</TabItem>
+		</TabControl>
+	</Grid>
 </Window>

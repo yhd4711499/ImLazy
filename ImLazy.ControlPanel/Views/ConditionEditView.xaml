@@ -18,9 +18,14 @@
                 </Grid.ColumnDefinitions>
                 <views:AddinSelectView />
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Content="Add" Width="75" VerticalAlignment="Top" Command="{Binding Parent.NewConditionLeafCommand}"/>
-                    <Button Content="Add Sub" Width="75" VerticalAlignment="Top" Command="{Binding Parent.NewConditionBranchCommand}"/>
-                    <Button Content="Delete" Width="75" VerticalAlignment="Top" Command="{Binding Parent.DeleteConditionCommand}" CommandParameter="{Binding }"/>
+                    <StackPanel.Resources>
+                        <Style TargetType="Button" BasedOn="{StaticResource SimbolButtonStyle}">
+                            <Setter Property="Margin" Value="{StaticResource DefaultMargin}"></Setter>
+                        </Style>
+                    </StackPanel.Resources>
+                    <Button Content="+" VerticalAlignment="Top" Command="{Binding Parent.NewConditionLeafCommand}"/>
+                    <Button Content="+[]" VerticalAlignment="Top" Command="{Binding Parent.NewConditionBranchCommand}"/>
+                    <Button Content="-" VerticalAlignment="Top" Command="{Binding Parent.DeleteConditionCommand}" CommandParameter="{Binding }"/>
                 </StackPanel>
             </Grid>
         </HierarchicalDataTemplate>
@@ -29,7 +34,7 @@
                 <GroupBox.Header>
                     <!-- you bind MainView in Header="{Binding  Condition.MainView}" in GroupBox. An error will occur when reopen the window
                      which contained this view -->
-                    <ContentPresenter Content="{Binding MainView}"/>
+                    <ContentPresenter Content="{Binding MainView}" VerticalAlignment="Center"/>
                 </GroupBox.Header>
                 <Grid>
                     <ToggleButton Visibility="Collapsed" x:Name="Expander" ClickMode="Press" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" />
@@ -48,7 +53,7 @@
                 </Trigger>
                 <Trigger Property="IsSelected" Value="true">
                     <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>
+                    <!--<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>-->
                 </Trigger>
                 <MultiTrigger>
                     <MultiTrigger.Conditions>
@@ -73,18 +78,13 @@
             </util:ConditionItemContainerStyleSelector.NestedStyle>
         </util:ConditionItemContainerStyleSelector>
     </UserControl.Resources>
-    <Grid>
-        <GroupBox DataContext="{Binding}">
-            <GroupBox.Header>
-                <ContentPresenter Content="{Binding Condition.MainView}"/>
-            </GroupBox.Header>
-            <TreeView
-                ItemContainerStyleSelector="{StaticResource selector}"
-    		    ItemsSource="{Binding }"
-    		    ItemTemplate="{StaticResource ConditionViewModelTemplate}"
-    		    HorizontalContentAlignment="Stretch"
-                VerticalAlignment="Stretch" >
-            </TreeView>
-        </GroupBox>
+    <Grid DataContext="{Binding}">
+        <TreeView
+            ItemContainerStyleSelector="{StaticResource selector}"
+    		ItemsSource="{Binding }"
+    		ItemTemplate="{StaticResource ConditionViewModelTemplate}"
+    		HorizontalContentAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            BorderThickness="0"/>
     </Grid>
 </UserControl>

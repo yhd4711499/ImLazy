@@ -13,6 +13,5 @@ namespace ImLazy.Contracts
         /// 插件的类型
         /// </summary>
         Type Type { get; }
-        string Name { get; }
     }
 }

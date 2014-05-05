@@ -26,7 +26,7 @@ namespace ImLazy.Addins.Actions
             if (Directory.Exists(targetPath))
             {
                 // targetPath is dir. So copy filePath to targetPath folder
-                TryFileAction(filePath, targetPath, (f, t) => FolderUtil.ToFolder(f, t, _action));
+                ExecuteFileAction(filePath, targetPath, (f, t) => FolderUtil.ToFolder(f, t, _action));
             }
             else
             {
@@ -36,43 +36,32 @@ namespace ImLazy.Addins.Actions
                     // no extension means the targetPath is a dir path.
                     // so the dirs should be made first then followed by copying.
                     FolderUtil.MakeDirs(targetPath);
-                    TryFileAction(filePath, targetPath, (f, t) => FolderUtil.ToFolder(f, t, _action));
+                    ExecuteFileAction(filePath, targetPath, (f, t) => FolderUtil.ToFolder(f, t, _action));
                 }
                 else
                 {
                     // now targetPath is a full path.(ie. "D:\temp\a.ext")
                     // so copy from filePath directly to targetPath
-                    TryFileAction(filePath, targetPath, _action);
+                    ExecuteFileAction(filePath, targetPath, _action);
                 }
             }
         }
 
-        private void TryFileAction(string filePath, string targetPath, Action<string,string> action)
+        private void ExecuteFileAction(string filePath, string targetPath, Action<string,string> action)
         {
             if (FileSystemUtil.IsFileLocked(filePath))
             {
                 Log.InfoFormat("Source:[{0}] seems to be locked. Try it next time.", filePath);
-                return;;
+                return;
             }
             if (FileSystemUtil.IsFileLocked(targetPath))
             {
                 Log.InfoFormat("Target:[{0}] seems to be locked. Try it next time.", targetPath);
-                return; ;
+                return;
             }
-            
-            try
-            {
-                action(filePath, targetPath);
-                Log.InfoFormat("{2} : {0} -> {1}", filePath, targetPath, _actionName);
-            }
-            catch (IOException ex)
-            {
-                Log.Error(String.Format("Failed in {0} : {1} -> {2}.", _actionName, filePath, targetPath), ex);
-            }
-            catch (Exception e)
-            {
-                Log.Error(String.Format("Action [{0}] failed.", _actionName), e);
-            }
+
+            action(filePath, targetPath);
+            Log.InfoFormat("{2} : {0} -> {1}", filePath, targetPath, _actionName);
         }
 
         private Action<string, string> _action;
@@ -87,5 +76,8 @@ namespace ImLazy.Addins.Actions
         {
             return new TextContent { Configuration = config };
         }
+
+        protected abstract string GetName();
+        public string LocalName { get { return GetName(); } }
     }
 }

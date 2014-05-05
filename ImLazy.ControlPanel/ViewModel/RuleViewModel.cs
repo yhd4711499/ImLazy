@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using ImLazy.ControlPanel.Util;
 using ImLazy.ControlPanel.Views;
 using ImLazy.Data;
 using System.Windows;
@@ -14,7 +15,7 @@ namespace ImLazy.ControlPanel.ViewModel
     /// </summary>
     public class RuleViewModel : ViewModelBase
     {
-        public const string NamePropertyName = "Name";
+        public const string NamePropertyName = "LocalName";
         public string Name
         {
             get { return Rule.Name; }
@@ -57,8 +58,32 @@ namespace ImLazy.ControlPanel.ViewModel
         }
 
         public FolderViewModel FolderParent { get; private set; }
-        public RuleProperty Property { get; private set; }
-        public Rule Rule { get; private set; }
+
+        private RuleProperty _property;
+        public RuleProperty Property
+        {
+            get { return _property; }
+            private set
+            {
+                if(value == _property)
+                    return;
+                _property = value;
+                RaisePropertyChanged(EnabledPropertyName);
+            }
+        }
+
+        private Rule _rule;
+        public Rule Rule
+        {
+            get { return _rule; }
+            private set
+            {
+                if(value == _rule)
+                    return;
+                _rule = value;
+                RaisePropertyChanged(NamePropertyName);
+            }
+        }
 
         /// <summary>
         /// Use a ViewModel instead of ConditionCorp data class to provide UI interaction for future use.
@@ -102,12 +127,14 @@ namespace ImLazy.ControlPanel.ViewModel
                        ?? (_editCommand = new RelayCommand(
                            () =>
                            {
-                               var memento = GetMemento() as Memento;
+                               var memento = GetMemento();
                                var ruleVm = new RuleViewModel(FolderParent, memento.Rule, memento.Property);
                                var w = new Window
                                {
+                                   Height = 600,
+                                   Width = 800,
                                    ShowActivated = true,
-                                   Title = "New Rule",
+                                   Title = "EditRule".Local(),
                                    Content = new RuleDetailView
                                    {
                                        DataContext = ruleVm
@@ -219,12 +246,11 @@ namespace ImLazy.ControlPanel.ViewModel
         {
             FolderParent = folderParent;
             Property = p;
-
         }
 
         #region Memento
 
-        private object GetMemento()
+        private Memento GetMemento()
         {
             return new Memento(this);
         }
@@ -233,7 +259,7 @@ namespace ImLazy.ControlPanel.ViewModel
         {
             var memento = mementoObj as Memento;
             if (memento == null) throw new ArgumentNullException("mementoObj");
-            Property = memento.Property;
+            Enabled = memento.Property.Enabled;
             Rule = memento.Rule;
         }
 

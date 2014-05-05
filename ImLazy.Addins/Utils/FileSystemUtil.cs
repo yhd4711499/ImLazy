@@ -17,11 +17,32 @@ namespace ImLazy.Addins.Utils
             }
         }
 
+        public static void DeleteFileOrFolder(string source)
+        {
+            if (Directory.Exists(source))
+            {
+                Directory.Delete(source, true);
+            }
+            else
+            {
+                File.Delete(source);
+            }
+        }
+
         public static void MoveFileOrFolder(string source, string dest)
         {
             if (Directory.Exists(source))
             {
-                Directory.Move(source, dest);
+                if (Path.GetPathRoot(source) != Path.GetPathRoot(dest))
+                {
+                    DirectoryCopy(source, dest, true);
+                    Directory.Delete(source, true);
+                }
+                else
+                {
+                    Directory.Move(source, dest);
+                }
+                
             }
             else
             {
@@ -93,12 +114,12 @@ namespace ImLazy.Addins.Utils
         {
             if (!File.Exists(path))
                 return false;
-            var flag = false;
+            var flag = true;
             try
             {
                 using (new FileStream(path, FileMode.Open))
                 {
-                    flag = true;
+                    flag = false;
                 }
             }
             catch (IOException)

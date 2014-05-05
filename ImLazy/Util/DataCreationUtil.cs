@@ -86,7 +86,7 @@ namespace ImLazy.Util
             where TIAddin : IAddin
             where TIMetadata : IAddinMetadata
         {
-            var c = AddinInfoFactory.Create<TWrapper>(lazy.Metadata);
+            var c = AddinInfoFactory.Create<TWrapper>(lazy.Value);
             return c;
         }
     }

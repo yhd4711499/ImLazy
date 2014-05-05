@@ -1,11 +1,11 @@
-﻿using ImLazy.Contracts;
+﻿using ImLazy.Addins.Utils;
+using ImLazy.Contracts;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
 
 namespace ImLazy.Addins.Actions
 {
-    [ExportMetadata("Name", "删除")]
     [ExportMetadata("Type", typeof(DeleteAction))]
     [Export(typeof(IActionAddin))]
     public class DeleteAction:IActionAddin
@@ -19,6 +19,11 @@ namespace ImLazy.Addins.Actions
         public IEditView CreateMainView(SerializableDictionary<string, object> config)
         {
             return null;
+        }
+
+        public string LocalName
+        {
+            get { return "DeleteAction".Local(); }
         }
     }
 }

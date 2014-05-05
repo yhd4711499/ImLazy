@@ -11,6 +11,7 @@ namespace ImLazy.Data
         public Guid Guid { get; set; }
         [XmlAttribute]
         public String Name { get; set; }
+
 // ReSharper disable MemberCanBePrivate.Global
         public ConditionBranch ConditionBranch { get; set; }
 // ReSharper restore MemberCanBePrivate.Global

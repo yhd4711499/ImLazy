@@ -33,7 +33,10 @@ namespace ImLazy.RunTime
                         _instance = DataCreationUtil.TryCreateFromFile<DataStorage>(FilePath);
                     }
                     if (_instance != null)
+                    {
                         _instance.Rules.ForEach(_ => CacheMap<object>.RuleCacheMap.Put(_.Key, _.Value));
+                        _instance.Folders.ForEach(f=>f.RuleProperties.Sort());
+                    }
                     else
                         _instance = Create();
                 }

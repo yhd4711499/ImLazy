@@ -57,9 +57,10 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.4.2.30.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+      <HintPath>..\packages\MahApps.Metro.0.13.1.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -79,6 +80,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviors\CloseParentWindowBehavior.cs" />
+    <Compile Include="Behaviors\MouseDoubleClick.cs" />
+    <Compile Include="Commands\AwaitableDelegateCommand.cs" />
+    <Compile Include="Converters\BooleanConverter.cs" />
+    <Compile Include="Converters\BooleanToStringConverter.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\Status.cs" />
+    <Compile Include="Converters\StatusConverter.cs" />
     <Compile Include="Interop\ComDlgResources.cs" />
     <Compile Include="Interop\COMGuids.cs" />
     <Compile Include="Interop\ErrorHelper.cs" />
@@ -86,7 +94,13 @@
     <Compile Include="Interop\ShellComInterfaces.cs" />
     <Compile Include="Interop\ShellWrapperDefinitions.cs" />
     <Compile Include="Interop\Win32Resources.cs" />
+    <Compile Include="Properties\Resources.zh-CN.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.zh-CN.resx</DependentUpon>
+    </Compile>
     <Compile Include="Util\ConditionItemContainerStyleSelector.cs" />
+    <Compile Include="Util\LocalUtil.cs" />
     <Compile Include="Util\MyVisualTreeHelper.cs" />
     <Compile Include="Util\NativeMethods.cs" />
     <Compile Include="Util\SafeHandles.cs" />
@@ -95,6 +109,7 @@
     <Compile Include="ViewModel\ConditionLeafViewModel.cs" />
     <Compile Include="ViewModel\ConditionCorpViewModel.cs" />
     <Compile Include="ViewModel\ConditionViewModelFactory.cs" />
+    <Compile Include="ViewModel\ControlPanelViewModel.cs" />
     <Compile Include="ViewModel\FolderViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\AddinInfoViewModelBase.cs" />
@@ -129,6 +144,22 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Resources\Templates\Default\ItemTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic\Buttons.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Themes\Generic\Default.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Metro\Buttons.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Metro\Default.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -167,6 +198,10 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Properties\Resources.zh-CN.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -184,9 +219,17 @@
       <Project>{55146d10-f793-4b90-b07a-d796eb9af9f2}</Project>
       <Name>ImLazy.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ImLazy.Service\ImLazy.Service.csproj">
+      <Project>{b997faec-a6b7-46a3-a064-8b931ca4540c}</Project>
+      <Name>ImLazy.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ImLazy\ImLazy.csproj">
       <Project>{9e2ccb85-22b1-4aae-9dc0-1d23e6156825}</Project>
       <Name>ImLazy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WpfLocalization\WpfLocalization.csproj">
+      <Project>{2e907436-577c-4769-90f4-87aba03fe24a}</Project>
+      <Name>WpfLocalization</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

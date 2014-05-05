@@ -13,5 +13,6 @@ namespace ImLazy.Contracts
         /// 获取插件的视图
         /// </summary>
         IEditView CreateMainView(SerializableDictionary<string, object> config);
+        string LocalName { get; }
     }
 }

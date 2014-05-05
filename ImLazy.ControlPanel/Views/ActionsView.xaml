@@ -15,17 +15,23 @@
                 </Grid.ColumnDefinitions>
                 <views:AddinSelectView />
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Content="Add" Width="75" VerticalAlignment="Top" Command="{Binding Parent.NewActionCommand}"/>
-                    <Button Content="Delete" Width="75" VerticalAlignment="Top" Command="{Binding Parent.DeleteActionCommand}" CommandParameter="{Binding }"/>
+                    <Button Content="+" Style="{StaticResource SimbolButtonStyle}" VerticalAlignment="Top" Command="{Binding Parent.NewActionCommand}" Margin="{StaticResource DefaultMargin}"/>
+                    <Button Content="-" Style="{StaticResource SimbolButtonStyle}" VerticalAlignment="Top" Command="{Binding Parent.DeleteActionCommand}" CommandParameter="{Binding }" Margin="{StaticResource DefaultMargin}"/>
                 </StackPanel>
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
-    	<TreeView
-	        ItemsSource="{Binding }"
-    		ItemTemplate="{StaticResource ActionItemTemplate}"
-    		HorizontalContentAlignment="Stretch">
-		</TreeView>
+        <GroupBox Header="执行以下动作">
+            <ScrollViewer
+                VerticalScrollBarVisibility="Auto">
+                <ItemsControl
+                    BorderThickness="0"
+	                ItemsSource="{Binding }"
+    		        ItemTemplate="{StaticResource ActionItemTemplate}"
+    		        HorizontalContentAlignment="Stretch">
+                </ItemsControl>
+            </ScrollViewer>
+        </GroupBox>
     </Grid>
 </UserControl>

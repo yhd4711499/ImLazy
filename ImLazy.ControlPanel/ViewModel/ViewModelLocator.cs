@@ -51,5 +51,10 @@ namespace ImLazy.ControlPanel.ViewModel
                 return ServiceLocator.Current.GetInstance<MainViewModel>();
             }
         }
+
+        public ControlPanelViewModel ControlPanel
+        {
+            get { return new ControlPanelViewModel(); }
+        }
     }
 }

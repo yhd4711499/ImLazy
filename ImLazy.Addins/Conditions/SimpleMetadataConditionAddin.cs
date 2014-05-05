@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text.RegularExpressions;
 using ImLazy.Contracts;
 using log4net;
 using System;
@@ -7,11 +8,13 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using ImLazy.Util;
 using ImLazy.RunTime;
+using Microsoft.WindowsAPICodePack.ApplicationServices;
+using WpfLocalization;
 using LogManager = ImLazy.RunTime.LogManager;
+using ImLazy.Addins.Utils;
 
 namespace ImLazy.Addins.Conditions
 {
-    [ExportMetadata("Name", "文件信息")]
     [ExportMetadata("Type", typeof(SimpleMetadataConditionAddin))]
     [Export(typeof(IConditionAddin))]
     public class SimpleMetadataConditionAddin : IConditionAddin
@@ -20,12 +23,25 @@ namespace ImLazy.Addins.Conditions
 
         #region Class Initiation
 
+        public static readonly Dictionary<string, Func<string, bool>> FileTypes = new Dictionary<string, Func<string, bool>>
+            {
+                {"File", File.Exists},
+                {"Folder", Directory.Exists},
+                {"Any", (s) => true},
+            };
+
         public static readonly Dictionary<string, PropertyOpeartion> PropertyOpeartions = new Dictionary<string, PropertyOpeartion>
         {
             {"System.FileName", GetPropertyOpeartion<string>(Path.GetFileName)},
             {"System.FileExtension", GetPropertyOpeartion<string>(Path.GetExtension)},
             {"System.Size", GetPropertyOpeartion<long>(_=> File.Exists(_)? new FileInfo(_).Length.ToString():"0")},
         };
+
+        public enum MatchMode
+        {
+            Matches,
+            NotMatches
+        }
 
         /// <summary>
         /// Recents used keys
@@ -39,44 +55,24 @@ namespace ImLazy.Addins.Conditions
             <string, ConditionOpeartion>
         {
             {
-                "equals",
+                "smb_equals",
                 GetOperation<string>((a, b) => a.Equals(b, StringComparison.InvariantCultureIgnoreCase))
             },
             {
-                "contains",
+                "smb_contains",
                 GetOperation<string>((a, b) => a.Contains(b))
             },
             {
-                "starts with",
+                "smb_starts_with",
                 GetOperation<string>((a, b) => a.StartsWith(b, StringComparison.InvariantCultureIgnoreCase))
             },
             {
-                "ends with",
+                "smb_ends_with",
                 GetOperation<string>((a, b) => a.EndsWith(b, StringComparison.InvariantCultureIgnoreCase))
-            },
-            {
-                "not equals",
-                GetOperation<string>((a, b) => !a.Equals(b, StringComparison.InvariantCultureIgnoreCase))
-            },
-            {
-                "not contains",
-                GetOperation<string>((a, b) => !a.Contains(b))
-            },
-            {
-                "not starts with",
-                GetOperation<string>((a, b) => !a.StartsWith(b, StringComparison.InvariantCultureIgnoreCase))
-            },
-            {
-                "not ends with",
-                GetOperation<string>((a, b) => !a.EndsWith(b, StringComparison.InvariantCultureIgnoreCase))
             },
             {
                 ">",
                 GetOperation<long>((a,b)=>long.Parse(a) > long.Parse(b))
-            },
-            {
-                ">=",
-                GetOperation<long>((a,b)=>long.Parse(a) >= long.Parse(b))
             },
             {
                 "=",
@@ -86,40 +82,7 @@ namespace ImLazy.Addins.Conditions
                 "<",
                 GetOperation<long>((a,b)=>long.Parse(a) < long.Parse(b))
             },
-            {
-                "<=",
-                GetOperation<long>((a,b)=>long.Parse(a) <= long.Parse(b))
-            },
-            {
-                "!=",
-                GetOperation<long>((a,b)=>long.Parse(a) != long.Parse(b))
-            },
         };
-
-        static SimpleMetadataConditionAddin()
-        {
-            Log.Debug("Initiating ...");
-            try
-            {
-                /*LoadAllProperties(typeof(SystemProperties));
-                Log.Debug("Sorting system properties...");
-                Properties.Sort((a, b) => 
-                {
-                    var indexA = PriorityMap.FindIndex(_ => _.Equals(a.PropertyKey));
-                    var indexB = PriorityMap.FindIndex(_ => _.Equals(b.PropertyKey));
-                    if (indexA == indexB)
-                        return 0;
-                    if (indexA > indexB)
-                        return -1;
-                    return 1;
-                });
-                Log.Debug("SimpleMetadataConditionAddin Initiated.");*/
-            }
-            catch (Exception ex)
-            {
-                Log.Error("Failed in initiating.", ex);
-            }
-        }
         #endregion
 
         #region Constaints
@@ -166,13 +129,42 @@ namespace ImLazy.Addins.Conditions
         #endregion
 
         #region API
-        public bool IsMatch(string filePath, SerializableDictionary<string, object> arg)
+        public bool IsMatch(string filePath, SerializableDictionary<string, object> dic)
         {
             Log.Debug("Begin match.");
 
-            var symbol = arg.TryGetValue<string>(ConfigNames.Symbol);
-            var matchObjects = arg.TryGetValue(ConfigNames.TargetObject);
-            var targetProperty = arg.TryGetValue<string>(ConfigNames.TargetProperty);
+            var symbol = dic.TryGetValue<string>(ConfigNames.Symbol);
+            var matchObjects = dic.TryGetValue(ConfigNames.TargetObject);
+            var targetProperty = dic.TryGetValue<string>(ConfigNames.TargetProperty);
+            var modeStr = dic.TryGetValue<string>(ConfigNames.Mode);
+            if (String.IsNullOrEmpty(modeStr))
+            {
+                Log.Error("Mode is undefined! Return false instead.");
+                return false;
+            }
+            MatchMode matchMode;
+            if (!Enum.TryParse(modeStr, out matchMode))
+            {
+                Log.ErrorFormat("Can't parse a correct match mode from [{0}]. Return false instead.", modeStr);
+                return false;
+            }
+
+            var type = dic.TryGetValue<string>(ConfigNames.FileType);
+            if (!Log.CheckParam(type, "Can't parse a correct file type from [{0}]. Return false instead.", type))
+                return false;
+
+            Func<string, bool> matchTypeFunc;
+            if (!FileTypes.TryGetValue(type, out matchTypeFunc))
+            {
+                Log.ErrorFormat("Can't parse a correct file type from [{0}]. Return false instead.", type);
+                return false;
+            }
+
+            if (!matchTypeFunc(filePath))
+            {
+                Log.DebugFormat("{0} didn't match FileType : {1}", filePath, type);
+                return false;
+            }
 
             // get PropertyOpeartion
             PropertyOpeartion po;
@@ -198,7 +190,8 @@ namespace ImLazy.Addins.Conditions
             var matchStrings = ((string) matchObjects).Split(Spliter);
             Log.DebugFormat("Matching {0} {1} [{2}]", value, symbol, String.Join(",", matchStrings));
             var result = matchStrings.Any(_ => co.IsMatch(value, _)); //operationCache.IsMatch(value, matchObjects);
-
+            if (matchMode == MatchMode.NotMatches)
+                result = !result;
             Log.DebugFormat("Done matching : {0}", result);
             return result;
 
@@ -208,6 +201,12 @@ namespace ImLazy.Addins.Conditions
         {
             return new SimpleMetadataConditionAddinView { Configuration = config };
         }
+
+        public string LocalName
+        {
+            get { return "SimpleMetadataConditionAddin".Local(); }
+        }
+
         #endregion
 
         /// <summary>

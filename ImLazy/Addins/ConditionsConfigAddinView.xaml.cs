@@ -5,6 +5,7 @@ using System.Windows;
 using ImLazy.Util;
 using ImLazy.RunTime;
 using ImLazy.Data;
+using ImLazy.Util;
 
 namespace ImLazy.Addins
 {
@@ -21,7 +22,11 @@ namespace ImLazy.Addins
 
         void ConditionsConfigAddinView_Loaded(object sender, RoutedEventArgs e)
         {
-            CmbMode.ItemsSource = Enum.GetNames(typeof(ConditionMode));
+            // For localization
+            var dic = new Dictionary<string, string>();
+            Enum.GetNames(typeof(ConditionMode)).ForEach(_ => dic.Add(_.Local(), _));
+
+            CmbMode.ItemsSource = dic;
             if (CmbMode.SelectedItem == null)
             {
                 CmbMode.SelectedIndex = 0;
@@ -35,14 +40,14 @@ namespace ImLazy.Addins
             {
                 var dic = new SerializableDictionary<string, object>
                 { 
-                    {ConfigNames.Symbol, CmbMode.SelectedItem}
+                    {ConfigNames.Symbol, CmbMode.SelectedValue}
                 };
                 return dic;
             }
             set
             {
                 var modeStr = value.TryGetValue<string>(ConfigNames.Symbol);
-                CmbMode.SelectedItem = modeStr;
+                CmbMode.SelectedValue = modeStr;
             }
         }
     }

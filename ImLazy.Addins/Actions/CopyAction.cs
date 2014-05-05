@@ -5,7 +5,6 @@ using System.ComponentModel.Composition;
 
 namespace ImLazy.Addins.Actions
 {
-    [ExportMetadata("Name", "复制")]
     [ExportMetadata("Type", typeof(CopyAction))]
     [Export(typeof(IActionAddin))]
     public class CopyAction : FileActionBase
@@ -13,6 +12,11 @@ namespace ImLazy.Addins.Actions
         public CopyAction()
         {
             SetAction(FileSystemUtil.CopyFileOrFolder);
+        }
+
+        protected override string GetName()
+        {
+            return "CopyAction".Local();
         }
     }
 }

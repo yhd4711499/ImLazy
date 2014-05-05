@@ -64,6 +64,16 @@
     <Compile Include="Data\Rule.cs" />
     <Compile Include="Data\RuleProperty.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <DependentUpon>Resources.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Properties\Resources.zh-CN.Designer.cs">
+      <DependentUpon>Resources.zh-CN.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="RunTime\CacheMap.cs" />
     <Compile Include="RunTime\AddinHost.cs" />
     <Compile Include="RunTime\AppEnvironment.cs" />
@@ -71,16 +81,22 @@
     <Compile Include="RunTime\DataStorage.cs" />
     <Compile Include="RunTime\Executor.cs" />
     <Compile Include="RunTime\LogManager.cs" />
+    <Compile Include="Util\CodingUtil.cs" />
     <Compile Include="Util\ConfigurationHelper.cs" />
     <Compile Include="Util\DataCreationUtil.cs" />
     <Compile Include="Util\EnumHelper.cs" />
     <Compile Include="Util\FolderUtil.cs" />
+    <Compile Include="Util\LocalUtil.cs" />
     <Compile Include="Util\ObjectCopier.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ImLazy.Contracts\ImLazy.Contracts.csproj">
       <Project>{55146d10-f793-4b90-b07a-d796eb9af9f2}</Project>
       <Name>ImLazy.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WpfLocalization\WpfLocalization.csproj">
+      <Project>{2e907436-577c-4769-90f4-87aba03fe24a}</Project>
+      <Name>WpfLocalization</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -94,6 +110,16 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="System\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.zh-CN.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

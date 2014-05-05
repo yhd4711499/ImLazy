@@ -7,6 +7,7 @@ namespace ImLazy.Data
     public class AddinInfo : DataItemBase, IAddinInfo
     {
         public string AddinType { get; set; }
+        public string LocalName { get; set; }
         public string Name { get; set; }
 
         public virtual void Save(SerializableDictionary<string, object> config)

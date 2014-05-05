@@ -7,7 +7,7 @@ namespace ImLazy.Data
     {
 //        protected override IActionAddin GetAddin(string name)
 //        {
-//            var _ = AddinHost.Instance.ActionAddins.FirstOrDefault(l => l.Metadata.Name.Equals(AddinName));
+//            var _ = AddinHost.Instance.ActionAddins.FirstOrDefault(l => l.Metadata.LocalName.Equals(AddinName));
 //            return _ != null ? _.Value : null;
 //        }
     }

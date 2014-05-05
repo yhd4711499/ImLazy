@@ -9,22 +9,23 @@
     <UserControl.Resources>
         <DataTemplate x:Key="AddinItemTemplate" DataType="viewModel:AddinInfoViewModelBase">
             <Grid>
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding AddinInfo.Name}" VerticalAlignment="Top"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding AddinInfo.LocalName}" VerticalAlignment="Top"/>
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
     	<Grid.ColumnDefinitions>
-    		<ColumnDefinition/>
     		<ColumnDefinition Width="Auto"/>
+    		<ColumnDefinition Width="*"/>
     	</Grid.ColumnDefinitions>
         <ComboBox
     		x:Name="ComboBoxAddin" 
     		VerticalAlignment="Center"
             HorizontalAlignment="Stretch"
-    		ItemTemplate="{StaticResource AddinItemTemplate}"
             HorizontalContentAlignment="Stretch"
-            VerticalContentAlignment="Center"/>
+            VerticalContentAlignment="Center"
+            ItemTemplate="{StaticResource AddinItemTemplate}"
+            Margin="{StaticResource DefaultMargin}"/>
     	<ContentPresenter
     		x:Name="ContentAddin"
     		VerticalAlignment="Center"

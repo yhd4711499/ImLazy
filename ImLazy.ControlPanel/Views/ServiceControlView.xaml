@@ -2,23 +2,31 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              mc:Ignorable="d" 
              d:DesignHeight="300"
              d:DesignWidth="300">
-    <Grid>
-        <Button Content="安装" Height="23" HorizontalAlignment="Left" Margin="12,12,0,0" Name="BtnInstall" VerticalAlignment="Top" Width="75" Click="btnInstall_Click" />
-        <Button Content="卸载" Height="23" HorizontalAlignment="Left" Margin="93,12,0,0" Name="BtnUninstall" VerticalAlignment="Top" Width="75" Click="btnUninstall_Click" />
-        <Button Content="检测服务状态" Height="23" HorizontalAlignment="Left" Margin="12,70,0,0" Name="BtnCheckStatus" VerticalAlignment="Top" Width="109" Click="btnCheckStatus_Click" />
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="127,70,0,0" Name="LblCheckStatus" Text="" VerticalAlignment="Top" Width="364"
-                   x:FieldModifier="private" />
-        <Button Content="Start" Height="23" HorizontalAlignment="Left" Margin="12,41,0,0" Name="BtnStart" VerticalAlignment="Top" Width="75" Click="btnStart_Click" />
-        <Button Content="Stop" Height="23" HorizontalAlignment="Left" Margin="93,41,0,0" Name="BtnStop" VerticalAlignment="Top" Width="75" Click="btnStop_Click" />
-        <Button Content="Pause/Continue" Height="23" HorizontalAlignment="Left" Margin="174,41,0,0" Name="BtnPauseContinue" VerticalAlignment="Top" Width="109" Click="btnPauseContinue_Click" />
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="289,41,0,0" Name="LblStatus" Text="" VerticalAlignment="Top" Width="202"
-                   x:FieldModifier="private" />
-        <TextBlock Height="23" HorizontalAlignment="Left" Margin="174,12,0,0" Name="LblLog" Text="" VerticalAlignment="Top" Width="317"
-                   x:FieldModifier="private" />
-        <Button Content="运行" HorizontalAlignment="Left" Margin="12,98,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-    </Grid>
+    <StackPanel DataContext="{Binding ControlPanel,Source={StaticResource Locator}}">
+		<StackPanel Orientation="Horizontal">
+    		<Label Content="{Loc Status}"/>
+            <TextBlock TextWrapping="Wrap" Text="{Binding Status}" VerticalAlignment="Center" Foreground="{Binding Status,Converter={StaticResource StatusConverter}}"/>
+            <TextBlock TextWrapping="Wrap" Margin="8,0,0,0" Text="{Binding ExecutionStatus,StringFormat=[{0}]}" VerticalAlignment="Center" Foreground="{Binding ExecutionStatus,Converter={StaticResource StatusConverter}}"/>
+    	</StackPanel>
+		<GroupBox Header="{Loc ControlPanel}" Margin="0,20,0,0">
+			<UniformGrid Columns="2" Margin="{StaticResource DefaultMargin}" HorizontalAlignment="Left">
+				<UniformGrid.Resources>
+					<Style TargetType="Button">
+						<Setter Property="Height" Value="25"/>
+						<Setter Property="Width" Value="75"/>
+						<Setter Property="Margin" Value="0,0,8,8"/>
+					</Style>
+				</UniformGrid.Resources>
+				<Button Content="安装" Command="{Binding InstallCommand}"/>
+				<Button Content="卸载" Command="{Binding UninstallCommand}"/>
+                <Button Content="启动服务" Command="{Binding StartCommand}"/>
+                <Button Content="停止服务" Command="{Binding StopCommand}"/>
+                <Button Content="立即清理" Command="{Binding ExecuteCommand}"/>
+            </UniformGrid>
+		</GroupBox>
+	</StackPanel>
 </UserControl>

@@ -13,12 +13,19 @@ namespace ImLazy.RunTime
         private readonly CacheMap<Action<string, SerializableDictionary<string, object>>> _actionCacheMap;
         private readonly CacheMap<Rule> _ruleCacheMap;
 
+        private readonly HashSet<string> _execludsions = new HashSet<string>
+        {
+            "desktop.ini",
+            "Thumbs.db"
+        };
+
         /// <summary>
         /// Used to store LastWriteTime for files scanned.
         /// <para>When executing, the time stored will be compared to the actual time of </para>
-        /// <para>the file. Followed procedures will be skipped if these two time are the same.</para>
+        /// <para>the file-rule, which is a combination of file path and <see cref="RuleProperty"/>.</para>
+        /// <para>Followed procedures will be skipped if these two time are the same.</para>
         /// </summary>
-        private readonly static Dictionary<string, int> Records = new Dictionary<string, int>();
+        private readonly static FileRuleCombinationCache Records = new FileRuleCombinationCache();
 
         private static readonly ILog Log = LogManager.GetLogger(typeof(Executor));
 
@@ -26,6 +33,11 @@ namespace ImLazy.RunTime
         {
         }
 
+
+        public static void ClearCache(Guid ruleGuid)
+        {
+            Records.Remove(ruleGuid);
+        }
         /// <summary>
         /// 初始化Executor
         /// </summary>
@@ -40,6 +52,7 @@ namespace ImLazy.RunTime
             _conditionCacheMap = conditionCacheMap;
             _actionCacheMap = actionCacheMap;
             _ruleCacheMap = ruleCacheMap;
+            Log.InfoFormat("Exclusions: {0}", String.Join(",", _execludsions));
         }
 
         public void Execute(IEnumerable<Folder> folders)
@@ -51,20 +64,20 @@ namespace ImLazy.RunTime
 
         private void Do(Folder folder)
         {
-            Directory.EnumerateFileSystemEntries(folder.FolderPath).ForEach(fe =>
+            Directory.EnumerateFileSystemEntries(folder.FolderPath).Where(_ => !_execludsions.Contains(Path.GetFileName(_))).ForEach(fe =>
             {
-                // Is the file untouched since last execution?
-                int lastExeTime, lastWriteTime = File.GetLastWriteTime(fe).Millisecond;
-                if (Records.TryGetValue(fe, out lastExeTime) && lastExeTime == lastWriteTime)
+                foreach (var rp in folder.RuleProperties.Where(_=>_.Enabled))
                 {
-                    // If so, skip it.
-                    Log.DebugFormat("{0} not changed since last exectution. Skip.", fe);
-                    return;
-                }
-                Records[fe] = lastWriteTime;
+                    // Is the file-rule untouched since last execution?
+                    int lastExeTime, lastWriteTime = File.GetLastWriteTime(fe).Millisecond;
+                    if (Records.TryGetValue(rp.RuleGuid, fe, out lastExeTime) && lastExeTime == lastWriteTime)
+                    {
+                        // If so, skip it.
+                        Log.DebugFormat("{0} not changed since last exectution. Skip.", fe);
+                        return;
+                    }
+                    Records[rp.RuleGuid, fe] = lastWriteTime;
 
-                foreach (var rp in folder.RuleProperties)
-                {
                     // Get the rule by guid
                     Log.DebugFormat("Searching for rule with GUID:{0}...", rp.RuleGuid);
                     var rule = _ruleCacheMap.Get(rp.RuleGuid);
@@ -97,14 +110,16 @@ namespace ImLazy.RunTime
                                 actionMethod(fe, action.Config);
                                 successed++;
                                 Log.Debug("Succeed!");
-                                // Remove record to avoid memory leak
-                                Records.Remove(fe);
-
                             }
                             catch (Exception ex)
                             {
                                 failed++;
                                 Log.Error("Action failed!", ex);
+                            }
+                            finally
+                            {
+                                // Remove record to avoid memory leak
+                                Records.Remove(rp.RuleGuid, fe);
                             }
                         });
                         Log.DebugFormat("Actions all done. Successed:{0}, failed:{1}", successed, failed);
@@ -143,6 +158,64 @@ namespace ImLazy.RunTime
                         return false;
                 }
             }
+        }
+
+        /// <summary>
+        /// A <see cref="Dictionary{T,V}"/> which takes a computed hashcode of
+        /// <para> <see cref="RuleProperty"/> and <see cref="string"/> as key and <see cref="int"/> as value.</para>
+        /// </summary>
+        private class FileRuleCombinationCache : Dictionary<Guid, Dictionary<string, int>>
+        {
+            /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="propertyGuid"><see cref="Guid"/></param>
+            /// <param name="filePath">File path</param>
+            /// <returns></returns>
+            public int this[Guid propertyGuid, string filePath]
+            {
+                set
+                {
+                    Dictionary<string, int> pairs;
+                    if (!TryGetValue(propertyGuid, out pairs))
+                    {
+                        pairs = new Dictionary<string, int>();
+                        this[propertyGuid] = pairs;
+                    }
+                    pairs[filePath] = value;
+                }
+            }
+
+            /// <summary>
+            /// Get the computed hash code
+            /// </summary>
+            /// <param name="propertyGuid"></param>
+            /// <param name="filePath"></param>
+            /// <returns></returns>
+            /*private static int CalcHash(RuleProperty p, string filePath)
+            {
+                return p.GetHashCode() + 31 * filePath.GetHashCode();
+            }*/
+
+            public void Remove(Guid propertyGuid, string filePath)
+            {
+                this[propertyGuid].Remove(filePath);
+            }
+
+            /// <summary>
+            /// Same as TryGetValue(int, out int) but taks a computed hashcode of the first two params as key.
+            /// </summary>
+            /// <param name="propertyGuid"></param>
+            /// <param name="filePath"></param>
+            /// <param name="value"></param>
+            /// <returns></returns>
+            public bool TryGetValue(Guid propertyGuid, string filePath, out int value)
+            {
+                value = -1;
+                Dictionary<string, int> pairs;
+                return TryGetValue(propertyGuid, out pairs) && pairs.TryGetValue(filePath, out value);
+            }
+            
         }
     }
 }

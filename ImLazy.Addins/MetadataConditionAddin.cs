@@ -1,4 +1,5 @@
-﻿using ImLazy.Contracts;
+﻿using ImLazy.Addins.Utils;
+using ImLazy.Contracts;
 using log4net;
 using Microsoft.WindowsAPICodePack.Shell;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
@@ -12,7 +13,6 @@ using LogManager = ImLazy.RunTime.LogManager;
 
 namespace ImLazy.Addins
 {
-    [ExportMetadata("Name", "元数据")]
     [ExportMetadata("Type", typeof(MetadataConditionAddin))]
     [Export(typeof(IConditionAddin))]
     public class MetadataConditionAddin : IConditionAddin
@@ -125,13 +125,13 @@ namespace ImLazy.Addins
         #endregion
 
         #region API
-        public bool IsMatch(string filePath, SerializableDictionary<string, object> arg)
+        public bool IsMatch(string filePath, SerializableDictionary<string, object> dic)
         {
             Log.Debug("Begin match.");
 
-            var symbol = arg.TryGetValue<string>(ConfigNames.Symbol);
-            var matchObjects = arg.TryGetValue(ConfigNames.TargetObject);
-            var targetProperty = arg.TryGetValue<string>(ConfigNames.TargetProperty);
+            var symbol = dic.TryGetValue<string>(ConfigNames.Symbol);
+            var matchObjects = dic.TryGetValue(ConfigNames.TargetObject);
+            var targetProperty = dic.TryGetValue<string>(ConfigNames.TargetProperty);
 
             // get property object
             var so = ShellObject.FromParsingName(filePath);
@@ -174,6 +174,12 @@ namespace ImLazy.Addins
         {
             return new MetadataConditionAddinView { Configuration = config };
         }
+
+        public string LocalName
+        {
+            get { return "MetadataConditionAddin".Local(); }
+        }
+
         #endregion
 
         /// <summary>
