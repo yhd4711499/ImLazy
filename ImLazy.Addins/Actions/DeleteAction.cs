@@ -1,6 +1,6 @@
-﻿using ImLazy.Addins.Utils;
-using ImLazy.Contracts;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using ImLazy.Addins.Utils;
+using ImLazy.SDK.Base.Contracts;
 using System.ComponentModel.Composition;
 using System.IO;
 

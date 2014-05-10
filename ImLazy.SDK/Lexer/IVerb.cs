@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using ImLazy.Contracts;
-
-namespace ImLazy.SDK.Lexer
+﻿namespace ImLazy.SDK.Lexer
 {
     public interface IVerb : ILexer
     {

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ImLazy.Addins.Utils;
 using ImLazy.SDK.Lexer;
 
 namespace ImLazy.Addins.Lexer.Subjects

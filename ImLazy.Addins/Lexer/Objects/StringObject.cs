@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using ImLazy.Addins.ContentViews;
-using ImLazy.Contracts;
-using ImLazy.RunTime;
+using ImLazy.SDK.Base.Contracts;
 using ImLazy.SDK.Lexer;
-using ImLazy.Util;
 
 namespace ImLazy.Addins.Lexer.Objects
 {

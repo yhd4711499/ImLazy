@@ -83,9 +83,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ImLazy.Contracts\ImLazy.Contracts.csproj">
-      <Project>{55146d10-f793-4b90-b07a-d796eb9af9f2}</Project>
-      <Name>ImLazy.Contracts</Name>
+    <ProjectReference Include="..\ImLazy.SDK\ImLazy.SDK.csproj">
+      <Project>{1a58b251-454e-48e1-b62d-4ede0b8222ee}</Project>
+      <Name>ImLazy.SDK</Name>
     </ProjectReference>
     <ProjectReference Include="..\ImLazy\ImLazy.csproj">
       <Project>{9e2ccb85-22b1-4aae-9dc0-1d23e6156825}</Project>

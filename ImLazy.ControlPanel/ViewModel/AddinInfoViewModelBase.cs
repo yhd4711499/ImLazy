@@ -1,7 +1,7 @@
 ﻿using GalaSoft.MvvmLight;
-using ImLazy.Contracts;
 using ImLazy.Data;
 using ImLazy.RunTime;
+using ImLazy.SDK.Base.Contracts;
 
 namespace ImLazy.ControlPanel.ViewModel
 {

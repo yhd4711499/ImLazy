@@ -3,7 +3,7 @@ using System.IO;
 using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Xml.Serialization;
-using ImLazy.Contracts;
+using ImLazy.SDK.Base.Contracts;
 using ImLazy.Data;
 using log4net;
 using LogManager = ImLazy.RunTime.LogManager;

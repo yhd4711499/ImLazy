@@ -1,5 +1,5 @@
 ﻿using ImLazy.Addins.Utils;
-using ImLazy.Contracts;
+using ImLazy.SDK.Base.Contracts;
 using log4net;
 using Microsoft.WindowsAPICodePack.Shell;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
@@ -7,9 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using ImLazy.Util;
 using ImLazy.RunTime;
 using LogManager = ImLazy.RunTime.LogManager;
+using ImLazy.Util;
 
 namespace ImLazy.Addins
 {

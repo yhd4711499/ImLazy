@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using ImLazy.Contracts;
+using ImLazy.SDK.Base.Contracts;
 using ImLazy.Data;
 
 namespace ImLazy.RunTime

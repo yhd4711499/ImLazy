@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ImLazy.Contracts;
+using ImLazy.SDK.Base.Contracts;
 
 namespace ImLazy.Data
 {

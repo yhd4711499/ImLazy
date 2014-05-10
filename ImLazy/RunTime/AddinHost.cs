@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Linq;
-using ImLazy.Contracts;
+using ImLazy.SDK.Base.Contracts;
 using log4net;
 
 namespace ImLazy.RunTime

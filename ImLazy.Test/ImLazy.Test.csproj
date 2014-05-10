@@ -66,10 +66,6 @@
       <Project>{4853e911-7a66-4436-b0d6-c98a96e07ecd}</Project>
       <Name>ImLazy.Addins</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ImLazy.Contracts\ImLazy.Contracts.csproj">
-      <Project>{55146d10-f793-4b90-b07a-d796eb9af9f2}</Project>
-      <Name>ImLazy.Contracts</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ImLazy.SDK\ImLazy.SDK.csproj">
       <Project>{1a58b251-454e-48e1-b62d-4ede0b8222ee}</Project>
       <Name>ImLazy.SDK</Name>

@@ -2,16 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ImLazy.Addins.Utils;
-using ImLazy.Contracts;
+using ImLazy.SDK.Base.Contracts;
 using ImLazy.RunTime;
 using ImLazy.Util;
 using log4net;
-using WpfLocalization;
-using ConfigurationHelper = ImLazy.Util.ConfigurationHelper;
 using LogManager = ImLazy.RunTime.LogManager;
 
 namespace ImLazy.Addins.Conditions

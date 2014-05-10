@@ -1,6 +1,6 @@
 ﻿using System.IO;
-using System.Text.RegularExpressions;
-using ImLazy.Contracts;
+using ImLazy.Addins.Utils;
+using ImLazy.SDK.Base.Contracts;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -8,10 +8,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using ImLazy.Util;
 using ImLazy.RunTime;
-using Microsoft.WindowsAPICodePack.ApplicationServices;
-using WpfLocalization;
 using LogManager = ImLazy.RunTime.LogManager;
-using ImLazy.Addins.Utils;
 
 namespace ImLazy.Addins.Conditions
 {

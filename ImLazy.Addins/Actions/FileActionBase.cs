@@ -1,9 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using ImLazy.Addins.ContentViews;
 using ImLazy.Addins.Utils;
-using ImLazy.Contracts;
+using ImLazy.SDK.Base.Contracts;
 using System;
-using System.Collections.Generic;
 using ImLazy.RunTime;
 using ImLazy.Util;
 using log4net;

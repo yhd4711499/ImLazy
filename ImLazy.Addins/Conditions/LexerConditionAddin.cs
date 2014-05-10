@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ImLazy.Addins.Utils;
-using ImLazy.Contracts;
+using ImLazy.SDK.Base.Contracts;
 using ImLazy.RunTime;
-using ImLazy.SDK.Lexer;
 using ImLazy.Util;
-using WpfLocalization;
 
 namespace ImLazy.Addins.Conditions
 {

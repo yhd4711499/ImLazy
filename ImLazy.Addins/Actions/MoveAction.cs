@@ -1,6 +1,5 @@
 ﻿using ImLazy.Addins.Utils;
-using ImLazy.Contracts;
-using System.IO;
+using ImLazy.SDK.Base.Contracts;
 using System.ComponentModel.Composition;
 
 namespace ImLazy.Addins.Actions

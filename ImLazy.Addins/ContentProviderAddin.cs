@@ -1,9 +1,9 @@
 ﻿using System.Windows;
-using ImLazy.Contracts;
+using ImLazy.SDK.Base.Contracts;
 using System;
 using System.Collections.Generic;
-using ImLazy.Util;
 using ImLazy.Addins.ContentViews;
+using ImLazy.Util;
 
 namespace ImLazy.Addins
 {

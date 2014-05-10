@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
-using ImLazy.Contracts;
+﻿using System.Collections.Generic;
+using IEditView = ImLazy.SDK.Base.Contracts.IEditView;
 
 namespace ImLazy.SDK.Lexer
 {

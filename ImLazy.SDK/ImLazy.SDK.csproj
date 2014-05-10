@@ -36,18 +36,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\Contracts\IActionAddin.cs" />
+    <Compile Include="Base\Contracts\IActionAddinMetadata.cs" />
+    <Compile Include="Base\Contracts\IAddin.cs" />
+    <Compile Include="Base\Contracts\IAddinMetadata.cs" />
+    <Compile Include="Base\Contracts\IConditionAddin.cs" />
+    <Compile Include="Base\Contracts\IConditionAddinMetadata.cs" />
+    <Compile Include="Base\Contracts\IEditView.cs" />
+    <Compile Include="Base\Contracts\IEditViewBranch.cs" />
+    <Compile Include="System.Collections.Generic\Extensions.cs" />
+    <Compile Include="System.Collections.Generic\SerializableDictionary.cs" />
     <Compile Include="Lexer\ILexer.cs" />
     <Compile Include="Lexer\ILexerData.cs" />
     <Compile Include="Lexer\IObject.cs" />
     <Compile Include="Lexer\ISubject.cs" />
     <Compile Include="Lexer\IVerb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ImLazy.Contracts\ImLazy.Contracts.csproj">
-      <Project>{55146d10-f793-4b90-b07a-d796eb9af9f2}</Project>
-      <Name>ImLazy.Contracts</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

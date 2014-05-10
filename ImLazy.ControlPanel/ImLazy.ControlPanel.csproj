@@ -208,9 +208,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ImLazy.Contracts\ImLazy.Contracts.csproj">
-      <Project>{55146d10-f793-4b90-b07a-d796eb9af9f2}</Project>
-      <Name>ImLazy.Contracts</Name>
+    <ProjectReference Include="..\ImLazy.SDK\ImLazy.SDK.csproj">
+      <Project>{1a58b251-454e-48e1-b62d-4ede0b8222ee}</Project>
+      <Name>ImLazy.SDK</Name>
     </ProjectReference>
     <ProjectReference Include="..\ImLazy.Service\ImLazy.Service.csproj">
       <Project>{b997faec-a6b7-46a3-a064-8b931ca4540c}</Project>

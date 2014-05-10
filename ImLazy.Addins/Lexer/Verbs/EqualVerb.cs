@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Composition;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ImLazy.Addins.Utils;
+﻿using System.ComponentModel.Composition;
 using ImLazy.SDK.Lexer;
 
 namespace ImLazy.Addins.Lexer.Verbs

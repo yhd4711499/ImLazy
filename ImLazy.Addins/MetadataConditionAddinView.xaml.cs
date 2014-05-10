@@ -1,6 +1,6 @@
 ﻿using System;
 using ImLazy.Addins.Annotations;
-using ImLazy.Contracts;
+using ImLazy.SDK.Base.Contracts;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using System.Collections.Generic;
 using System.Linq;
