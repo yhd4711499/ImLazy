@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using System.Windows;
 using System.Diagnostics;
-using System.ServiceProcess;
 using System.Threading;
 using ImLazy.RunTime;
 using ImLazy.Service;

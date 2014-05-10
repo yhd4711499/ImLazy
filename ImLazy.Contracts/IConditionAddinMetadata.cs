@@ -13,7 +13,5 @@ namespace ImLazy.Contracts
         /// </summary>
         [DefaultValue("")]
         string Parent { get; }
-        [DefaultValue(false)]
-        bool ForRule { get; }
     }
 }

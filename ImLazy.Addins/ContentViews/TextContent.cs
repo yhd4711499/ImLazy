@@ -14,12 +14,12 @@ namespace ImLazy.Addins.ContentViews
             {
                 return new SerializableDictionary<string, object>
                 {
-                    {ConfigNames.TargetObject,Text}
+                    {ConfigNames.ObjectValue,Text}
                 };
             }
             set
             {
-                Text = value.TryGetValue(ConfigNames.TargetObject) as string;
+                Text = value.TryGetValue(ConfigNames.ObjectValue) as string;
             }
         }
     }

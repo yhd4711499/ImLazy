@@ -4,8 +4,10 @@ using ImLazy.Addins.Utils;
 using ImLazy.Contracts;
 using System;
 using System.Collections.Generic;
+using ImLazy.RunTime;
 using ImLazy.Util;
 using log4net;
+using LogManager = log4net.LogManager;
 
 namespace ImLazy.Addins.Actions
 {
@@ -15,7 +17,7 @@ namespace ImLazy.Addins.Actions
         private static readonly ILog Log = LogManager.GetLogger(typeof(FileActionBase));
         public void DoAction(string filePath, SerializableDictionary<string, object> dic)
         {
-            var targetPath = dic.TryGetValue<string>("TargetObject");
+            var targetPath = dic.TryGetValue<string>(ConfigNames.ObjectValue);
             if (File.Exists(targetPath))
             {
                 throw new Exception(String.Format("Target path exist : {0}. Unable to proceed !", targetPath));

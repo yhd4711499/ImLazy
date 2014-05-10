@@ -33,6 +33,9 @@ namespace ImLazy.RunTime
             Log.Info("AddinHost initiating...");
             _instance.LoadAddins();
             _instance.BuildCache();
+
+            LexerRuntime.Instance.ToString();
+
             Log.Info("AddinHost initiated.");
         }
 

@@ -56,6 +56,10 @@
     <Compile Include="Actions\DeleteAction.cs" />
     <Compile Include="Actions\FileActionBase.cs" />
     <Compile Include="Conditions\FileTypeConditionAddin.cs" />
+    <Compile Include="Conditions\LexerConditionAddin.cs" />
+    <Compile Include="Conditions\LexerConditionAddinView.xaml.cs">
+      <DependentUpon>LexerConditionAddinView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Conditions\SimpleMetadataConditionAddin.cs" />
     <Compile Include="Conditions\FileTypeConditionAddinView.xaml.cs">
       <DependentUpon>FileTypeConditionAddinView.xaml</DependentUpon>
@@ -67,6 +71,11 @@
     <Compile Include="ContentViews\BoolContent.cs" />
     <Compile Include="ContentViews\LongContent.cs" />
     <Compile Include="ContentViews\TextContent.cs" />
+    <Compile Include="Lexer\Objects\StringObject.cs" />
+    <Compile Include="Lexer\Subjects\FileExtensionSubject.cs" />
+    <Compile Include="Lexer\Subjects\FileNameSubject.cs" />
+    <Compile Include="Lexer\Verbs\ContainsVerb.cs" />
+    <Compile Include="Lexer\Verbs\EqualVerb.cs" />
     <Compile Include="MetadataConditionAddin.cs" />
     <Compile Include="MetadataConditionAddinView.xaml.cs">
       <DependentUpon>MetadataConditionAddinView.xaml</DependentUpon>
@@ -93,6 +102,11 @@
       <Name>ImLazy.Contracts</Name>
       <Private>False</Private>
     </ProjectReference>
+    <ProjectReference Include="..\ImLazy.SDK\ImLazy.SDK.csproj">
+      <Project>{1a58b251-454e-48e1-b62d-4ede0b8222ee}</Project>
+      <Name>ImLazy.SDK</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\ImLazy\ImLazy.csproj">
       <Project>{9e2ccb85-22b1-4aae-9dc0-1d23e6156825}</Project>
       <Name>ImLazy</Name>
@@ -101,12 +115,17 @@
     <ProjectReference Include="..\WpfLocalization\WpfLocalization.csproj">
       <Project>{2E907436-577C-4769-90F4-87ABA03FE24A}</Project>
       <Name>WpfLocalization</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Conditions\FileTypeConditionAddinView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Conditions\LexerConditionAddinView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Conditions\SimpleMetadataConditionAddinView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -130,6 +149,7 @@
       <LastGenOutput>Resources.zh-CN.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -5,7 +5,6 @@ using System.Windows;
 using ImLazy.Util;
 using ImLazy.RunTime;
 using ImLazy.Data;
-using ImLazy.Util;
 
 namespace ImLazy.Addins
 {
@@ -40,13 +39,13 @@ namespace ImLazy.Addins
             {
                 var dic = new SerializableDictionary<string, object>
                 { 
-                    {ConfigNames.Symbol, CmbMode.SelectedValue}
+                    {ConfigNames.Symbol, CmbMode.SelectedValue.ToString()}
                 };
                 return dic;
             }
             set
             {
-                var modeStr = value.TryGetValue<string>(ConfigNames.Symbol);
+                var modeStr = value.TryGetValue(ConfigNames.Symbol);
                 CmbMode.SelectedValue = modeStr;
             }
         }

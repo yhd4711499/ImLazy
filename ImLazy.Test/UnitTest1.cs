@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using ImLazy.Addins.Conditions;
 using ImLazy.RunTime;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -8,11 +9,10 @@ namespace ImLazy.Test
     public class UnitTest1
     {
         [TestMethod]
-        public void TestMethod_Clone_AddinInfo()
+        public void TestMethod_LexerRuntime()
         {
-//            var info = AddinInfoFactory.Create<ActionAddinInfo>(typeof (UnitTest1));
-//            info.Config["test"] = "test";
-//            object clone = info.Clone();
+            var count = LexerRuntime.Instance.Subjects.Count();
+            Assert.AreEqual(count, 2);
         }
 
         [TestMethod]

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.Serialization.Json;
+using System.Text;
 using System.Xml.Serialization;
 using ImLazy.Contracts;
 using ImLazy.Data;
@@ -49,6 +51,17 @@ namespace ImLazy.Util
         }
 
         /// <summary>
+        /// JSON反序列化
+        /// </summary>
+        public static T JsonDeserialize<T>(string jsonString)
+        {
+            var ser = new DataContractJsonSerializer(typeof(T));
+            var ms = new MemoryStream(Encoding.UTF8.GetBytes(jsonString));
+            T obj = (T)ser.ReadObject(ms);
+            return obj;
+        }
+
+        /// <summary>
         /// 保存到文件
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -59,7 +72,7 @@ namespace ImLazy.Util
             try
             {
                 Log.DebugFormat("Saving instance of {0} to path: {1}", typeof(T), filePath);
-                using (var stream = new StreamWriter(filePath, false))
+                using (var stream = new StreamWriter(filePath))
                 {
                     var xs = new XmlSerializer(typeof(T));
                     xs.Serialize(stream, data);

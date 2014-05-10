@@ -7,5 +7,10 @@
         public const string TargetProperty = "TargetProperty";
         public const string Mode = "Mode";
         public const string FileType = "FileType";
+
+        public const string Subject = "Subject";
+        public const string Verb = "Verb";
+        public const string Object = "Object";
+        public const string ObjectValue = "ObjectValue";
     }
 }

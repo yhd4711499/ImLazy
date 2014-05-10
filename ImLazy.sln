@@ -11,6 +11,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImLazy.ControlPanel", "ImLazy.ControlPanel\ImLazy.ControlPanel.csproj", "{07445760-082C-4B2B-8E06-53505B3AB01B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4853E911-7A66-4436-B0D6-C98A96E07ECD} = {4853E911-7A66-4436-B0D6-C98A96E07ECD}
+		{1A58B251-454E-48E1-B62D-4EDE0B8222EE} = {1A58B251-454E-48E1-B62D-4EDE0B8222EE}
 		{B997FAEC-A6B7-46A3-A064-8B931CA4540C} = {B997FAEC-A6B7-46A3-A064-8B931CA4540C}
 	EndProjectSection
 EndProject
@@ -25,6 +26,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImLazy.Test", "ImLazy.Test\ImLazy.Test.csproj", "{5579A0B7-1A8A-4966-A01D-6E132DD49A97}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfLocalization", "WpfLocalization\WpfLocalization.csproj", "{2E907436-577C-4769-90F4-87ABA03FE24A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImLazy.SDK", "ImLazy.SDK\ImLazy.SDK.csproj", "{1A58B251-454E-48E1-B62D-4EDE0B8222EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -106,6 +109,16 @@ Global
 		{2E907436-577C-4769-90F4-87ABA03FE24A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{2E907436-577C-4769-90F4-87ABA03FE24A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{2E907436-577C-4769-90F4-87ABA03FE24A}.Release|x86.ActiveCfg = Release|Any CPU
+		{1A58B251-454E-48E1-B62D-4EDE0B8222EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A58B251-454E-48E1-B62D-4EDE0B8222EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A58B251-454E-48E1-B62D-4EDE0B8222EE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1A58B251-454E-48E1-B62D-4EDE0B8222EE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1A58B251-454E-48E1-B62D-4EDE0B8222EE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1A58B251-454E-48E1-B62D-4EDE0B8222EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A58B251-454E-48E1-B62D-4EDE0B8222EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A58B251-454E-48E1-B62D-4EDE0B8222EE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1A58B251-454E-48E1-B62D-4EDE0B8222EE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1A58B251-454E-48E1-B62D-4EDE0B8222EE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

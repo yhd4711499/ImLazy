@@ -39,6 +39,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
@@ -80,6 +81,7 @@
     <Compile Include="RunTime\ConfigNames.cs" />
     <Compile Include="RunTime\DataStorage.cs" />
     <Compile Include="RunTime\Executor.cs" />
+    <Compile Include="RunTime\LexerRuntime.cs" />
     <Compile Include="RunTime\LogManager.cs" />
     <Compile Include="Util\CodingUtil.cs" />
     <Compile Include="Util\ConfigurationHelper.cs" />
@@ -93,6 +95,10 @@
     <ProjectReference Include="..\ImLazy.Contracts\ImLazy.Contracts.csproj">
       <Project>{55146d10-f793-4b90-b07a-d796eb9af9f2}</Project>
       <Name>ImLazy.Contracts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImLazy.SDK\ImLazy.SDK.csproj">
+      <Project>{1a58b251-454e-48e1-b62d-4ede0b8222ee}</Project>
+      <Name>ImLazy.SDK</Name>
     </ProjectReference>
     <ProjectReference Include="..\WpfLocalization\WpfLocalization.csproj">
       <Project>{2e907436-577c-4769-90f4-87aba03fe24a}</Project>

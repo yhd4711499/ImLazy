@@ -62,13 +62,25 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ImLazy.Addins\ImLazy.Addins.csproj">
+      <Project>{4853e911-7a66-4436-b0d6-c98a96e07ecd}</Project>
+      <Name>ImLazy.Addins</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ImLazy.Contracts\ImLazy.Contracts.csproj">
       <Project>{55146d10-f793-4b90-b07a-d796eb9af9f2}</Project>
       <Name>ImLazy.Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ImLazy.SDK\ImLazy.SDK.csproj">
+      <Project>{1a58b251-454e-48e1-b62d-4ede0b8222ee}</Project>
+      <Name>ImLazy.SDK</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ImLazy\ImLazy.csproj">
       <Project>{9E2CCB85-22B1-4AAE-9DC0-1D23E6156825}</Project>
       <Name>ImLazy</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WpfLocalization\WpfLocalization.csproj">
+      <Project>{2e907436-577c-4769-90f4-87aba03fe24a}</Project>
+      <Name>WpfLocalization</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

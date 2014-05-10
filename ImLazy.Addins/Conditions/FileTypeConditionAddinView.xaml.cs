@@ -33,8 +33,8 @@ namespace ImLazy.Addins.Conditions
             {
                 _configuration = new SerializableDictionary<string, object>
                 {
-                        {ConfigNames.FileType, ((LocalString) cmb_FileTypes.SelectedItem).Value}
-                    };
+                    {ConfigNames.FileType, ((LocalString) cmb_FileTypes.SelectedItem).Value}
+                };
                 return _configuration;
             }
             set

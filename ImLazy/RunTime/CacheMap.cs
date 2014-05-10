@@ -60,6 +60,12 @@ namespace ImLazy.RunTime
 // ReSharper restore StaticFieldInGenericType
         #endregion
 
+        public static readonly CacheMap<Func<string,object>> SubjectsCacheMap = new CacheMap<Func<string, object>>();
+
+        public static readonly CacheMap<Func<object,object,bool>> VerbsCacheMap = new CacheMap<Func<object, object, bool>>();
+ 
+        public static readonly CacheMap<Func<string, object>> ObjectsCacheMap = new CacheMap<Func<string, object>>(); 
+
         private readonly Dictionary<string, T> _cache = new Dictionary<string, T>();
         /// <summary>
         /// 放入缓存，将会替换已有的同名缓存
