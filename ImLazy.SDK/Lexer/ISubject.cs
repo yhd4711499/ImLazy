@@ -2,7 +2,7 @@
 {
     public interface ISubject : ILexer
     {
-        string GetVerbType();
+        LexerType GetVerbType();
         object GetProperty(string filePath);
     }
 }

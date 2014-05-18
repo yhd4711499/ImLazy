@@ -13,8 +13,8 @@ using ImLazy.Util;
 
 namespace ImLazy.Addins
 {
-    [ExportMetadata("Type", typeof(MetadataConditionAddin))]
-    [Export(typeof(IConditionAddin))]
+    //[ExportMetadata("Type", typeof(MetadataConditionAddin))]
+    //[Export(typeof(IConditionAddin))]
     public class MetadataConditionAddin : IConditionAddin
     {
         static readonly ILog Log = LogManager.GetLogger(typeof(MetadataConditionAddin));

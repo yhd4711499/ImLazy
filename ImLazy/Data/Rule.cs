@@ -24,12 +24,15 @@ namespace ImLazy.Data
         /// <returns>A new instance of <see cref="Rule"/></returns>
         public static Rule Create()
         {
-            return new Rule
+            var r = new Rule
             {
                 Guid = Guid.NewGuid(),
                 ConditionBranch = new ConditionBranch(),
                 Actions = new List<ActionAddinInfo>(),
             };
+            r.ConditionBranch.Add(new ConditionLeaf());
+            r.Actions.Add(new ActionAddinInfo());
+            return r;
         }
 
         public bool Equals(Rule other)

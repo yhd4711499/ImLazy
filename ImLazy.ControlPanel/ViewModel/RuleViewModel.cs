@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ImLazy.ControlPanel.Util;
@@ -15,7 +16,9 @@ namespace ImLazy.ControlPanel.ViewModel
     /// </summary>
     public class RuleViewModel : ViewModelBase
     {
-        public const string NamePropertyName = "LocalName";
+        private bool _surpressSaveCommand;
+
+        public const string NamePropertyName = "Name";
         public string Name
         {
             get { return Rule.Name; }
@@ -25,7 +28,6 @@ namespace ImLazy.ControlPanel.ViewModel
                     return;
                 Rule.Name = value;
                 RaisePropertyChanged(NamePropertyName);
-                SaveCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -89,6 +91,11 @@ namespace ImLazy.ControlPanel.ViewModel
         /// Use a ViewModel instead of ConditionCorp data class to provide UI interaction for future use.
         /// </summary>
         public ObservableCollection<ConditionCorpViewModel> Conditions { get; set; }
+
+        public ConditionCorpViewModel Condition
+        {
+            get { return Conditions.FirstOrDefault(); }
+        }
         public ObservableCollection<ActionViewModel> Actions { get; private set; }
 
         #region Commands
@@ -104,7 +111,11 @@ namespace ImLazy.ControlPanel.ViewModel
             {
                 return _saveCommand
                        ?? (_saveCommand = new RelayCommand(
-                           () => FolderParent.SaveRuleCommand.Execute(this),
+                           () =>
+                           {
+                               if (!_surpressSaveCommand)
+                                   FolderParent.SaveRuleCommand.Execute(this);
+                           },
                            () =>
                            {
                                if (string.IsNullOrEmpty(Rule.Name))
@@ -128,23 +139,11 @@ namespace ImLazy.ControlPanel.ViewModel
                            () =>
                            {
                                var memento = GetMemento();
-                               var ruleVm = new RuleViewModel(FolderParent, memento.Rule, memento.Property);
-                               var w = new Window
-                               {
-                                   Height = 600,
-                                   Width = 800,
-                                   ShowActivated = true,
-                                   Title = "EditRule".Local(),
-                                   Content = new RuleDetailView
-                                   {
-                                       DataContext = ruleVm
-                                   }
-                               };
-                               if (w.ShowDialog() == true)
-                               {
-                                   SetMemento(memento);
-                                   FolderParent.SaveRuleCommand.Execute(ruleVm);
-                               }
+                               var ruleVm = new RuleViewModel(FolderParent, memento.Rule, memento.Property) {_surpressSaveCommand = false};
+                               var w = WindowUtil.CreateRuleWindow(ruleVm, "EditRule".Local());
+                               if (w.ShowDialog() != true) return;
+                               SetMemento(memento);
+                               SaveCommand.Execute(null);
                            }));
             }
         }
@@ -180,12 +179,6 @@ namespace ImLazy.ControlPanel.ViewModel
                                if (_addPendingActions != null)
                                {
                                    _addPendingActions.Remove(p.AddinInfo as ActionAddinInfo);
-                                   //var d = _addPendingActions.Where(_ => _.Equals(p.ActionAddinInfo)).FirstOrDefault();
-                                   //if (d != null)
-                                   //{
-                                   //    _addPendingActions.Remove(d);
-                                   //    return;
-                                   //}
                                }
                                Rule.Actions.RemoveAll(_ => _.Equals(p.AddinInfo));
                            }));

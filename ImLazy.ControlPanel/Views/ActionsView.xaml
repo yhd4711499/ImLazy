@@ -23,7 +23,7 @@
     </UserControl.Resources>
     <Grid>
         <GroupBox Header="执行以下动作">
-            <ScrollViewer
+            <ScrollViewer MaxHeight="200"
                 VerticalScrollBarVisibility="Auto">
                 <ItemsControl
                     BorderThickness="0"

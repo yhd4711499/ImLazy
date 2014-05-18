@@ -8,16 +8,12 @@ namespace ImLazy.Addins.Lexer.Subjects
     [ExportMetadata("Name", "ImLazy.Addins.Lexer.Subjects.FileNameSubject")]
     public class FileNameSubject : ISubject
     {
-        public string ElementType { get; private set; }
+        public string Name { get { return "FileNameSubject"; } }
+        public LexerType ElementType { get; private set; }
 
-        public string Name
+        public LexerType GetVerbType()
         {
-            get { return "FileNameSubject"; }
-        }
-
-        public string GetVerbType()
-        {
-            return "string";
+            return LexerTypes.StringType;
         }
 
         public object GetProperty(string filePath)

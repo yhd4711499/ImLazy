@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using ImLazy.Addins.Utils;
 using ImLazy.SDK.Base.Contracts;
+using ImLazy.SDK.Util;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -12,8 +13,8 @@ using LogManager = ImLazy.RunTime.LogManager;
 
 namespace ImLazy.Addins.Conditions
 {
-    [ExportMetadata("Type", typeof(SimpleMetadataConditionAddin))]
-    [Export(typeof(IConditionAddin))]
+    //[ExportMetadata("Type", typeof(SimpleMetadataConditionAddin))]
+    //[Export(typeof(IConditionAddin))]
     public class SimpleMetadataConditionAddin : IConditionAddin
     {
         static readonly ILog Log = LogManager.GetLogger(typeof(SimpleMetadataConditionAddin));
@@ -24,7 +25,7 @@ namespace ImLazy.Addins.Conditions
             {
                 {"File", File.Exists},
                 {"Folder", Directory.Exists},
-                {"Any", (s) => true},
+                {"Any", s => true},
             };
 
         public static readonly Dictionary<string, PropertyOpeartion> PropertyOpeartions = new Dictionary<string, PropertyOpeartion>

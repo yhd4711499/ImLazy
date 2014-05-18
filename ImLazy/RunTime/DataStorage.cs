@@ -101,6 +101,7 @@ namespace ImLazy.RunTime
         {
             DataCreationUtil.TrySaveToFile(this, FilePath);
             AddinHost.Instance.BuildCache();
+            LexerRuntime.Instance.BuildCache();
         }
     }
 }

@@ -201,4 +201,43 @@
   <data name="FileTypeConditionAddin" xml:space="preserve">
     <value>文件类型</value>
   </data>
+  <data name="AnyFile" xml:space="preserve">
+    <value>文件</value>
+  </data>
+  <data name="Audio" xml:space="preserve">
+    <value>音频</value>
+  </data>
+  <data name="ContainsVerb" xml:space="preserve">
+    <value>含有</value>
+  </data>
+  <data name="Document" xml:space="preserve">
+    <value>文档</value>
+  </data>
+  <data name="EqualVerb" xml:space="preserve">
+    <value>是</value>
+  </data>
+  <data name="FileExtensionSubject" xml:space="preserve">
+    <value>后缀名</value>
+  </data>
+  <data name="FileNameSubject" xml:space="preserve">
+    <value>文件名（含后缀）</value>
+  </data>
+  <data name="FileTypeSubject" xml:space="preserve">
+    <value>文件类型</value>
+  </data>
+  <data name="GuitarProTab" xml:space="preserve">
+    <value>吉他谱</value>
+  </data>
+  <data name="IsVerb" xml:space="preserve">
+    <value>是</value>
+  </data>
+  <data name="Picture" xml:space="preserve">
+    <value>图片</value>
+  </data>
+  <data name="Video" xml:space="preserve">
+    <value>视频</value>
+  </data>
+  <data name="Archieve" xml:space="preserve">
+    <value>压缩包</value>
+  </data>
 </root>

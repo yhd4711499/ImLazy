@@ -201,4 +201,43 @@
   <data name="FileTypeConditionAddin" xml:space="preserve">
     <value>File type</value>
   </data>
+  <data name="AnyFile" xml:space="preserve">
+    <value>file</value>
+  </data>
+  <data name="Audio" xml:space="preserve">
+    <value>audio</value>
+  </data>
+  <data name="ContainsVerb" xml:space="preserve">
+    <value>contains</value>
+  </data>
+  <data name="Document" xml:space="preserve">
+    <value>document</value>
+  </data>
+  <data name="EqualVerb" xml:space="preserve">
+    <value>equals</value>
+  </data>
+  <data name="FileExtensionSubject" xml:space="preserve">
+    <value>File extension</value>
+  </data>
+  <data name="FileNameSubject" xml:space="preserve">
+    <value>Name with extension</value>
+  </data>
+  <data name="FileTypeSubject" xml:space="preserve">
+    <value>File type</value>
+  </data>
+  <data name="GuitarProTab" xml:space="preserve">
+    <value>GuitarPro tab</value>
+  </data>
+  <data name="IsVerb" xml:space="preserve">
+    <value>is</value>
+  </data>
+  <data name="Picture" xml:space="preserve">
+    <value>picture</value>
+  </data>
+  <data name="Video" xml:space="preserve">
+    <value>video</value>
+  </data>
+  <data name="Archieve" xml:space="preserve">
+    <value>Archieve</value>
+  </data>
 </root>

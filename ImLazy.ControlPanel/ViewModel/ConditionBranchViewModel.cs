@@ -18,12 +18,6 @@ namespace ImLazy.ControlPanel.ViewModel
             get { return AddinInfo as ConditionBranch; }
         }
 
-        public new ConditionBranchViewModel Parent
-        {
-            get { return base.Parent as ConditionBranchViewModel; }
-            set { base.Parent = value; }
-        }
-
         public ObservableCollection<ConditionCorpViewModel> SubConditions { get; protected set; }
 
         /// <summary>
@@ -53,6 +47,12 @@ namespace ImLazy.ControlPanel.ViewModel
             }
         }
 
+        public void InsertCondition(int index, ConditionCorpViewModel vm)
+        {
+            AddPendingConditions.Insert(index, vm.AddinInfo as ConditionCorp);
+            SubConditions.Insert(index, vm);
+        }
+
         ConditionCorpViewModel CreateViewModel(ConditionCorp c)
         {
             var nc = c as ConditionBranch;
@@ -63,6 +63,11 @@ namespace ImLazy.ControlPanel.ViewModel
         }
 
         private List<ConditionCorp> _addPendingConditions;
+
+        private List<ConditionCorp> AddPendingConditions
+        {
+            get { return _addPendingConditions ?? (_addPendingConditions = new List<ConditionCorp>()); }
+        } 
 
         private RelayCommand _newConditionLeafCommand;
 
@@ -85,8 +90,6 @@ namespace ImLazy.ControlPanel.ViewModel
         /// <returns>An instance of <see cref="ConditionCorpViewModel"/> or <see cref="ConditionBranchViewModel"/></returns>
         private ConditionCorpViewModel NewCondition(bool isBranch)
         {
-            if (_addPendingConditions == null)
-                _addPendingConditions = new List<ConditionCorp>();
             ConditionCorpViewModel vm;
             ConditionCorp c;
             if (isBranch)
@@ -99,7 +102,7 @@ namespace ImLazy.ControlPanel.ViewModel
                 c = new ConditionLeaf();
                 vm = new ConditionLeafViewModel(c as ConditionLeaf, this);
             }
-            _addPendingConditions.Add(c);
+            AddPendingConditions.Add(c);
             SubConditions.Add(vm);
             return vm;
         }

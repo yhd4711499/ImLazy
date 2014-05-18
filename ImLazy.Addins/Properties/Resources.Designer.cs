@@ -9,6 +9,9 @@
 //------------------------------------------------------------------------------
 
 namespace ImLazy.Addins.Properties {
+    using System;
+    
+    
     /// <summary>
     ///   一个强类型的资源类，用于查找本地化的字符串等。
     /// </summary>
@@ -76,6 +79,24 @@ namespace ImLazy.Addins.Properties {
         }
         
         /// <summary>
+        ///   查找类似 file 的本地化字符串。
+        /// </summary>
+        internal static string AnyFile {
+            get {
+                return ResourceManager.GetString("AnyFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Archieve 的本地化字符串。
+        /// </summary>
+        internal static string Archieve {
+            get {
+                return ResourceManager.GetString("Archieve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 attribute 的本地化字符串。
         /// </summary>
         internal static string Attribute {
@@ -85,11 +106,29 @@ namespace ImLazy.Addins.Properties {
         }
         
         /// <summary>
+        ///   查找类似 audio 的本地化字符串。
+        /// </summary>
+        internal static string Audio {
+            get {
+                return ResourceManager.GetString("Audio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 condition matches 的本地化字符串。
         /// </summary>
         internal static string ConditionMatches {
             get {
                 return ResourceManager.GetString("ConditionMatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 contains 的本地化字符串。
+        /// </summary>
+        internal static string ContainsVerb {
+            get {
+                return ResourceManager.GetString("ContainsVerb", resourceCulture);
             }
         }
         
@@ -112,11 +151,47 @@ namespace ImLazy.Addins.Properties {
         }
         
         /// <summary>
+        ///   查找类似 document 的本地化字符串。
+        /// </summary>
+        internal static string Document {
+            get {
+                return ResourceManager.GetString("Document", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 equals 的本地化字符串。
+        /// </summary>
+        internal static string EqualVerb {
+            get {
+                return ResourceManager.GetString("EqualVerb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 File 的本地化字符串。
         /// </summary>
         internal static string File {
             get {
                 return ResourceManager.GetString("File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 File extension 的本地化字符串。
+        /// </summary>
+        internal static string FileExtensionSubject {
+            get {
+                return ResourceManager.GetString("FileExtensionSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Name with extension 的本地化字符串。
+        /// </summary>
+        internal static string FileNameSubject {
+            get {
+                return ResourceManager.GetString("FileNameSubject", resourceCulture);
             }
         }
         
@@ -130,6 +205,15 @@ namespace ImLazy.Addins.Properties {
         }
         
         /// <summary>
+        ///   查找类似 File type 的本地化字符串。
+        /// </summary>
+        internal static string FileTypeSubject {
+            get {
+                return ResourceManager.GetString("FileTypeSubject", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Folder 的本地化字符串。
         /// </summary>
         internal static string Folder {
@@ -139,11 +223,29 @@ namespace ImLazy.Addins.Properties {
         }
         
         /// <summary>
+        ///   查找类似 GuitarPro tab 的本地化字符串。
+        /// </summary>
+        internal static string GuitarProTab {
+            get {
+                return ResourceManager.GetString("GuitarProTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 is 的本地化字符串。
         /// </summary>
         internal static string Is {
             get {
                 return ResourceManager.GetString("Is", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 is 的本地化字符串。
+        /// </summary>
+        internal static string IsVerb {
+            get {
+                return ResourceManager.GetString("IsVerb", resourceCulture);
             }
         }
         
@@ -189,6 +291,15 @@ namespace ImLazy.Addins.Properties {
         internal static string NotMatches {
             get {
                 return ResourceManager.GetString("NotMatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 picture 的本地化字符串。
+        /// </summary>
+        internal static string Picture {
+            get {
+                return ResourceManager.GetString("Picture", resourceCulture);
             }
         }
         
@@ -297,6 +408,15 @@ namespace ImLazy.Addins.Properties {
         internal static string System_Size {
             get {
                 return ResourceManager.GetString("System_Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 video 的本地化字符串。
+        /// </summary>
+        internal static string Video {
+            get {
+                return ResourceManager.GetString("Video", resourceCulture);
             }
         }
         

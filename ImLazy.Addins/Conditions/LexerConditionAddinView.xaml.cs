@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Windows;
 using System.Windows.Controls;
 using ImLazy.Addins.Utils;
@@ -17,6 +18,7 @@ namespace ImLazy.Addins.Conditions
     public partial class LexerConditionAddinView : IEditView
     {
         private string _objectTypeString;
+        private bool _isDirty = true;
         public LexerConditionAddinView()
         {
             InitializeComponent();
@@ -44,6 +46,9 @@ namespace ImLazy.Addins.Conditions
         /// </summary>
         private void UpdateObject()
         {
+            if (!_isDirty)
+                return;
+            _isDirty = false;
             // 从Combox中获取主语和谓语类型
             // TODO:若没有谓语后的逻辑
             var verb = CmbVerbs.SelectedItem as IVerb;
@@ -78,6 +83,7 @@ namespace ImLazy.Addins.Conditions
 
         private void CmbVerbsOnSelectionChanged(object sender, SelectionChangedEventArgs selectionChangedEventArgs)
         {
+            _isDirty = true;
             UpdateObject();
         }
 
@@ -91,12 +97,16 @@ namespace ImLazy.Addins.Conditions
                 Debugger.Break();
                 return;
             }
+
+            _isDirty = true;
+
             var name = subject.GetVerbType();
             var verbs = LexerRuntime.Instance.GetSupportedVerbsByType(name);
             if (!verbs.Any())
             {
                 CmbVerbs.Visibility = Visibility.Collapsed;
                 Content.Visibility = Visibility.Collapsed;
+                Content.Content = null;
             }
             else
             {
@@ -104,6 +114,7 @@ namespace ImLazy.Addins.Conditions
                 CmbVerbs.ItemsSource = verbs.Select(_ => _.Value);
                 if (CmbVerbs.SelectedIndex == -1)
                     CmbVerbs.SelectedIndex = 0;
+                UpdateObject();
             }
             
         }
@@ -130,6 +141,7 @@ namespace ImLazy.Addins.Conditions
             {
                 if (_configuration == value)
                     return;
+                _isDirty = true;
                 _configuration = value;
                 UpdateUi();
             }

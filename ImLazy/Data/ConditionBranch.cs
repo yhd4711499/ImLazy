@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using ImLazy.Addins;
 using System.Collections.Generic;
 using System.Xml.Serialization;
@@ -38,6 +39,20 @@ namespace ImLazy.Data
         public void Add(ConditionCorp corp)
         {
             SubConditions.Add(corp);
+        }
+
+        public int Sum()
+        {
+            var sum = 1;
+            SubConditions.ForEach(_ =>
+            {
+                sum++;
+                if (_ is ConditionBranch)
+                {
+                    sum += ((ConditionBranch)_).Sum();
+                }
+            });
+            return sum;
         }
     }
 }

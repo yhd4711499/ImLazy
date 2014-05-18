@@ -10,16 +10,14 @@ namespace ImLazy.Addins.Lexer.Objects
     [ExportMetadata("Name", "ImLazy.Addins.Lexer.Objects.StringObject")]
     class StringObject : IObject
     {
-        public string NextElementType { get { return null; } }
-
-        public string ElementType
-        {
-            get { return "string"; }
-        }
-
         public string Name
         {
             get { return "StringObject"; }
+        }
+
+        public LexerType ElementType
+        {
+            get { return LexerTypes.StringType; }
         }
 
         public object GetObject(string value)
@@ -29,7 +27,7 @@ namespace ImLazy.Addins.Lexer.Objects
 
         public IEditView CreateMainView(SerializableDictionary<string, object> config)
         {
-            return new TextContent {Configuration = config};
+            return new TextContent {Configuration = config, MinWidth = 50};
         }
     }
 }

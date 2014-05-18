@@ -8,6 +8,8 @@
         public const string Mode = "Mode";
         public const string FileType = "FileType";
 
+        public const string AvailableItems = "AvailableItems";
+
         public const string Subject = "Subject";
         public const string Verb = "Verb";
         public const string Object = "Object";

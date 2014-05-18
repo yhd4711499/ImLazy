@@ -23,7 +23,7 @@ namespace ImLazy.Addins.Actions
                 throw new Exception(String.Format("Target path exist : {0}. Unable to proceed !", targetPath));
             }
             if (targetPath.StartsWith("/") || targetPath.StartsWith("\\"))
-// ReSharper disable once AssignNullToNotNullAttribute
+                // ReSharper disable once AssignNullToNotNullAttribute
                 targetPath = Path.Combine(Path.GetDirectoryName(filePath), targetPath.Remove(0,1));
             if (Directory.Exists(targetPath))
             {

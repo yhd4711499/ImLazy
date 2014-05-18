@@ -14,6 +14,28 @@ namespace System.Collections.Generic
             }
         }
 
+        public static void ForEach(this IEnumerable items, Action<object> action)
+        {
+            foreach (var item in items)
+            {
+                action(item);
+            }
+        }
+
+        public static int Sum(this IEnumerable items)
+        {
+            var sum = 1;
+            items.ForEach(_ =>
+            {
+                sum++;
+                if (_ is IEnumerable)
+                {
+                    sum += Sum((IEnumerable)_);
+                }
+            });
+            return sum;
+        }
+
         public static void RemoveAll<TKey, TValue>(this IDictionary<TKey, TValue> dic, Func<TKey,bool> func)
         {
             var pairsToRemove = new List<KeyValuePair<TKey, TValue>>(dic.Count);

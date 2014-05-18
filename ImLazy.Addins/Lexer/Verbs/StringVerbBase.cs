@@ -1,21 +1,16 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
 using System.Linq;
 using ImLazy.SDK.Lexer;
 
 namespace ImLazy.Addins.Lexer.Verbs
 {
-    [Export(typeof(IVerb))]
-    [ExportMetadata("Name", "ImLazy.Addins.Lexer.Verbs.EqualVerb")]
-    public class EqualVerb : IVerb
+    public abstract class StringVerbBase:IVerb
     {
-        public string Name
-        {
-            get { return "EqualVerb"; }
-        }
+        public abstract string Name { get; }
 
         public LexerType ElementType
         {
-            get { return LexerTypes.ObjectType; }
+            get { return LexerTypes.StringType; }
         }
 
         public LexerType GetObjectType(LexerType verbType)
@@ -29,9 +24,11 @@ namespace ImLazy.Addins.Lexer.Verbs
             if (strValue != null)
             {
                 var values = strValue.Split('|');
-                return values.Any(_ => _.Equals((string)property));
+                return values.Any(_ => GetResult((string)property, _));
             }
-            return property.Equals(value);
+            throw new NotSupportedException("StringVerbBase only accepts string value!");
         }
+
+        protected abstract bool GetResult(string a, string b);
     }
 }

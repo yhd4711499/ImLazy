@@ -13,11 +13,19 @@ namespace ImLazy.ControlPanel.Views
     {
         AddinInfoViewModelBase _dataContext;
 
+        public bool HideAddinSelection { get; set; }
+
         public AddinSelectView()
         {
             InitializeComponent();
             DataContextChanged += OnDataContextChanged;
             ComboBoxAddin.SelectionChanged += ComboBoxAddinSelectionChanged;
+            Loaded += AddinSelectView_Loaded;
+        }
+
+        void AddinSelectView_Loaded(object sender, RoutedEventArgs e)
+        {
+            ComboBoxAddin.Visibility = !HideAddinSelection ? Visibility.Visible : Visibility.Collapsed;
         }
 
         void ComboBoxAddinSelectionChanged(object sender, SelectionChangedEventArgs e)

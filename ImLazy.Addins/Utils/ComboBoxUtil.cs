@@ -12,21 +12,25 @@ namespace ImLazy.Addins.Utils
         {
             if(item == null)
                 return;
-            var localStringSource = cmb.ItemsSource as IEnumerable<LocalString>;
-            if (localStringSource != null)
+            var index = -1;
+            while (true)
             {
-                var index = localStringSource.ToList().FindLastIndex(_ => _.Value.Equals(item));
-                cmb.SelectedIndex = index;
-            }
-            else
-            {
+                var localStringSource = cmb.ItemsSource as IEnumerable<LocalString>;
+                if (localStringSource != null)
+                {
+                    index = localStringSource.ToList().FindLastIndex(_ => _.Value.Equals(item));
+                    break;
+                }
                 var lazyAddinSource = cmb.ItemsSource as IEnumerable<ILexer>;
                 if (lazyAddinSource != null)
                 {
-                    var index = lazyAddinSource.ToList().FindLastIndex(_ => _.GetType().FullName.Equals(item));
-                    cmb.SelectedIndex = index;
+                    index = lazyAddinSource.ToList().FindLastIndex(_ => _.GetType().FullName.Equals(item));
+                    break;
                 }
+                
+                break;
             }
+            cmb.SelectedIndex = index == -1 ? 0 : index;
             
         }
     }

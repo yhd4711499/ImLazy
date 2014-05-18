@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using System.IO;
 using ImLazy.SDK.Lexer;
 
@@ -8,23 +9,18 @@ namespace ImLazy.Addins.Lexer.Subjects
     [ExportMetadata("Name", "ImLazy.Addins.Lexer.Subjects.FileExtensionSubject")]
     public class FileExtensionSubject : ISubject
     {
-        public string UniqueName { get { return "ImLazy.Addins.Lexer.Subjects.FileExtensionSubject"; } }
+        public string Name { get { return "FileExtensionSubject"; } }
+        public LexerType ElementType { get; private set; }
 
-        public string ElementType { get; private set; }
-
-        public string Name
+        public LexerType GetVerbType()
         {
-            get { return "FileExtensionSubject"; }
-        }
-
-        public string GetVerbType()
-        {
-            return "string";
+            return LexerTypes.StringType;
         }
 
         public object GetProperty(string filePath)
         {
-            return Path.GetExtension(filePath);
+            var extension = Path.GetExtension(filePath);
+            return String.IsNullOrEmpty(extension) ? "" : extension.Substring(1);
         }
     }
 }

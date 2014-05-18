@@ -9,7 +9,7 @@ namespace ImLazy.Data
         {
             return new T
             {
-                AddinType = metadata.Type.FullName,
+                AddinType = metadata.Type.Name,
                 LocalName = metadata.LocalName,
                 Config = new SerializableDictionary<string, object>()
             };
@@ -19,7 +19,7 @@ namespace ImLazy.Data
         {
             return new T
             {
-                AddinType = addin.GetType().FullName,//metadata.Type.FullName,
+                AddinType = addin.GetType().FullName,//metadata.Type.Name,
                 LocalName = addin.LocalName,
                 Config = new SerializableDictionary<string, object>()
             };

@@ -6,85 +6,83 @@
              xmlns:views="clr-namespace:ImLazy.ControlPanel.Views"
              xmlns:util="clr-namespace:ImLazy.ControlPanel.Util"
              xmlns:viewModel="clr-namespace:ImLazy.ControlPanel.ViewModel"
+             xmlns:controls="clr-namespace:ImLazy.ControlPanel.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <HierarchicalDataTemplate x:Key="ConditionViewModelTemplate" ItemsSource="{Binding SubConditions}"
-                                  DataType="viewModel:ConditionBranchViewModel">
-            <Grid Margin="0,5">
+        <DataTemplate x:Key="ConditionLeafDataTemplate" DataType="viewModel:ConditionCorpViewModel">
+            <Grid AllowDrop="True" Margin="0,5">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <views:AddinSelectView />
+                <views:AddinSelectView HideAddinSelection="True" />
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <StackPanel.Resources>
                         <Style TargetType="Button" BasedOn="{StaticResource SimbolButtonStyle}">
                             <Setter Property="Margin" Value="{StaticResource DefaultMargin}"></Setter>
                         </Style>
                     </StackPanel.Resources>
-                    <Button Content="+" VerticalAlignment="Top" Command="{Binding Parent.NewConditionLeafCommand}"/>
-                    <Button Content="+[]" VerticalAlignment="Top" Command="{Binding Parent.NewConditionBranchCommand}"/>
-                    <Button Content="-" VerticalAlignment="Top" Command="{Binding Parent.DeleteConditionCommand}" CommandParameter="{Binding }"/>
+                    <Button Content="+" VerticalAlignment="Top" Command="{Binding Parent.NewConditionLeafCommand}" />
+                    <Button Content="+[]" VerticalAlignment="Top"
+                                Command="{Binding Parent.NewConditionBranchCommand}" />
+                    <Button Content="-" VerticalAlignment="Top" Command="{Binding Parent.DeleteConditionCommand}"
+                                CommandParameter="{Binding }" />
+                    <Border
+                        Width="10" Height="10" Background="Black"
+                        MouseMove="treeView_MouseMove" 
+                        MouseDown="treeView_MouseDown" 
+                        Drop="treeView_Drop" 
+                        DragOver="treeView_DragOver"/>
                 </StackPanel>
             </Grid>
-        </HierarchicalDataTemplate>
-        <ControlTemplate x:Key="TreeViewItemControlTemplate1" TargetType="{x:Type TreeViewItem}">
-            <GroupBox Height="Auto" Width="Auto" Margin="0,5" HorizontalContentAlignment="Stretch" >
-                <GroupBox.Header>
-                    <!-- you bind MainView in Header="{Binding  Condition.MainView}" in GroupBox. An error will occur when reopen the window
-                     which contained this view -->
-                    <ContentPresenter Content="{Binding MainView}" VerticalAlignment="Center"/>
-                </GroupBox.Header>
-                <Grid>
-                    <ToggleButton Visibility="Collapsed" x:Name="Expander" ClickMode="Press" IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" />
-                    <Border Visibility="Collapsed" x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
-                        <ContentPresenter x:Name="PART_Header" ContentSource="Header" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-                    </Border>
-                    <ItemsPresenter x:Name="ItemsHost"/>
-                </Grid>
-            </GroupBox>
-            <ControlTemplate.Triggers>
-                <Trigger Property="IsExpanded" Value="false">
-                    <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed"/>
-                </Trigger>
-                <Trigger Property="HasItems" Value="false">
-                    <Setter Property="Visibility" TargetName="Expander" Value="Hidden"/>
-                </Trigger>
-                <Trigger Property="IsSelected" Value="true">
-                    <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                    <!--<Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"/>-->
-                </Trigger>
-                <MultiTrigger>
-                    <MultiTrigger.Conditions>
-                        <Condition Property="IsSelected" Value="true"/>
-                        <Condition Property="IsSelectionActive" Value="false"/>
-                    </MultiTrigger.Conditions>
-                    <Setter Property="Background" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightBrushKey}}"/>
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}}"/>
-                </MultiTrigger>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
-        <util:ConditionItemContainerStyleSelector
-            x:Key="selector">
-            <util:ConditionItemContainerStyleSelector.NestedStyle>
-                <Style TargetType="{x:Type TreeViewItem}">
-                    <Setter Property="Template" Value="{StaticResource TreeViewItemControlTemplate1}"/>
-                    <Setter Property="IsExpanded" Value="True"/>
-                </Style>
-            </util:ConditionItemContainerStyleSelector.NestedStyle>
-        </util:ConditionItemContainerStyleSelector>
+        </DataTemplate>
+        <util:ConditionTemplateSelector x:Key="TemplateSelector" NormalTemplate="{StaticResource ConditionLeafDataTemplate}">
+            <util:ConditionTemplateSelector.NestedTempldate>
+                <DataTemplate DataType="viewModel:ConditionBranchViewModel">
+                    <GroupBox
+                        AllowDrop="True" Height="Auto" Width="Auto" Margin="0,5"
+                        HorizontalContentAlignment="Stretch"
+                        >
+                        <GroupBox.Header>
+                            <!-- you bind MainView in Header="{Binding  Condition.MainView}" in GroupBox. An error will occur when reopen the window
+                                which contained this view -->
+                            <ContentPresenter Content="{Binding MainView}" VerticalAlignment="Center" />
+                        </GroupBox.Header>
+                        <ItemsControl
+                                ItemTemplateSelector="{DynamicResource TemplateSelector}"
+                                ItemsSource="{Binding SubConditions}" />
+                    </GroupBox>
+                </DataTemplate>
+            </util:ConditionTemplateSelector.NestedTempldate>
+        </util:ConditionTemplateSelector>
     </UserControl.Resources>
     <Grid DataContext="{Binding}">
-        <TreeView
-            ItemContainerStyleSelector="{StaticResource selector}"
-    		ItemsSource="{Binding }"
-    		ItemTemplate="{StaticResource ConditionViewModelTemplate}"
-    		HorizontalContentAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            BorderThickness="0"/>
+        <!--<ScrollViewer VerticalScrollBarVisibility="Auto">
+            <ContentControl Content="{Binding }">
+                <ContentControl.ContentTemplate>
+                    <DataTemplate>
+                        <GroupBox
+                            AllowDrop="True"
+                            Height="Auto"
+                            Width="Auto"
+                            Margin="0,5"
+                            HorizontalContentAlignment="Stretch">
+                            <GroupBox.Header>
+                                ~1~ you bind MainView in Header="{Binding  Condition.MainView}" in GroupBox. An error will occur when reopen the window
+                                which contained this view @1@
+                                <ContentPresenter Content="{Binding MainView}" VerticalAlignment="Center"/>
+                            </GroupBox.Header>
+                            <ItemsControl
+                                ItemTemplateSelector="{StaticResource TemplateSelector}"
+                                ItemsSource="{Binding SubConditions}"/>
+                        </GroupBox>
+                    </DataTemplate>
+                </ContentControl.ContentTemplate>
+            </ContentControl>
+        </ScrollViewer>-->
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <controls:ConditionListBox DataContext="{Binding }" />
+        </ScrollViewer>
     </Grid>
 </UserControl>

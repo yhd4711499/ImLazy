@@ -2,7 +2,7 @@
 {
     public interface IVerb : ILexer
     {
-        string GetObjectType(string verbType);
+        LexerType GetObjectType(LexerType verbType);
         /// <summary>
         /// 是否符合条件
         /// </summary>

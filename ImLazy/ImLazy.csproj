@@ -83,7 +83,6 @@
     <Compile Include="RunTime\Executor.cs" />
     <Compile Include="RunTime\LexerRuntime.cs" />
     <Compile Include="RunTime\LogManager.cs" />
-    <Compile Include="Util\CodingUtil.cs" />
     <Compile Include="Util\ConfigurationHelper.cs" />
     <Compile Include="Util\DataCreationUtil.cs" />
     <Compile Include="Util\EnumHelper.cs" />

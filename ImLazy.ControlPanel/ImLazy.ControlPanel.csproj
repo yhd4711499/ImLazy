@@ -75,6 +75,13 @@
     <Compile Include="Behaviors\CloseParentWindowBehavior.cs" />
     <Compile Include="Behaviors\MouseDoubleClick.cs" />
     <Compile Include="Commands\AwaitableDelegateCommand.cs" />
+    <Compile Include="Controls\ConditionBranchView.xaml.cs">
+      <DependentUpon>ConditionBranchView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ConditionLeafView.xaml.cs">
+      <DependentUpon>ConditionLeafView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ConditionListBox.cs" />
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\BooleanToStringConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
@@ -93,6 +100,8 @@
       <DependentUpon>Resources.zh-CN.resx</DependentUpon>
     </Compile>
     <Compile Include="Util\ConditionItemContainerStyleSelector.cs" />
+    <Compile Include="Util\ConditionTemplateSelector.cs" />
+    <Compile Include="Util\WindowUtil.cs" />
     <Compile Include="Util\LocalUtil.cs" />
     <Compile Include="Util\MyVisualTreeHelper.cs" />
     <Compile Include="Util\NativeMethods.cs" />
@@ -124,6 +133,14 @@
     <Compile Include="Views\ServiceControlView.xaml.cs">
       <DependentUpon>ServiceControlView.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\ConditionBranchView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ConditionLeafView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

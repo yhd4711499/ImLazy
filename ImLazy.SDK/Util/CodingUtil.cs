@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using log4net;
 
-namespace ImLazy.Util
+namespace ImLazy.SDK.Util
 {
     public static class CodingUtil
     {
@@ -16,6 +18,15 @@ namespace ImLazy.Util
             if (param != null) return true;
             log.ErrorFormat(nullMsgFormat, args);
             return false;
+        }
+        public static bool CheckParams(this ILog log, string nullMsgFormat, params object[] paramsObjects)
+        {
+            foreach (var p in paramsObjects.Where(p => p == null))
+            {
+                log.ErrorFormat(nullMsgFormat, p);
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -41,17 +42,7 @@ namespace ImLazy.ControlPanel.ViewModel
                                           {
                                               var rule = Rule.Create();
                                               var ruleVm = new RuleViewModel(this, rule, RuleProperty.Create(Rules.Count, rule.Guid));
-                                              var w = new Window
-                                              {
-                                                  Height = 600,
-                                                  Width = 800,
-                                                  ShowActivated = true,
-                                                  Title = "NewRule".Local(),
-                                                  Content = new RuleDetailView
-                                                  {
-                                                      DataContext = ruleVm
-                                                  }
-                                              };
+                                              var w = WindowUtil.CreateRuleWindow(ruleVm, "NewRule".Local());
                                               if (w.ShowDialog() == true)
                                               {
                                                   Rules.Add(ruleVm);
@@ -59,7 +50,6 @@ namespace ImLazy.ControlPanel.ViewModel
                                           }));
             }
         }
-
 
         private RelayCommand<RuleViewModel> _saveRuleCommand;
 

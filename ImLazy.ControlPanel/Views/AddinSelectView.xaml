@@ -20,10 +20,12 @@
     	</Grid.ColumnDefinitions>
         <ComboBox
     		x:Name="ComboBoxAddin" 
+            Visibility="Collapsed"
     		VerticalAlignment="Center"
             HorizontalAlignment="Stretch"
             HorizontalContentAlignment="Stretch"
             VerticalContentAlignment="Center"
+            SelectedIndex="0"
             ItemTemplate="{StaticResource AddinItemTemplate}"
             Margin="{StaticResource DefaultMargin}"/>
     	<ContentPresenter

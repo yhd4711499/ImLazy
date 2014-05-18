@@ -10,6 +10,11 @@ namespace ImLazy.ControlPanel.ViewModel
     /// </summary>
     public class ConditionCorpViewModel : AddinInfoViewModelBase
     {
+        public new ConditionBranchViewModel Parent
+        {
+            get { return base.Parent as ConditionBranchViewModel; }
+            set { base.Parent = value; }
+        }
         /// <summary>
         /// Initialize a new instance of the ConditionCorpViewModel class.
         /// </summary>

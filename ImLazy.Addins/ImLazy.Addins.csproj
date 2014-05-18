@@ -68,14 +68,21 @@
       <DependentUpon>SimpleMetadataConditionAddinView.xaml</DependentUpon>
     </Compile>
     <Compile Include="ContentProviderAddin.cs" />
+    <Compile Include="ContentViews\ComboxContent.cs" />
     <Compile Include="ContentViews\BoolContent.cs" />
     <Compile Include="ContentViews\LongContent.cs" />
     <Compile Include="ContentViews\TextContent.cs" />
+    <Compile Include="Lexer\Objects\FileTypeObject.cs" />
     <Compile Include="Lexer\Objects\StringObject.cs" />
     <Compile Include="Lexer\Subjects\FileExtensionSubject.cs" />
+    <Compile Include="Lexer\Subjects\FileTypeSubject.cs" />
     <Compile Include="Lexer\Subjects\FileNameSubject.cs" />
+    <Compile Include="Lexer\Verbs\EndsWithVerb.cs" />
+    <Compile Include="Lexer\Verbs\StartsWithVerb.cs" />
     <Compile Include="Lexer\Verbs\ContainsVerb.cs" />
     <Compile Include="Lexer\Verbs\EqualVerb.cs" />
+    <Compile Include="Lexer\Verbs\IsVerb.cs" />
+    <Compile Include="Lexer\Verbs\StringVerbBase.cs" />
     <Compile Include="MetadataConditionAddin.cs" />
     <Compile Include="MetadataConditionAddinView.xaml.cs">
       <DependentUpon>MetadataConditionAddinView.xaml</DependentUpon>

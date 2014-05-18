@@ -72,7 +72,7 @@ namespace ImLazy.RunTime
                 var f = new Func<IEnumerable<ILexer>, String>(c =>
                 {
                     var addinMetadatas = c as ILexer[] ?? c.ToArray();
-                    return !addinMetadatas.Any() ? String.Empty : String.Join("\n\t\t", addinMetadatas.Select(_ => _.Name));
+                    return !addinMetadatas.Any() ? String.Empty : String.Join("\n\t\t", addinMetadatas.Select(_ => _.GetType().FullName));
                 });
                 Log.InfoFormat("Load addins finished.\n\tSubjects has {0}\n\t\t{1}\n\tVerbs has {2}\n\t\t{3}\n\tObjects has {4}\n\t\t{5}",
                     Subjects.Count(),
@@ -85,52 +85,14 @@ namespace ImLazy.RunTime
             }
         }
 
-        public IEnumerable<Lazy<IVerb, ILexerData>> GetSupportedVerbs(string name)
+        public IEnumerable<Lazy<IVerb, ILexerData>> GetSupportedVerbsByType(LexerType nextType)
         {
-            var firstOrDefault = Subjects.FirstOrDefault(_ => _.Value.Name.Equals(name));
-            if (firstOrDefault == null) return null;
-            var nextType = firstOrDefault.Value.GetVerbType();
-            if (nextType.Equals("none"))
-                return null;
-            var items = nextType.Equals("object")
-                ? Verbs
-                : Verbs.Where(_ => _.Value.ElementType.Equals("object") || _.Value.ElementType.Equals(nextType));
-            return items;
+            return Verbs.Where(_ => nextType.Is(_.Value.ElementType));
         }
 
-        public IEnumerable<Lazy<IVerb, ILexerData>> GetSupportedVerbsByType(string nextType)
+        public IEnumerable<Lazy<IObject, ILexerData>> GetSupportedObjectsByVerbType(LexerType verbType)
         {
-            if (nextType.Equals("none"))
-                return null;
-            var items = nextType.Equals("object")
-                ? Verbs
-                : Verbs.Where(_ => _.Value.ElementType.Equals("object") || _.Value.ElementType.Equals(nextType));
-            return items;
-        }
-
-        public IEnumerable<Lazy<IObject, ILexerData>> GetSupportedObjectsByVerbType(string verbType)
-        {
-            var items = verbType.Equals("object")
-                ? Objects
-                : Objects.Where(
-                    _ => _.Value.ElementType.Equals("object") || _.Value.ElementType.Equals(verbType));
-            return items;
-        }
-
-        public IEnumerable<Lazy<IObject, ILexerData>> GetSupportedObjects(string subjectName, string verbName)
-        {
-            var firstOrDefault = Verbs.FirstOrDefault(_ => _.Value.Name.Equals(verbName));
-            var fodSubject = Subjects.FirstOrDefault(_ => _.Value.Name.Equals(subjectName));
-
-            if (firstOrDefault == null) return null;
-
-            var nextType = firstOrDefault.Value.GetObjectType(fodSubject == null ? null : fodSubject.Value.GetVerbType());
-
-            var items = nextType.Equals("object")
-                ? Objects
-                : Objects.Where(
-                    _ => _.Value.ElementType.Equals("object") || _.Value.ElementType.Equals(nextType));
-            return items;
+            return Objects.Where(_ => verbType.Is(_.Value.ElementType));
         }
 
         /// <summary>
@@ -143,7 +105,7 @@ namespace ImLazy.RunTime
             {
                 #region Cache ViewCreator func to CacheMap<object>
 
-                Log.Info("Building view creators caches...");
+                Log.Info("Building view creators, subjects and verbs caches...");
 
                 Objects.ForEach(
                     _ =>
@@ -156,20 +118,10 @@ namespace ImLazy.RunTime
                 Verbs.ForEach(
                     _ => CacheMap<object>.VerbsCacheMap.Put(_.Value.GetType().FullName, _.Value.IsMatch));
 
-                #endregion
-
-                #region Cache addins main func to according cache map
-
-                /*Log.Info("Building functions caches...");
-
-                ConditionAddins.ForEach(
-                    _ => CacheMap<object>.ConditionCacheMap.Put(_.Metadata.Type.FullName, _.Value.IsMatch));
-                ActionAddins.ForEach(
-                    _ => CacheMap<object>.ActionCacheMap.Put(_.Metadata.Type.FullName, _.Value.DoAction));
-
-                Log.Info("Done caching.");*/
+                Log.Info("Done caching.");
 
                 #endregion
+
             }
         }
     }

@@ -59,10 +59,15 @@ namespace ImLazy.RunTime
         {
             // 每个目录都在各自的线程中运行
             var enumerable = folders as Folder[] ?? folders.ToArray();
-            enumerable.AsParallel().ForAll(Do);
+            enumerable.AsParallel().ForAll(_=>Do(_));
         }
 
-        private void Do(Folder folder)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="folder"></param>
+        /// <param name="practice"></param>
+        private void Do(Folder folder, bool practice = false)
         {
             Directory.EnumerateFileSystemEntries(folder.FolderPath).Where(_ => !_execludsions.Contains(Path.GetFileName(_))).ForEach(fe =>
             {
