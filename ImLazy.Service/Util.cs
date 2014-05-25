@@ -1,10 +1,13 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using System.Threading;
 using System.Threading.Tasks;
 using ImLazy.RunTime;
+using ImLazy.SDK.Exceptions;
+using ImLazy.SDK.Util;
 
 namespace ImLazy.Service
 {
@@ -17,22 +20,22 @@ namespace ImLazy.Service
 
         public static void Install()
         {
-            var process = new Process
+            CmdUtil.Run(new ProcessStartInfo
             {
-                StartInfo = { UseShellExecute = false, FileName = "Install.bat", CreateNoWindow = true }
-            };
-            process.Start();
-            process.WaitForExit();
+                UseShellExecute = false,
+                FileName = "Install.bat",
+                CreateNoWindow = true
+            });
         }
 
         public static void Uninstall()
         {
-            var process = new Process
+            CmdUtil.Run(new ProcessStartInfo
             {
-                StartInfo = { UseShellExecute = false, FileName = "Uninstall.bat", CreateNoWindow = true }
-            };
-            if(!process.Start())
-                throw new Exception();
+                UseShellExecute = false,
+                FileName = "Uninstall.bat",
+                CreateNoWindow = true
+            });
         }
 
         public static ServiceStatus CheckStatus()
@@ -41,8 +44,7 @@ namespace ImLazy.Service
                .FirstOrDefault(s => s.ServiceName == Constaints.ServiceName);
             if (ctl == null)
                 return new ServiceStatus(ServiceStatusEnum.Uninstalled);
-            else
-                return new ServiceStatus(ctl.Status);
+            return new ServiceStatus(ctl.Status);
         }
 
         public static void Start()
@@ -50,17 +52,27 @@ namespace ImLazy.Service
             var serviceController = new ServiceController(Constaints.ServiceName);
             if (serviceController.Status == ServiceControllerStatus.Stopped)
             {
-                serviceController.Start();
+                try
+                {
+                    serviceController.Start();
+                }
+                catch (Exception ex)
+                {
+                    var win32Ex = ex.InnerException as Win32Exception;
+                    if (win32Ex != null && win32Ex.NativeErrorCode == 5)
+                    {
+                        // not privilliged
+                        throw new NotPrivilligedException();
+                    }
+                    throw;
+                }
+                
                 while (serviceController.Status != ServiceControllerStatus.Running)
                 {
                     serviceController.Refresh();
                     Thread.Sleep(100);
                 }
                 //LblStatus.Text = "服务已启动";
-            }
-            else
-            {
-                //LblStatus.Text = "此时无法启动服务，请稍后重试";
             }
         }
 
@@ -75,10 +87,6 @@ namespace ImLazy.Service
                     serviceController.Refresh();
                     Thread.Sleep(100);
                 }
-            }
-            else
-            {
-                
             }
         }
 
@@ -97,16 +105,7 @@ namespace ImLazy.Service
                     serviceController.Continue();
                     //LblStatus.Text = "服务已继续";
                 }
-                else
-                {
-                    //LblStatus.Text = "服务未处于暂停和启动状态";
-                }
             }
-            else
-            {
-                //LblStatus.Text = "服务不能暂停";
-            }
-
         }
 
         readonly static Executor Executor = new Executor(

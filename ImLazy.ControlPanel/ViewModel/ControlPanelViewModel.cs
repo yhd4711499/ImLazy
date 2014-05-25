@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ImLazy.ControlPanel.Converters;
+using ImLazy.ControlPanel.Util;
+using ImLazy.SDK.Exceptions;
 using ImLazy.Service;
 
 namespace ImLazy.ControlPanel.ViewModel
@@ -81,6 +83,10 @@ namespace ImLazy.ControlPanel.ViewModel
                 {
                     _serviceStatus = value;
                     RaisePropertyChanged(ServiceStatusPropertyName);
+                    StartCommand.RaiseCanExecuteChanged();
+                    StopCommand.RaiseCanExecuteChanged();
+                    InstallCommand.RaiseCanExecuteChanged();
+                    UninstallCommand.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -99,8 +105,7 @@ namespace ImLazy.ControlPanel.ViewModel
                 return _startCommand
                        ?? (_startCommand = new RelayCommand(
                            () => CommonAction("StartPending", "Running", "StartFailed", Service.Util.Start),
-                           () =>
-                               !IfAny(ServiceStatusEnum.Uninstalled, ServiceStatusEnum.Running)));
+                           () => !IfAny(ServiceStatusEnum.Uninstalled, ServiceStatusEnum.Running)));
             }
         }
 
@@ -117,7 +122,7 @@ namespace ImLazy.ControlPanel.ViewModel
                 return _stopCommand
                        ?? (_stopCommand = new RelayCommand(
                        ()=> CommonAction("StopPending", "Stopped", "StopFailed",Service.Util.Stop),
-                       ()=>!IfAny(ServiceStatusEnum.Uninstalled, ServiceStatusEnum.Stopped)));
+                       ()=> !IfAny(ServiceStatusEnum.Uninstalled, ServiceStatusEnum.Stopped)));
             }
         }
 
@@ -195,20 +200,29 @@ namespace ImLazy.ControlPanel.ViewModel
         private async void Init()
         {
             UpdateStatus("Initiating");
-            _serviceStatus = await Task.FromResult(Service.Util.CheckStatus());
-            UpdateStatus(_serviceStatus.ToString());
+            ServiceStatus = await Task.FromResult(Service.Util.CheckStatus());
+            UpdateStatus(ServiceStatus.ToString());
         }
 
-        private void UpdateStatus(string msg, bool isError = false, string detailInfo = null, Status status = null)
+        private async void UpdateStatus(string msg, int errorCode, Status status = null)
         {
             var st = status ?? Status;
-            if (st.Update(msg, isError, detailInfo))
+            if (st.Update(msg.Local(), true, errorCode.LocalError()))
                 RaisePropertyChanged(st.PropertyName);
+            ServiceStatus = await Task.FromResult(Service.Util.CheckStatus());
+        }
+
+        private async void UpdateStatus(string msg, bool isError = false, string detailInfo = null, Status status = null)
+        {
+            var st = status ?? Status;
+            if (st.Update(msg.Local(), isError, detailInfo.Local()))
+                RaisePropertyChanged(st.PropertyName);
+            ServiceStatus = await Task.FromResult(Service.Util.CheckStatus());
         }
 
         private bool IfAny(params ServiceStatusEnum[] status)
         {
-            return _serviceStatus.IsPending || status.Any(_ => _ == _serviceStatus.Status);
+            return ServiceStatus.IsPending || status.Any(_ => _ == ServiceStatus.Status);
         }
 
         private async void CommonAction(string beforeMsg, string aftMsg, string errorMsg, Action a)
@@ -219,9 +233,9 @@ namespace ImLazy.ControlPanel.ViewModel
                 await Service.Util.DoAsync(a);
                 UpdateStatus(aftMsg);
             }
-            catch (Exception ex)
+            catch (BaseException ex)
             {
-                UpdateStatus(errorMsg, true, ex.Message);
+                UpdateStatus(errorMsg, ex.GetErrorCode());
             }
         }
     }

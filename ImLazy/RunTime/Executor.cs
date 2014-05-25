@@ -16,7 +16,8 @@ namespace ImLazy.RunTime
         private readonly HashSet<string> _execludsions = new HashSet<string>
         {
             "desktop.ini",
-            "Thumbs.db"
+            "Thumbs.db",
+            ".td"
         };
 
         /// <summary>
@@ -69,7 +70,11 @@ namespace ImLazy.RunTime
         /// <param name="practice"></param>
         private void Do(Folder folder, bool practice = false)
         {
-            Directory.EnumerateFileSystemEntries(folder.FolderPath).Where(_ => !_execludsions.Contains(Path.GetFileName(_))).ForEach(fe =>
+            var entries = from entry in Directory.EnumerateFileSystemEntries(folder.FolderPath)
+                where !_execludsions.Any(Path.GetFileName(entry).Contains)
+                select entry;
+            
+            entries.AsParallel().ForEach(fe =>
             {
                 foreach (var rp in folder.RuleProperties.Where(_=>_.Enabled))
                 {
@@ -78,8 +83,8 @@ namespace ImLazy.RunTime
                     if (Records.TryGetValue(rp.RuleGuid, fe, out lastExeTime) && lastExeTime == lastWriteTime)
                     {
                         // If so, skip it.
-                        Log.DebugFormat("{0} not changed since last exectution. Skip.", fe);
-                        return;
+                        Log.DebugFormat("{0} : {1} has no changes since last exectution and is skipped.", rp.RuleGuid, fe);
+                        continue;
                     }
                     Records[rp.RuleGuid, fe] = lastWriteTime;
 
@@ -99,7 +104,7 @@ namespace ImLazy.RunTime
                     {
                         // Execution the actions
                         Log.Debug("ConditionBranch matched. Performing actions...");
-                        int successed = 0, failed = 0;
+                        int passed = 0, failed = 0;
                         rule.Actions.ForEach(action =>
                         {
                             Log.DebugFormat("Searching action {0} (name : {1}) ...", action.AddinType, action.Name);
@@ -113,8 +118,8 @@ namespace ImLazy.RunTime
                             try
                             {
                                 actionMethod(fe, action.Config);
-                                successed++;
-                                Log.Debug("Succeed!");
+                                passed++;
+                                Log.Debug("Passed!");
                             }
                             catch (Exception ex)
                             {
@@ -127,7 +132,7 @@ namespace ImLazy.RunTime
                                 Records.Remove(rp.RuleGuid, fe);
                             }
                         });
-                        Log.DebugFormat("Actions all done. Successed:{0}, failed:{1}", successed, failed);
+                        Log.DebugFormat("Actions all done. Passed:{0}, failed:{1}", passed, failed);
                     }
                     else
                     {

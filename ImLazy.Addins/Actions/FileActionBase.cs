@@ -51,7 +51,8 @@ namespace ImLazy.Addins.Actions
 
         private void ExecuteFileAction(string filePath, string targetPath, Action<string,string> action)
         {
-            if (FileSystemUtil.IsFileLocked(filePath))
+            // there is no need to check both path.
+            /*if (FileSystemUtil.IsFileLocked(filePath))
             {
                 Log.InfoFormat("Source:[{0}] seems to be locked. Try it next time.", filePath);
                 return;
@@ -60,10 +61,17 @@ namespace ImLazy.Addins.Actions
             {
                 Log.InfoFormat("Target:[{0}] seems to be locked. Try it next time.", targetPath);
                 return;
+            }*/
+            
+            try
+            {
+                action(filePath, targetPath);
+                Log.InfoFormat("{2} : [{0}] -> [{1}]", filePath, targetPath, _actionName);
             }
-
-            action(filePath, targetPath);
-            Log.InfoFormat("{2} : {0} -> {1}", filePath, targetPath, _actionName);
+            catch
+            {
+                Log.WarnFormat("\"{0}\" seems to be locked. Try it next time.", filePath);
+            }
         }
 
         private Action<string, string> _action;

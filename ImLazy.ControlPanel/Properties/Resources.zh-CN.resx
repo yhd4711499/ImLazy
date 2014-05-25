@@ -129,6 +129,14 @@
   <data name="Enabled" xml:space="preserve">
     <value>开启</value>
   </data>
+  <data name="ERR_0x00000000" xml:space="preserve">
+    <value>未知错误。</value>
+    <comment>ERR_Unknown</comment>
+  </data>
+  <data name="ERR_0x00000001" xml:space="preserve">
+    <value>权限不够，请使用管理员权限运行本程序。</value>
+    <comment>ERR_NotPrivilliged</comment>
+  </data>
   <data name="Folders" xml:space="preserve">
     <value>目录</value>
   </data>

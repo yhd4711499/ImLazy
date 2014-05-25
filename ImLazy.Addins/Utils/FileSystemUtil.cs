@@ -110,6 +110,11 @@ namespace ImLazy.Addins.Utils
             }
         }
 
+        /// <summary>
+        /// 文件是否被其他进程使用
+        /// </summary>
+        /// <param name="path">文件或文件夹的路径</param>
+        /// <returns>如果path为文件夹的路径，总返回false</returns>
         public static bool IsFileLocked(string path)
         {
             if (!File.Exists(path))

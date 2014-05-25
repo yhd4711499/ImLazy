@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ImLazy.ControlPanel.Util;
 
 namespace ImLazy.ControlPanel.Converters
 {
@@ -46,7 +40,7 @@ namespace ImLazy.ControlPanel.Converters
         {
             if (String.IsNullOrEmpty(Message))
                 return Message;
-            var s = Message.Local();
+            var s = Message;
             return DetailInfo == null ? s : String.Format("{0} : {1}", s, DetailInfo);
         }
     }

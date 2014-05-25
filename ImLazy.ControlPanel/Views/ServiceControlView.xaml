@@ -10,7 +10,7 @@
 		<StackPanel Orientation="Horizontal">
     		<Label Content="{Loc Status}"/>
             <TextBlock TextWrapping="Wrap" Text="{Binding Status}" VerticalAlignment="Center" Foreground="{Binding Status,Converter={StaticResource StatusConverter}}"/>
-            <TextBlock TextWrapping="Wrap" Margin="8,0,0,0" Text="{Binding ExecutionStatus,StringFormat=[{0}]}" VerticalAlignment="Center" Foreground="{Binding ExecutionStatus,Converter={StaticResource StatusConverter}}"/>
+            <TextBlock TextWrapping="Wrap" Margin="8,0,0,0" Text="{Binding ExecutionStatus}" VerticalAlignment="Center" Foreground="{Binding ExecutionStatus,Converter={StaticResource StatusConverter}}"/>
     	</StackPanel>
 		<GroupBox Header="{Loc ControlPanel}" Margin="0,20,0,0">
 			<UniformGrid Columns="2" Margin="{StaticResource DefaultMargin}" HorizontalAlignment="Left">
