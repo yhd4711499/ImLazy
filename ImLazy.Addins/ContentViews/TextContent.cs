@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
-using ImLazy.SDK.Base.Contracts;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using ImLazy.RunTime;
+using ImLazy.SDK.Base.Contracts;
 using ImLazy.Util;
 
 namespace ImLazy.Addins.ContentViews
 {
-    class TextContent:TextBox,IEditView
+    class TextContent : TextBox, IEditView
     {
         public SerializableDictionary<string, object> Configuration
         {
@@ -19,7 +23,7 @@ namespace ImLazy.Addins.ContentViews
             }
             set
             {
-                Text = value.TryGetValue(ConfigNames.ObjectValue) as string;
+                Text = value.TryGetValue<string>(ConfigNames.ObjectValue);
             }
         }
     }

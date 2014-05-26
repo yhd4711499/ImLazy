@@ -71,6 +71,7 @@
     <Compile Include="ContentViews\ComboxContent.cs" />
     <Compile Include="ContentViews\BoolContent.cs" />
     <Compile Include="ContentViews\LongContent.cs" />
+    <Compile Include="ContentViews\RegexTextContent.cs" />
     <Compile Include="ContentViews\TextContent.cs" />
     <Compile Include="Lexer\Objects\FileTypeObject.cs" />
     <Compile Include="Lexer\Objects\StringObject.cs" />
@@ -78,6 +79,7 @@
     <Compile Include="Lexer\Subjects\FileTypeSubject.cs" />
     <Compile Include="Lexer\Subjects\FileNameSubject.cs" />
     <Compile Include="Lexer\Verbs\EndsWithVerb.cs" />
+    <Compile Include="Lexer\Verbs\MatchRegexVerb.cs" />
     <Compile Include="Lexer\Verbs\StartsWithVerb.cs" />
     <Compile Include="Lexer\Verbs\ContainsVerb.cs" />
     <Compile Include="Lexer\Verbs\EqualVerb.cs" />

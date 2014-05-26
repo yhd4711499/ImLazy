@@ -72,8 +72,7 @@ namespace ImLazy.Addins.Conditions
                 var dic = new SerializableDictionary<string, object>();
                 if (_configuration != null)
                 {
-                    dic.Add(ConfigNames.Object, _configuration.TryGetValue(ConfigNames.Object));
-                    dic.Add(ConfigNames.ObjectValue, _configuration.TryGetValue(ConfigNames.ObjectValue));
+                    _configuration.ForEach(_ => dic.Add(_.Key, _.Value));
                 }
                 var obj = objects.FirstOrDefault().Value;
                 Content.Content = obj.CreateMainView(dic);
@@ -132,8 +131,10 @@ namespace ImLazy.Addins.Conditions
                 {
                     _configuration.Add(ConfigNames.Object,
                         _objectTypeString);
-                    _configuration.Add(ConfigNames.ObjectValue,
-                        ((IEditView)Content.Content).Configuration.TryGetValue(ConfigNames.ObjectValue));
+                    var config = ((IEditView) Content.Content).Configuration;
+                    config.ForEach(_=>_configuration.Add(_.Key, _.Value));
+                    /*_configuration.Add(ConfigNames.ObjectValue,
+                        ((IEditView)Content.Content).Configuration.TryGetValue(ConfigNames.ObjectValue));*/
                 }
                 return _configuration;
             }

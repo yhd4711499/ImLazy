@@ -10,6 +10,11 @@ namespace ImLazy.Addins.Lexer.Objects
     [ExportMetadata("Name", "ImLazy.Addins.Lexer.Objects.StringObject")]
     class StringObject : IObject
     {
+        public static class ConfigNames
+        {
+            public const string IsRegexp = "IsRegexp";
+        }
+        
         public string Name
         {
             get { return "StringObject"; }
