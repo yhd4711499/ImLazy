@@ -110,7 +110,6 @@
     <Compile Include="ViewModel\ActionViewModel.cs" />
     <Compile Include="ViewModel\ConditionLeafViewModel.cs" />
     <Compile Include="ViewModel\ConditionCorpViewModel.cs" />
-    <Compile Include="ViewModel\ConditionViewModelFactory.cs" />
     <Compile Include="ViewModel\ControlPanelViewModel.cs" />
     <Compile Include="ViewModel\FolderViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />

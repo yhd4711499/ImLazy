@@ -10,23 +10,40 @@
 		<StackPanel Orientation="Horizontal">
     		<Label Content="{Loc Status}"/>
             <TextBlock TextWrapping="Wrap" Text="{Binding Status}" VerticalAlignment="Center" Foreground="{Binding Status,Converter={StaticResource StatusConverter}}"/>
-            <TextBlock TextWrapping="Wrap" Margin="8,0,0,0" Text="{Binding ExecutionStatus}" VerticalAlignment="Center" Foreground="{Binding ExecutionStatus,Converter={StaticResource StatusConverter}}"/>
     	</StackPanel>
 		<GroupBox Header="{Loc ControlPanel}" Margin="0,20,0,0">
-			<UniformGrid Columns="2" Margin="{StaticResource DefaultMargin}" HorizontalAlignment="Left">
-				<UniformGrid.Resources>
-					<Style TargetType="Button">
-						<Setter Property="Height" Value="25"/>
-						<Setter Property="Width" Value="75"/>
-						<Setter Property="Margin" Value="0,0,8,8"/>
-					</Style>
-				</UniformGrid.Resources>
-				<Button Content="安装" Command="{Binding InstallCommand}"/>
-				<Button Content="卸载" Command="{Binding UninstallCommand}"/>
-                <Button Content="启动服务" Command="{Binding StartCommand}"/>
-                <Button Content="停止服务" Command="{Binding StopCommand}"/>
-                <Button Content="立即清理" Command="{Binding ExecuteCommand}"/>
-            </UniformGrid>
-		</GroupBox>
+            <Grid Margin="{StaticResource DefaultMargin}" HorizontalAlignment="Left">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="Button">
+                        <Setter Property="HorizontalAlignment" Value="Left"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Height" Value="25"/>
+                        <Setter Property="Width" Value="75"/>
+                        <Setter Property="Margin" Value="8"/>
+                    </Style>
+                </Grid.Resources>
+                <Button Content="安装" Command="{Binding InstallCommand}" Grid.Column="0" Grid.Row="0"/>
+                <Button Content="卸载" Command="{Binding UninstallCommand}" Grid.Column="1" Grid.Row="0"/>
+                <Button Content="启动服务" Command="{Binding StartCommand}" Grid.Column="0" Grid.Row="1"/>
+                <Button Content="停止服务" Command="{Binding StopCommand}" Grid.Column="1" Grid.Row="1"/>
+                <Button Content="立即清理" Command="{Binding ExecuteCommand}" Grid.Column="0" Grid.Row="2"/>
+                <TextBlock
+                        Grid.Column="1" Grid.Row="2"
+                        TextWrapping="Wrap"
+                        Margin="8,0,0,0"
+                        Text="{Binding ExecutionStatus}"
+                        VerticalAlignment="Center"
+                        Foreground="{Binding ExecutionStatus,Converter={StaticResource StatusConverter}}"/>
+            </Grid>
+        </GroupBox>
 	</StackPanel>
 </UserControl>

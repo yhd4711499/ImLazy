@@ -6,11 +6,15 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ImLazy.ControlPanel.Converters;
 using ImLazy.ControlPanel.Util;
+using ImLazy.ControlPanel.Views;
 using ImLazy.SDK.Exceptions;
 using ImLazy.Service;
 
 namespace ImLazy.ControlPanel.ViewModel
 {
+    /// <summary>
+    /// a page viewmodel for <see cref="ServiceControlView"/>
+    /// </summary>
     public class ControlPanelViewModel:ViewModelBase
     {
         /// <summary>
@@ -105,7 +109,7 @@ namespace ImLazy.ControlPanel.ViewModel
                 return _startCommand
                        ?? (_startCommand = new RelayCommand(
                            () => CommonAction("StartPending", "Running", "StartFailed", Service.Util.Start),
-                           () => !IfAny(ServiceStatusEnum.Uninstalled, ServiceStatusEnum.Running)));
+                           () => !IfPendingOrAny(ServiceStatusEnum.Uninstalled, ServiceStatusEnum.Running)));
             }
         }
 
@@ -121,8 +125,8 @@ namespace ImLazy.ControlPanel.ViewModel
             {
                 return _stopCommand
                        ?? (_stopCommand = new RelayCommand(
-                       ()=> CommonAction("StopPending", "Stopped", "StopFailed",Service.Util.Stop),
-                       ()=> !IfAny(ServiceStatusEnum.Uninstalled, ServiceStatusEnum.Stopped)));
+                       ()=> CommonAction("StopPending", "Stopped", "StopFailed", Service.Util.Stop),
+                       ()=> !IfPendingOrAny(ServiceStatusEnum.Uninstalled, ServiceStatusEnum.Stopped)));
             }
         }
 
@@ -138,7 +142,7 @@ namespace ImLazy.ControlPanel.ViewModel
                 return _installCommand
                        ?? (_installCommand = new RelayCommand(
                        ()=>CommonAction("InstallPending", "Installed", "InstallFailed",Service.Util.Install),
-                       ()=>!IfAny(ServiceStatusEnum.Installed)));
+                       ()=>!IfPendingOrAny(ServiceStatusEnum.Installed)));
             }
         }
 
@@ -154,7 +158,7 @@ namespace ImLazy.ControlPanel.ViewModel
                 return _uninstallCommand
                        ?? (_uninstallCommand = new RelayCommand(
                            () => CommonAction("UninstallPending", "Uninstalled", "UninstallFailed", Service.Util.Uninstall),
-                           () => !IfAny(ServiceStatusEnum.Uninstalled)));
+                           () => !IfPendingOrAny(ServiceStatusEnum.Uninstalled)));
             }
         }
 
@@ -220,7 +224,7 @@ namespace ImLazy.ControlPanel.ViewModel
             ServiceStatus = await Task.FromResult(Service.Util.CheckStatus());
         }
 
-        private bool IfAny(params ServiceStatusEnum[] status)
+        private bool IfPendingOrAny(params ServiceStatusEnum[] status)
         {
             return ServiceStatus.IsPending || status.Any(_ => _ == ServiceStatus.Status);
         }

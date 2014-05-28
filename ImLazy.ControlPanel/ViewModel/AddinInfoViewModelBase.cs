@@ -5,6 +5,10 @@ using ImLazy.SDK.Base.Contracts;
 
 namespace ImLazy.ControlPanel.ViewModel
 {
+    /// <summary>
+    /// Wrapper for viewmodel 
+    /// <para/>It contains a <see cref="IAddinInfo"/> and provides <see cref="IEditView"/>
+    /// </summary>
     public abstract class AddinInfoViewModelBase : ViewModelBase
     {
 // ReSharper disable once MemberCanBeProtected.Global
