@@ -5,10 +5,9 @@ using Microsoft.WindowsAPICodePack.Shell;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
-using ImLazy.RunTime;
-using LogManager = ImLazy.RunTime.LogManager;
+using ImLazy.Runtime;
+using LogManager = ImLazy.Runtime.LogManager;
 using ImLazy.Util;
 
 namespace ImLazy.Addins

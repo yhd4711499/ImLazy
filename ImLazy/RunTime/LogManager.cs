@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using log4net;
 using log4net.Config;
 
-namespace ImLazy.RunTime
+namespace ImLazy.Runtime
 {
     public static class LogManager
     {

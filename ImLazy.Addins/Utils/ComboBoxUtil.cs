@@ -25,7 +25,6 @@ namespace ImLazy.Addins.Utils
                 if (lazyAddinSource != null)
                 {
                     index = lazyAddinSource.ToList().FindLastIndex(_ => _.GetType().FullName.Equals(item));
-                    break;
                 }
                 
                 break;

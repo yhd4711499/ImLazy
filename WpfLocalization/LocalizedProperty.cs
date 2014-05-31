@@ -163,12 +163,7 @@ namespace WpfLocalization
                 result = (ResourceManager)obj.Dispatcher.Invoke(new DispatcherOperationCallback(x => LocalizationScope.GetResourceManager((DependencyObject)x)), obj);
             }
 
-            if (result == null)
-            {
-                result = LocalizationManager.DefaultResourceManager;
-            }
-
-            return result;
+            return result ?? (LocalizationManager.DefaultResourceManager);
         }
 
         /// <summary>
@@ -197,13 +192,7 @@ namespace WpfLocalization
                 result = (CultureInfo)obj.Dispatcher.Invoke(new DispatcherOperationCallback(x => LocalizationScope.GetCulture((DependencyObject)x)), obj);
             }
 
-            if (result == null)
-            {
-                // Get the culture of the UI thread in case the current thread is different
-                result = obj.Dispatcher.Thread.CurrentCulture;
-            }
-
-            return result;
+            return result ?? (obj.Dispatcher.Thread.CurrentCulture);
         }
 
         /// <summary>
@@ -232,13 +221,7 @@ namespace WpfLocalization
                 result = (CultureInfo)obj.Dispatcher.Invoke(new DispatcherOperationCallback(x => LocalizationScope.GetUICulture((DependencyObject)x)), obj);
             }
 
-            if (result == null)
-            {
-                // Get the culture of the UI thread in case the current thread is different
-                result = obj.Dispatcher.Thread.CurrentUICulture;
-            }
-
-            return result;
+            return result ?? (obj.Dispatcher.Thread.CurrentUICulture);
         }
 
         #endregion
@@ -280,7 +263,7 @@ namespace WpfLocalization
                 return false;
             }
 
-            if (object.ReferenceEquals(this, obj))
+            if (ReferenceEquals(this, obj))
             {
                 return true;
             }
@@ -288,19 +271,8 @@ namespace WpfLocalization
             var targetObject = Object;
 
             return targetObject != null
-                && object.ReferenceEquals(targetObject, instance.Object)
-                && object.ReferenceEquals(Property, instance.Property);
-        }
-
-        /// <summary>
-        /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-        /// </returns>
-        public override string ToString()
-        {
-            return base.ToString();
+                && ReferenceEquals(targetObject, instance.Object)
+                && ReferenceEquals(Property, instance.Property);
         }
 
         #endregion

@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using ImLazy.Data;
-using ImLazy.RunTime;
+using ImLazy.Runtime;
 using ImLazy.SDK.Base.Contracts;
 
 namespace ImLazy.ControlPanel.ViewModel
@@ -28,7 +28,7 @@ namespace ImLazy.ControlPanel.ViewModel
             get
             {
                 if (_mainView != null) return _mainView;
-                var creator = CacheMap<object>.ViewCreatorCacheMap.Get(AddinInfo.AddinType);
+                var creator = LexerAddinHost.Instance.ViewCreatorCacheMap.Get(AddinInfo.AddinType);
                 if (creator == null)
                 {
                     // TODO:error

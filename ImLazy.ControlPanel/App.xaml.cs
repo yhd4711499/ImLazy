@@ -1,8 +1,8 @@
 ﻿using System;
 using ImLazy.ControlPanel.ViewModel;
-using ImLazy.RunTime;
+using ImLazy.Runtime;
 using log4net;
-using LogManager = ImLazy.RunTime.LogManager;
+using LogManager = ImLazy.Runtime.LogManager;
 
 namespace ImLazy.ControlPanel
 {

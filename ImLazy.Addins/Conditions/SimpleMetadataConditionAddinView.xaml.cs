@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using ImLazy.Util;
-using ImLazy.RunTime;
+using ImLazy.Runtime;
 using WpfLocalization;
 
 namespace ImLazy.Addins.Conditions
@@ -34,8 +34,8 @@ namespace ImLazy.Addins.Conditions
         public SimpleMetadataConditionAddinView()
         {
             InitializeComponent();
-            cmb_Properties.ItemsSource = PropertyItemsSource;
-            cmb_Mode.ItemsSource = Enum.GetNames(typeof(SimpleMetadataConditionAddin.MatchMode)).Select(_ => _.LocalString());
+            CmbProperties.ItemsSource = PropertyItemsSource;
+            CmbMode.ItemsSource = Enum.GetNames(typeof(SimpleMetadataConditionAddin.MatchMode)).Select(_ => _.LocalString());
             //cmb_Properties.DisplayMemberPath = "Key";
         }
 
@@ -45,10 +45,10 @@ namespace ImLazy.Addins.Conditions
             {
                 _configuration = new SerializableDictionary<string, object>
                 {
-                        {ConfigNames.TargetObject,((IEditView)content_param.Content).Configuration.TryGetValue(ConfigNames.TargetObject)},
-                        {ConfigNames.Symbol,((LocalString) cmb_AvailSymbols.SelectedItem).Value},
+                        {ConfigNames.TargetObject,((IEditView)ContentParam.Content).Configuration.TryGetValue(ConfigNames.TargetObject)},
+                        {ConfigNames.Symbol,((LocalString) CmbAvailSymbols.SelectedItem).Value},
                         {ConfigNames.TargetProperty, GetSelectedPropertyPair().Key.Value},
-                        {ConfigNames.Mode, ((LocalString) cmb_Mode.SelectedItem).Value},
+                        {ConfigNames.Mode, ((LocalString) CmbMode.SelectedItem).Value},
                     };
                 return _configuration;
             }
@@ -64,7 +64,7 @@ namespace ImLazy.Addins.Conditions
 
         private KeyValuePair<LocalString, SimpleMetadataConditionAddin.PropertyOpeartion> GetSelectedPropertyPair()
         {
-            return (KeyValuePair<LocalString, SimpleMetadataConditionAddin.PropertyOpeartion>)cmb_Properties.SelectedItem;
+            return (KeyValuePair<LocalString, SimpleMetadataConditionAddin.PropertyOpeartion>)CmbProperties.SelectedItem;
         }
 
         void cmb_Properties_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -80,7 +80,7 @@ namespace ImLazy.Addins.Conditions
             {
                 dic.Add(ConfigNames.TargetObject, _configuration.TryGetValue(ConfigNames.TargetObject));
             }
-            content_param.Content = ContentAddin.CreateMainView(dic);
+            ContentParam.Content = ContentAddin.CreateMainView(dic);
         }
 
         /// <summary>
@@ -93,8 +93,8 @@ namespace ImLazy.Addins.Conditions
                 return;
             _isDirty = false;
             var symbols = SimpleMetadataConditionAddin.GetAvailSymbols(propertyOpeartion).Select(_ => _.Key.LocalString()).ToList();
-            cmb_AvailSymbols.ItemsSource = symbols;
-            cmb_AvailSymbols.SelectedIndex = 0;
+            CmbAvailSymbols.ItemsSource = symbols;
+            CmbAvailSymbols.SelectedIndex = 0;
         }
 
         void UpdateForm()
@@ -111,14 +111,14 @@ namespace ImLazy.Addins.Conditions
                 return;
             }
 
-            cmb_Properties.SelectedItem = PropertyItemsSource.FirstOrDefault(_ => _.Key.Value.Equals(name));
+            CmbProperties.SelectedItem = PropertyItemsSource.FirstOrDefault(_ => _.Key.Value.Equals(name));
 
             RefreshAvailSymbols(propertyPair);
-            cmb_AvailSymbols.SelectItem(_configuration.TryGetValue<string>(ConfigNames.Symbol));
+            CmbAvailSymbols.SelectItem(_configuration.TryGetValue<string>(ConfigNames.Symbol));
 
-            cmb_Mode.SelectItem(_configuration.TryGetValue<string>(ConfigNames.Mode));
+            CmbMode.SelectItem(_configuration.TryGetValue<string>(ConfigNames.Mode));
 
-            content_param.Content = ContentAddin.CreateMainView(new SerializableDictionary<string, object>
+            ContentParam.Content = ContentAddin.CreateMainView(new SerializableDictionary<string, object>
             {
                 {ConfigNames.TargetObject, _configuration.TryGetValue(ConfigNames.TargetObject)},
                 {ContentProviderAddin.TargetType, propertyPair.TargetType.FullName}

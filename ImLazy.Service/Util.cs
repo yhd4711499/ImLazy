@@ -5,7 +5,7 @@ using System.Linq;
 using System.ServiceProcess;
 using System.Threading;
 using System.Threading.Tasks;
-using ImLazy.RunTime;
+using ImLazy.Runtime;
 using ImLazy.SDK.Exceptions;
 using ImLazy.SDK.Util;
 
@@ -108,11 +108,7 @@ namespace ImLazy.Service
             }
         }
 
-        readonly static Executor Executor = new Executor(
-                        CacheMap<object>.ConditionCacheMap,
-                        CacheMap<object>.ActionCacheMap,
-                        CacheMap<object>.RuleCacheMap
-                        );
+        readonly static Executor Executor = Executor.Instance;
         public static void Execute()
         {
             Executor.Execute(DataStorage.Instance.Folders);

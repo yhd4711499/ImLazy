@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections;
 using ImLazy.Addins;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using ImLazy.Util;
-using ImLazy.RunTime;
+using ImLazy.Runtime;
 
 namespace ImLazy.Data
 {
@@ -47,9 +46,10 @@ namespace ImLazy.Data
             SubConditions.ForEach(_ =>
             {
                 sum++;
-                if (_ is ConditionBranch)
+                var branch = _ as ConditionBranch;
+                if (branch != null)
                 {
-                    sum += ((ConditionBranch)_).Sum();
+                    sum += branch.Sum();
                 }
             });
             return sum;

@@ -5,7 +5,7 @@ namespace ImLazy.SDK.Base.Contracts
     /// <summary>
     /// 条件插件，用于判断路径是否符合条件
     /// </summary>
-    public interface IConditionAddin:SDK.Base.Contracts.IAddin
+    public interface IConditionAddin:IAddin
     {
         /// <summary>
         /// 是否符合条件

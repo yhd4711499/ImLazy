@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ImLazy.ControlPanel.Properties;
 
 namespace ImLazy.ControlPanel.Util
 {
@@ -17,7 +14,7 @@ namespace ImLazy.ControlPanel.Util
         {
             if (key == null)
                 return null;
-            var s = Properties.Resources.ResourceManager.GetString(key);
+            var s = Resources.ResourceManager.GetString(key);
             return s ?? String.Format("[{0}]", key);
         }
 
@@ -29,7 +26,7 @@ namespace ImLazy.ControlPanel.Util
         public static string LocalError(this int errorCode)
         {
             var key = String.Format("ERR_0x{0:x8}", errorCode);
-            var s = Properties.Resources.ResourceManager.GetString(key);
+            var s = Resources.ResourceManager.GetString(key);
             return s ?? String.Format("[{0}]", key);
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Win32;
 
-namespace ImLazy.RunTime
+namespace ImLazy.Runtime
 {
     // ReSharper disable PossibleNullReferenceException
     public static class AppEnvironment
@@ -40,7 +40,7 @@ namespace ImLazy.RunTime
             {
                 ReadRegistry();
             }
-            catch (Exception)
+            catch
             {
                 try
                 {
@@ -48,10 +48,11 @@ namespace ImLazy.RunTime
                     r.SetValue("mainExePath", mainExeFilePath);
                     LocalStorageFolder = mainExeFilePath;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    LogManager.GetLogger(typeof(AppEnvironment)).Error("Failed in initiating registry!", ex);
+                    throw;
                 }
-                throw;
             }
             
         }

@@ -12,7 +12,7 @@
     <StackPanel Orientation="Horizontal">
 		<TextBlock Text="中的" VerticalAlignment="Center" Margin="0,0,8,0"/>
 		<ComboBox 
-            x:Name="cmb_Properties" 
+            x:Name="CmbProperties" 
             SelectionChanged="cmb_Properties_SelectionChanged" 
             SelectedIndex="0" 
             Margin="0,0,8,0"
@@ -20,17 +20,17 @@
             DisplayMemberPath="Key"/>
         <TextBlock Text="{Loc Attribute}" VerticalAlignment="Center" Margin="0,0,8,0"/>
         <ComboBox 
-            x:Name="cmb_Mode" 
+            x:Name="CmbMode" 
             SelectedIndex="0"
             Margin="0,0,8,0" 
             VerticalAlignment="Center"
             SelectedValuePath="Value"
             />
 		<ComboBox 
-            x:Name="cmb_AvailSymbols" 
+            x:Name="CmbAvailSymbols" 
             Margin="0,0,8,0" 
             VerticalAlignment="Center"
             SelectedValuePath="Value"/>
-		<ContentPresenter x:Name="content_param" VerticalAlignment="Center" Margin="0,0,8,0"/>
+		<ContentPresenter x:Name="ContentParam" VerticalAlignment="Center" Margin="0,0,8,0"/>
 	</StackPanel>
 </UserControl>

@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Windows;
+﻿using System.Collections.Specialized;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-using ImLazy.ControlPanel.Views;
 using ImLazy.Data;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using ImLazy.RunTime;
+using ImLazy.Runtime;
 using ImLazy.ControlPanel.Util;
 
 namespace ImLazy.ControlPanel.ViewModel
@@ -172,12 +169,12 @@ namespace ImLazy.ControlPanel.ViewModel
             Rules.CollectionChanged += Rules_CollectionChanged;
         }
 
-        void Rules_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        void Rules_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             if(e.NewItems!=null)
-                e.NewItems.OfType<RuleViewModel>().ForEach(r => CacheMap<object>.RuleCacheMap.Put(r.Rule.Guid, r.Rule));
+                e.NewItems.OfType<RuleViewModel>().ForEach(r => Executor.Instance.RuleCacheMap.Put(r.Rule.Guid, r.Rule));
             if (e.OldItems != null)
-                e.OldItems.OfType<RuleViewModel>().ForEach(r => CacheMap<object>.RuleCacheMap.Remove(r.Rule.Guid));
+                e.OldItems.OfType<RuleViewModel>().ForEach(r => Executor.Instance.RuleCacheMap.Remove(r.Rule.Guid));
         }
 
         public override string ToString()

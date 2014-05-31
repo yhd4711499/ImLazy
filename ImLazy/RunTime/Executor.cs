@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CuttingEdge.Conditions;
 using ImLazy.Data;
 using log4net;
 
-namespace ImLazy.RunTime
+namespace ImLazy.Runtime
 {
     public class Executor
     {
-        private readonly CacheMap<Func<string, SerializableDictionary<string, object>, bool>> _conditionCacheMap;
-        private readonly CacheMap<Action<string, SerializableDictionary<string, object>>> _actionCacheMap;
-        private readonly CacheMap<Rule> _ruleCacheMap;
+        public readonly static Executor Instance = new Executor();
+
+        private readonly CacheMap<Func<string, SerializableDictionary<string, object>, bool>> _conditionCacheMap = new CacheMap<Func<string, SerializableDictionary<string, object>, bool>>();
+        private readonly CacheMap<Action<string, SerializableDictionary<string, object>>> _actionCacheMap = new CacheMap<Action<string, SerializableDictionary<string, object>>>();
+        private readonly CacheMap<Rule> _ruleCacheMap = new CacheMap<Rule>();
 
         private readonly HashSet<string> _execludsions = new HashSet<string>
         {
@@ -19,6 +22,22 @@ namespace ImLazy.RunTime
             "Thumbs.db",
             ".td"
         };
+
+        public CacheMap<Func<string, SerializableDictionary<string, object>, bool>> ConditionCacheMap
+        {
+            get { return _conditionCacheMap; }
+        }
+
+        public CacheMap<Action<string, SerializableDictionary<string, object>>> ActionCacheMap
+        {
+            get { return _actionCacheMap; }
+        }
+
+        public CacheMap<Rule> RuleCacheMap
+        {
+            get { return _ruleCacheMap; }
+        }
+
 
         /// <summary>
         /// Used to store LastWriteTime for files scanned.
@@ -34,44 +53,29 @@ namespace ImLazy.RunTime
         {
         }
 
-
         public static void ClearCache(Guid ruleGuid)
         {
             Records.Remove(ruleGuid);
         }
-        /// <summary>
-        /// 初始化Executor
-        /// </summary>
-        /// <param name="conditionCacheMap">条件</param>
-        /// <param name="actionCacheMap">动作</param>
-        /// <param name="ruleCacheMap">规则</param>
-        public Executor(
-            CacheMap<Func<string, SerializableDictionary<string, object>, bool>> conditionCacheMap
-            , CacheMap<Action<string, SerializableDictionary<string, object>>> actionCacheMap
-            , CacheMap<Rule> ruleCacheMap)
-        {
-            _conditionCacheMap = conditionCacheMap;
-            _actionCacheMap = actionCacheMap;
-            _ruleCacheMap = ruleCacheMap;
-            Log.InfoFormat("Exclusions: {0}", String.Join(",", _execludsions));
-        }
 
         public void Execute(IEnumerable<Folder> folders)
         {
+            Condition.Requires(folders, "folders").IsNotNull();
+            
             // 每个目录都在各自的线程中运行
             var enumerable = folders as Folder[] ?? folders.ToArray();
-            enumerable.AsParallel().ForAll(_=>Do(_));
+            enumerable.AsParallel().ForAll(Do);
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="folder"></param>
-        /// <param name="practice"></param>
-        private void Do(Folder folder, bool practice = false)
+        private void Do(Folder folder)
         {
             var entries = from entry in Directory.EnumerateFileSystemEntries(folder.FolderPath)
-                where !_execludsions.Any(Path.GetFileName(entry).Contains)
+                let fileName = Path.GetFileName(entry)
+                where fileName != null && !_execludsions.Any(fileName.Contains)
                 select entry;
             
             entries.AsParallel().ForEach(fe =>
@@ -90,7 +94,7 @@ namespace ImLazy.RunTime
 
                     // Get the rule by guid
                     Log.DebugFormat("Searching for rule with GUID:{0}...", rp.RuleGuid);
-                    var rule = _ruleCacheMap.Get(rp.RuleGuid);
+                    var rule = RuleCacheMap.Get(rp.RuleGuid);
                     if (rule == null)
                     {
                         Log.WarnFormat("Target rule [{0}] not found!", rp.RuleGuid);
@@ -108,7 +112,7 @@ namespace ImLazy.RunTime
                         rule.Actions.ForEach(action =>
                         {
                             Log.DebugFormat("Searching action {0} (name : {1}) ...", action.AddinType, action.Name);
-                            var actionMethod = _actionCacheMap.Get(action.AddinType);
+                            var actionMethod = ActionCacheMap.Get(action.AddinType);
                             if (actionMethod == null)
                             {
                                 Log.Warn("Action not found!");
@@ -150,7 +154,7 @@ namespace ImLazy.RunTime
                 var leaf = corp as ConditionLeaf;
                 if (leaf != null)
                 {
-                    return _conditionCacheMap.Get(leaf.AddinType)(filePath, leaf.Config);
+                    return ConditionCacheMap.Get(leaf.AddinType)(filePath, leaf.Config);
                 }
                 var branch = corp as ConditionBranch;
                 if (branch == null || branch.SubConditions == null || !branch.SubConditions.Any())

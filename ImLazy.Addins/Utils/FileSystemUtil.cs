@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 
 namespace ImLazy.Addins.Utils
 {
@@ -86,6 +85,7 @@ namespace ImLazy.Addins.Utils
             }
         }
 
+/*
         private static IEnumerable<FileInfo> WalkDirectoryTree(DirectoryInfo root)
         {
             // First, process all the files directly under this folder
@@ -109,7 +109,9 @@ namespace ImLazy.Addins.Utils
                 WalkDirectoryTree(dirInfo);
             }
         }
+*/
 
+/*
         /// <summary>
         /// 文件是否被其他进程使用
         /// </summary>
@@ -133,5 +135,6 @@ namespace ImLazy.Addins.Utils
             }
             return flag;
         }
+*/
     }
 }

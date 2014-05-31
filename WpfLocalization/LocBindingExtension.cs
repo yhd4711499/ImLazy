@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 using System.Windows.Threading;
+using WpfLocalization.Annotations;
 
 namespace WpfLocalization
 {
@@ -32,7 +33,7 @@ namespace WpfLocalization
         /// If both <see cref="ResourceKey"/> and <see cref="StringFormat"/> is specified
         /// <see cref="ResourceKey"/> has a priority.
         /// </remarks>
-        public string StringFormat { get; set; }
+        public string StringFormat { get; [UsedImplicitly] set; }
 
         Collection<BindingBase> _bindings;
 
@@ -41,15 +42,7 @@ namespace WpfLocalization
         /// </summary>
         public Collection<BindingBase> Bindings
         {
-            get
-            {
-                if (_bindings == null)
-                {
-                    _bindings = new Collection<BindingBase>();
-                }
-
-                return _bindings;
-            }
+            get { return _bindings ?? (_bindings = new Collection<BindingBase>()); }
         }
 
         /// <summary>
@@ -134,21 +127,15 @@ namespace WpfLocalization
 
                     return localizedValue.GetValue();
                 }
-                else
-                {
-                    throw new Exception("This extension can be used only with dependency properties.");
-                }
+                throw new Exception("This extension can be used only with dependency properties.");
             }
-            else if (service.TargetProperty is DependencyProperty || service.TargetProperty is PropertyInfo)
+            if (service.TargetProperty is DependencyProperty || service.TargetProperty is PropertyInfo)
             {
                 // The extension is used in a template
 
                 return this;
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
     }
 }

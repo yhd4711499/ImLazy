@@ -137,16 +137,13 @@ namespace WpfLocalization
 
                 return localizedValue.GetValue();
             }
-            else if (service.TargetProperty is DependencyProperty || service.TargetProperty is PropertyInfo)
+            if (service.TargetProperty is DependencyProperty || service.TargetProperty is PropertyInfo)
             {
                 // The extension is used in a template
 
                 return this;
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         LocalizedValue CreateLocalizedValue(LocalizedProperty property)
@@ -155,14 +152,11 @@ namespace WpfLocalization
             {
                 return new MethodLocalizedValue(property, Callback.GetCallback(), CallbackParameter);
             }
-            else if (string.IsNullOrEmpty(ResourceKey))
+            if (string.IsNullOrEmpty(ResourceKey))
             {
                 return null;
             }
-            else
-            {
-                return new ResourceLocalizedValue(property, ResourceKey);
-            }
+            return new ResourceLocalizedValue(property, ResourceKey);
         }
     }
 }

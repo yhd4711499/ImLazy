@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.IO;
 using ImLazy.Addins.Utils;
 using ImLazy.SDK.Base.Contracts;
-using ImLazy.RunTime;
+using ImLazy.Runtime;
 using ImLazy.SDK.Util;
 using ImLazy.Util;
 using log4net;
-using LogManager = ImLazy.RunTime.LogManager;
+using LogManager = ImLazy.Runtime.LogManager;
 
 namespace ImLazy.Addins.Conditions
 {

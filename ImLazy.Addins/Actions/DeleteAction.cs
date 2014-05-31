@@ -12,8 +12,7 @@ namespace ImLazy.Addins.Actions
     {
         public void DoAction(string filePath, SerializableDictionary<string, object> dic)
         {
-            if (File.Exists(filePath))
-                File.Delete(filePath);
+            FileSystemUtil.DeleteFileOrFolder(filePath);
         }
 
         public IEditView CreateMainView(SerializableDictionary<string, object> config)

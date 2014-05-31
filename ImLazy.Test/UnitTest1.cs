@@ -1,6 +1,5 @@
 ﻿using System.Linq;
-using ImLazy.Addins.Conditions;
-using ImLazy.RunTime;
+using ImLazy.Runtime;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ImLazy.Test
@@ -11,7 +10,7 @@ namespace ImLazy.Test
         [TestMethod]
         public void TestMethod_LexerRuntime()
         {
-            var count = LexerRuntime.Instance.Subjects.Count();
+            var count = LexerAddinHost.Instance.Subjects.Count();
             Assert.AreEqual(count, 2);
         }
 
@@ -45,11 +44,7 @@ namespace ImLazy.Test
         [TestMethod]
         public void TestMethod_Executor_Execute()
         {
-            var executor = new Executor(
-                CacheMap<object>.ConditionCacheMap,
-                CacheMap<object>.ActionCacheMap,
-                CacheMap<object>.RuleCacheMap
-                );
+            var executor = Executor.Instance;
             executor.Execute(DataStorage.Instance.Folders);
         }
     }

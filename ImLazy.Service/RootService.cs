@@ -1,9 +1,9 @@
-﻿using ImLazy.RunTime;
+﻿using ImLazy.Runtime;
 using log4net;
 using System;
 using System.ServiceProcess;
 using System.Timers;
-using LogManager = ImLazy.RunTime.LogManager;
+using LogManager = ImLazy.Runtime.LogManager;
 using Timer = System.Timers.Timer;
 
 namespace ImLazy.Service
@@ -16,11 +16,7 @@ namespace ImLazy.Service
 
 	    static RootService()
 	    {
-	        Executor = new Executor(
-                CacheMap<object>.ConditionCacheMap,
-                CacheMap<object>.ActionCacheMap,
-                CacheMap<object>.RuleCacheMap
-                );
+	        Executor = Executor.Instance;
 	    }
 		public RootService()
 		{

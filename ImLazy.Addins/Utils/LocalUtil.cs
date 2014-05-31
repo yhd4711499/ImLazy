@@ -1,4 +1,5 @@
 ﻿using System;
+using ImLazy.Addins.Properties;
 using WpfLocalization;
 
 namespace ImLazy.Addins.Utils
@@ -12,7 +13,7 @@ namespace ImLazy.Addins.Utils
         /// <returns>[xxx] if no matched resource is found</returns>
         public static string Local(this string key)
         {
-            var s = Properties.Resources.ResourceManager.GetString(key.Replace('.','_'));
+            var s = Resources.ResourceManager.GetString(key.Replace('.','_'));
             return s ?? String.Format("[{0}]", key);
         }
 

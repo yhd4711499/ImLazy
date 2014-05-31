@@ -4,7 +4,7 @@ using ImLazy.Addins.Lexer.Objects;
 using ImLazy.Addins.Utils;
 using ImLazy.SDK.Base.Contracts;
 using System.Windows.Controls;
-using ImLazy.RunTime;
+using ImLazy.Runtime;
 using ImLazy.Util;
 
 namespace ImLazy.Addins.ContentViews
@@ -15,8 +15,11 @@ namespace ImLazy.Addins.ContentViews
         private readonly CheckBox _isRegexCheckBox;
         public RegexTextContent()
         {
-            _textBox = new TextBox() {Margin = new Thickness(0,0,5,0)};
-            _isRegexCheckBox = new CheckBox()
+            _textBox = new TextBox
+            {
+                Margin = new Thickness(0,0,5,0)
+            };
+            _isRegexCheckBox = new CheckBox
             {
                 Content = "Regexp".Local(),
                 VerticalAlignment = VerticalAlignment.Center

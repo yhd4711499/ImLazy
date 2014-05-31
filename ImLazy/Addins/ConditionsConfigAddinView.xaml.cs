@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows;
 using ImLazy.Util;
-using ImLazy.RunTime;
+using ImLazy.Runtime;
 using ImLazy.Data;
 
 namespace ImLazy.Addins

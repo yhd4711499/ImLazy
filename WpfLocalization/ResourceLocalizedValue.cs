@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using Brush = System.Windows.Media.Brush;
 
 namespace WpfLocalization
 {
@@ -58,14 +59,11 @@ namespace WpfLocalization
             {
                 return GetFallbackValue();
             }
-            else if (Property.Converter != null)
+            if (Property.Converter != null)
             {
                 return value;
             }
-            else
-            {
-                return ChangeValueType(Property.GetValueType(), value);
-            }
+            return ChangeValueType(Property.GetValueType(), value);
         }
 
         /// <summary>
@@ -80,10 +78,7 @@ namespace WpfLocalization
             {
                 return "[" + _resourceKey + "]";
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         /// <summary>
@@ -108,11 +103,11 @@ namespace WpfLocalization
             {
                 return value;
             }
-            else if (type == value.GetType() || type.IsAssignableFrom(value.GetType()))
+            if (type == value.GetType() || type.IsAssignableFrom(value.GetType()))
             {
                 return value;
             }
-            else if (type == typeof(ImageSource))
+            if (type == typeof(ImageSource))
             {
                 BitmapSource result;
 
@@ -160,42 +155,36 @@ namespace WpfLocalization
 
                 return result;
             }
-            else if (type.IsEnum && value is string)
+            if (type.IsEnum && value is string)
             {
                 return Enum.Parse(type, (string)value);
             }
-            else if (value is IConvertible && (type.IsPrimitive || type == typeof(DateTime)))
+            if (value is IConvertible && (type.IsPrimitive || type == typeof(DateTime)))
             {
                 return Convert.ChangeType(value, type, CultureInfo.InvariantCulture);
             }
-            else
+            var converter = TypeDescriptor.GetConverter(type);
+
+            if (converter == null || converter.GetType() == typeof(TypeConverter))
             {
-                var converter = TypeDescriptor.GetConverter(type);
+                // No converter was found or the default converter was returned
+                // (the default converter is unusable)
 
-                if (converter == null || converter.GetType() == typeof(TypeConverter))
+                if (Property.IsInDesignMode)
                 {
-                    // No converter was found or the default converter was returned
-                    // (the default converter is unusable)
+                    // VS fails to load some converters in design mode
 
-                    if (Property.IsInDesignMode)
+                    if (type == typeof(Brush))
                     {
-                        // VS fails to load some converters in design mode
+                        converter = new BrushConverter();
 
-                        if (type == typeof(System.Windows.Media.Brush))
-                        {
-                            converter = new BrushConverter();
-
-                            return converter.ConvertFrom(null, CultureInfo.InvariantCulture, value);
-                        }
+                        return converter.ConvertFrom(null, CultureInfo.InvariantCulture, value);
                     }
+                }
 
-                    return value;
-                }
-                else
-                {
-                    return converter.ConvertFrom(null, CultureInfo.InvariantCulture, value);
-                }
+                return value;
             }
+            return converter.ConvertFrom(null, CultureInfo.InvariantCulture, value);
         }
     }
 }

@@ -1,36 +1,24 @@
-﻿namespace ImLazy.Service
+﻿using ImLazy.Annotations;
+
+namespace ImLazy.Service
 {
     class Component
     {
         private static Component _installComponent;
         internal static Component InstallComponent
         {
-            get
-            {
-                if (_installComponent == null)
-                {
-                    _installComponent = new Component("Install.bat");
-                }
-                return _installComponent;
-            }
+            get { return _installComponent ?? (_installComponent = new Component("Install.bat")); }
             set { _installComponent = value; }
         }
 
         private static Component _uninstallComponent;
         internal static Component UninstallComponent
         {
-            get
-            {
-                if (_installComponent == null)
-                {
-                    _installComponent = new Component("Uninstall.bat");
-                }
-                return _installComponent;
-            }
-            set { _installComponent = value; }
+            get { return _uninstallComponent ?? (_uninstallComponent = new Component("Uninstall.bat")); }
+            set { _uninstallComponent = value; }
         }
 
-        public string FilePath { get; private set; }
+        public string FilePath { [UsedImplicitly] get; private set; }
 
         private Component(string filePath)
         {

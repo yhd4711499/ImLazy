@@ -3,21 +3,31 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Linq;
+using ImLazy.Annotations;
+using ImLazy.SDK.Base.Contracts;
 using ImLazy.SDK.Lexer;
 using log4net;
 
-namespace ImLazy.RunTime
+namespace ImLazy.Runtime
 {
-    public class LexerRuntime
+    public class LexerAddinHost
     {
         private static readonly object LockObj = new object();
-        private static readonly ILog Log = LogManager.GetLogger(typeof(LexerRuntime));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(LexerAddinHost));
+
+        public readonly CacheMap<Func<SerializableDictionary<string, object>, IEditView>> ViewCreatorCacheMap = new CacheMap<Func<SerializableDictionary<string, object>, IEditView>>();
+
+        public readonly CacheMap<Func<string, object>> SubjectsCacheMap = new CacheMap<Func<string, object>>();
+
+        public readonly CacheMap<Func<object, object, bool>> VerbsCacheMap = new CacheMap<Func<object, object, bool>>();
+
+        public readonly CacheMap<Func<string, object>> ObjectsCacheMap = new CacheMap<Func<string, object>>();
 
         #region Singleton
 
-        private static readonly LexerRuntime _instance = new LexerRuntime();
+        private static readonly LexerAddinHost _instance = new LexerAddinHost();
 
-        public static LexerRuntime Instance
+        public static LexerAddinHost Instance
         {
             get { return _instance; }
         }
@@ -27,28 +37,28 @@ namespace ImLazy.RunTime
         #region Addins
         // ReSharper disable UnusedAutoPropertyAccessor.Local
         [ImportMany]
-        public IEnumerable<Lazy<ISubject, ILexerData>> Subjects { get; set; }
+        public IEnumerable<Lazy<ISubject, ILexerData>> Subjects { get; [UsedImplicitly] set; }
 
         [ImportMany]
 
-        public IEnumerable<Lazy<IVerb, ILexerData>> Verbs { get; set; }
+        public IEnumerable<Lazy<IVerb, ILexerData>> Verbs { get; [UsedImplicitly] set; }
 
         [ImportMany]
-        public IEnumerable<Lazy<IObject, ILexerData>> Objects { get; set; }
+        public IEnumerable<Lazy<IObject, ILexerData>> Objects { get; [UsedImplicitly] set; }
         // ReSharper restore UnusedAutoPropertyAccessor.Local
         #endregion
 
-        static LexerRuntime()
+        static LexerAddinHost()
         {
-            Log.Info("LexerRuntime initiating...");
+            Log.Info("LexerAddinHost initiating...");
             _instance.LoadAddins();
             _instance.BuildCache();
-            Log.Info("LexerRuntime initiated.");
+            Log.Info("LexerAddinHost initiated.");
         }
 
-        ~LexerRuntime()
+        ~LexerAddinHost()
         {
-            Log.Info("LexerRuntime finalized.");
+            Log.Info("LexerAddinHost finalized.");
         }
 
         /// <summary>
@@ -60,7 +70,7 @@ namespace ImLazy.RunTime
             lock (LockObj)
             {
                 #region Load addins
-                Log.Info("Loading addins from '\\Addins' subfolder and self (AddinHost.dll)...");
+                Log.Info("Loading addins from '\\Addins' subfolder and self (ImLazy.dll)...");
                 var catalog = new AggregateCatalog();
                 catalog.Catalogs.Add(new DirectoryCatalog("Addins"));
                 catalog.Catalogs.Add(new AssemblyCatalog(GetType().Assembly));
@@ -103,20 +113,20 @@ namespace ImLazy.RunTime
         {
             lock (LockObj)
             {
-                #region Cache ViewCreator func to CacheMap<object>
+                #region Cache lexer items and ViewCreator func to CacheMap<object>
 
                 Log.Info("Building view creators, subjects and verbs caches...");
 
                 Objects.ForEach(
                     _ =>
                     {
-                        CacheMap<object>.ViewCreatorCacheMap.Put(_.Value.GetType().FullName, _.Value.CreateMainView);
-                        CacheMap<object>.ObjectsCacheMap.Put(_.Value.GetType().FullName, _.Value.GetObject);
+                        ViewCreatorCacheMap.Put(_.Value.GetType().FullName, _.Value.CreateMainView);
+                        ObjectsCacheMap.Put(_.Value.GetType().FullName, _.Value.GetObject);
                     });
                 Subjects.ForEach(
-                    _ => CacheMap<object>.SubjectsCacheMap.Put(_.Value.GetType().FullName, _.Value.GetProperty));
+                    _ => SubjectsCacheMap.Put(_.Value.GetType().FullName, _.Value.GetProperty));
                 Verbs.ForEach(
-                    _ => CacheMap<object>.VerbsCacheMap.Put(_.Value.GetType().FullName, _.Value.IsMatch));
+                    _ => VerbsCacheMap.Put(_.Value.GetType().FullName, _.Value.IsMatch));
 
                 Log.Info("Done caching.");
 

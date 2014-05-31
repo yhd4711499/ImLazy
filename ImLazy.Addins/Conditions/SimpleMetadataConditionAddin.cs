@@ -1,15 +1,15 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using ImLazy.Addins.Utils;
 using ImLazy.SDK.Base.Contracts;
 using ImLazy.SDK.Util;
 using log4net;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 using ImLazy.Util;
-using ImLazy.RunTime;
-using LogManager = ImLazy.RunTime.LogManager;
+using ImLazy.Runtime;
+using LogManager = ImLazy.Runtime.LogManager;
 
 namespace ImLazy.Addins.Conditions
 {
@@ -32,7 +32,7 @@ namespace ImLazy.Addins.Conditions
         {
             {"System.FileName", GetPropertyOpeartion<string>(Path.GetFileName)},
             {"System.FileExtension", GetPropertyOpeartion<string>(Path.GetExtension)},
-            {"System.Size", GetPropertyOpeartion<long>(_=> File.Exists(_)? new FileInfo(_).Length.ToString():"0")},
+            {"System.Size", GetPropertyOpeartion<long>(_=> File.Exists(_)? new FileInfo(_).Length.ToString(CultureInfo.InvariantCulture):"0")},
         };
 
         public enum MatchMode

@@ -5,7 +5,7 @@ using System.Windows;
 using System.Linq;
 using ImLazy.Data;
 using ImLazy.ControlPanel.Util;
-using ImLazy.RunTime;
+using ImLazy.Runtime;
 
 namespace ImLazy.ControlPanel.ViewModel
 {

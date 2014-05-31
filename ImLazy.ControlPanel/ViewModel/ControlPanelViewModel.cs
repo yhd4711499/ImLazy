@@ -1,14 +1,14 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ImLazy.ControlPanel.Converters;
 using ImLazy.ControlPanel.Util;
 using ImLazy.ControlPanel.Views;
 using ImLazy.SDK.Exceptions;
 using ImLazy.Service;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ImLazy.ControlPanel.ViewModel
 {

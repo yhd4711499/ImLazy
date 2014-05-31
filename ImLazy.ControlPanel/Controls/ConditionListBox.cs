@@ -1,30 +1,27 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+using ImLazy.ControlPanel.Annotations;
 using ImLazy.ControlPanel.ViewModel;
 
 namespace ImLazy.ControlPanel.Controls
 {
     class ConditionListBox : ItemsControl
     {
-        private bool _isConditionChangedSurppressed;
-        private ObservableCollection<ConditionCorpViewModel> Conditoins;
+        private ObservableCollection<ConditionCorpViewModel> _conditoins;
         private Dictionary<ConditionCorpViewModel, ListBoxItem> map = new Dictionary<ConditionCorpViewModel, ListBoxItem>();
-        public ListBoxItem SelectedItem { get; private set; }
+        public ListBoxItem SelectedItem { [UsedImplicitly] get; private set; }
 
         public ConditionListBox()
         {
             DataContextChanged += ConditionListBox_DataContextChanged;
         }
 
-        void ConditionListBox_DataContextChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        void ConditionListBox_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             var oldConditions = e.OldValue as ObservableCollection<ConditionCorpViewModel>;
             if (oldConditions != null)
@@ -32,12 +29,12 @@ namespace ImLazy.ControlPanel.Controls
                 UnRegister(oldConditions);
                 oldConditions.ForEach(Remove);
             }
-            Conditoins = e.NewValue as ObservableCollection<ConditionCorpViewModel>;
-            if (Conditoins != null)
+            _conditoins = e.NewValue as ObservableCollection<ConditionCorpViewModel>;
+            if (_conditoins != null)
             {
-                Register(Conditoins);
+                Register(_conditoins);
                 var index = 0;
-                foreach (ConditionCorpViewModel newItem in Conditoins)
+                foreach (ConditionCorpViewModel newItem in _conditoins)
                 {
                     Insert(index, newItem);
                     index++;
@@ -123,11 +120,12 @@ namespace ImLazy.ControlPanel.Controls
             return lbi;
         }
 
-        void lbi_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        void lbi_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             map.ForEach(_ => _.Value.IsSelected = false);
 
             var lbi = sender as ListBoxItem;
+            Debug.Assert(lbi != null, "lbi != null");
             lbi.IsSelected = true;
 
             SelectedItem = lbi;
@@ -157,10 +155,8 @@ namespace ImLazy.ControlPanel.Controls
             }
         }
 
-        void Conditoins_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        void Conditoins_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if (_isConditionChangedSurppressed)
-                return;
             if (e.NewItems != null)
             {
                 var index = e.NewStartingIndex;

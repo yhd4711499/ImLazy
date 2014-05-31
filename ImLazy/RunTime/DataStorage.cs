@@ -7,7 +7,7 @@ using ImLazy.SDK.Base.Contracts;
 using ImLazy.Data;
 using ImLazy.Util;
 
-namespace ImLazy.RunTime
+namespace ImLazy.Runtime
 {
     /// <summary>
     /// 在运行时储存所有条件和动作
@@ -34,7 +34,7 @@ namespace ImLazy.RunTime
                     }
                     if (_instance != null)
                     {
-                        _instance.Rules.ForEach(_ => CacheMap<object>.RuleCacheMap.Put(_.Key, _.Value));
+                        _instance.Rules.ForEach(_ => Executor.Instance.RuleCacheMap.Put(_.Key, _.Value));
                         _instance.Folders.ForEach(f=>f.RuleProperties.Sort());
                     }
                     else
@@ -101,7 +101,7 @@ namespace ImLazy.RunTime
         {
             DataCreationUtil.TrySaveToFile(this, FilePath);
             AddinHost.Instance.BuildCache();
-            LexerRuntime.Instance.BuildCache();
+            LexerAddinHost.Instance.BuildCache();
         }
     }
 }

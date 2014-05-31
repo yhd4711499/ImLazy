@@ -2,7 +2,7 @@
 {
     public static class ErrorCodeDefinitions
     {
-        public const int ERR_Unknown = 0x00000000;
-        public const int ERR_NotPrivilliged = 0x00000001;
+        public const int ErrUnknown = 0x00000000;
+        public const int ErrNotPrivilliged = 0x00000001;
     }
 }

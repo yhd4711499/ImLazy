@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using ImLazy.Util;
-using ImLazy.RunTime;
+using ImLazy.Runtime;
 
 namespace ImLazy.Addins
 {
@@ -25,7 +25,7 @@ namespace ImLazy.Addins
         public MetadataConditionAddinView()
         {
             InitializeComponent();
-            cmb_Properties.ItemsSource = ItemsSource;
+            CmbProperties.ItemsSource = ItemsSource;
         }
 
         public SerializableDictionary<string, object> Configuration
@@ -34,10 +34,10 @@ namespace ImLazy.Addins
             {
                 _configuration = new SerializableDictionary<string, object>
                 {
-                        {ConfigNames.TargetObject,((IEditView)content_param.Content).Configuration.TryGetValue(ConfigNames.TargetObject)},
-                        {ConfigNames.Symbol,cmb_AvailSymbols.SelectedItem.ToString()},
+                        {ConfigNames.TargetObject,((IEditView)ContentParam.Content).Configuration.TryGetValue(ConfigNames.TargetObject)},
+                        {ConfigNames.Symbol,CmbAvailSymbols.SelectedItem.ToString()},
 // ReSharper disable once RedundantCast
-                        {ConfigNames.TargetProperty,(string)cmb_Properties.SelectedItem}
+                        {ConfigNames.TargetProperty,(string)CmbProperties.SelectedItem}
                     };
                 return _configuration;
             }
@@ -54,7 +54,7 @@ namespace ImLazy.Addins
         void cmb_Properties_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _isDirty = true;
-            var propertyName = (string)cmb_Properties.SelectedItem;
+            var propertyName = (string)CmbProperties.SelectedItem;
             RefreshAvailSymbols(propertyName);
             var dic = new SerializableDictionary<string, object>
             {
@@ -64,7 +64,7 @@ namespace ImLazy.Addins
             {
                 dic.Add(ConfigNames.TargetObject, _configuration.TryGetValue(ConfigNames.TargetObject));
             }
-            content_param.Content = ContentAddin.CreateMainView(dic);
+            ContentParam.Content = ContentAddin.CreateMainView(dic);
         }
 
         /// <summary>
@@ -79,8 +79,8 @@ namespace ImLazy.Addins
             _isDirty = false;
             var symbols = MetadataConditionAddin.GetAvailSymbols(
                 SystemProperties.GetPropertyDescription(canonicalName));
-            cmb_AvailSymbols.ItemsSource = symbols.Select(_ => _.Name);
-            cmb_AvailSymbols.SelectedIndex = 0;
+            CmbAvailSymbols.ItemsSource = symbols.Select(_ => _.Name);
+            CmbAvailSymbols.SelectedIndex = 0;
         }
 
         void UpdateForm()
@@ -92,10 +92,10 @@ namespace ImLazy.Addins
                 return;
             }
             RefreshAvailSymbols(name);
-            cmb_AvailSymbols.SelectedItem = _configuration.TryGetValue<string>(ConfigNames.Symbol);
+            CmbAvailSymbols.SelectedItem = _configuration.TryGetValue<string>(ConfigNames.Symbol);
             var propertyName = _configuration.TryGetValue<string>(ConfigNames.TargetProperty);
-            cmb_Properties.SelectedItem = propertyName;
-            content_param.Content = ContentAddin.CreateMainView(new SerializableDictionary<string, object>
+            CmbProperties.SelectedItem = propertyName;
+            ContentParam.Content = ContentAddin.CreateMainView(new SerializableDictionary<string, object>
             {
                 {ConfigNames.TargetObject, _configuration.TryGetValue(ConfigNames.TargetObject)},
                 {ContentProviderAddin.TargetType, SystemProperties.GetPropertyDescription(propertyName).ValueType.FullName}

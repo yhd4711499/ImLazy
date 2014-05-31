@@ -2,10 +2,11 @@
 using System.ComponentModel.Composition;
 using ImLazy.Addins.Utils;
 using ImLazy.SDK.Base.Contracts;
-using ImLazy.RunTime;
+using ImLazy.Runtime;
 using ImLazy.SDK.Util;
 using ImLazy.Util;
 using log4net;
+using LogManager = ImLazy.Runtime.LogManager;
 
 namespace ImLazy.Addins.Conditions
 {
@@ -13,7 +14,7 @@ namespace ImLazy.Addins.Conditions
     [Export(typeof(IConditionAddin))]
     class LexerConditionAddin : IConditionAddin
     {
-        private static readonly ILog Log = RunTime.LogManager.GetLogger(typeof (LexerConditionAddin));
+        private static readonly ILog Log = LogManager.GetLogger(typeof (LexerConditionAddin));
         private static readonly string LocalNameStatic = "LexerConditionAddin".Local();
 
         public IEditView CreateMainView(SerializableDictionary<string, object> config)
@@ -32,9 +33,9 @@ namespace ImLazy.Addins.Conditions
             if (!Log.CheckParams("One or more config(s) is null : ", subject, verb, obj, value))
                 return false;
             // get function from caches
-            var fs = CacheMap<object>.SubjectsCacheMap.Get(subject);
-            var fv = CacheMap<object>.VerbsCacheMap.Get(verb);
-            var fo = CacheMap<object>.ObjectsCacheMap.Get(obj);
+            var fs = LexerAddinHost.Instance.SubjectsCacheMap.Get(subject);
+            var fv = LexerAddinHost.Instance.VerbsCacheMap.Get(verb);
+            var fo = LexerAddinHost.Instance.ObjectsCacheMap.Get(obj);
             if (!Log.CheckParams("One or more function(s) is null : ", fs, fv, fo))
                 return false;
             // check

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows;
 using ImLazy.ControlPanel.Util;
 
 namespace ImLazy.ControlPanel.Converters

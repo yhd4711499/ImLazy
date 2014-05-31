@@ -220,7 +220,7 @@ namespace WpfLocalization
 
                 if (result == null)
                 {
-                    result = new ResourceManagerData()
+                    result = new ResourceManagerData
                     {
                         Type = type,
                         Manager = new ResourceManager(type),
@@ -253,7 +253,7 @@ namespace WpfLocalization
 
                 if (result == null)
                 {
-                    result = new ResourceManagerData()
+                    result = new ResourceManagerData
                     {
                         Assembly = assembly,
                         BaseName = baseName,
@@ -339,7 +339,7 @@ namespace WpfLocalization
 
                             var applicationType = item.GetType(assemblyName + ".App", false);
 
-                            if (applicationType != null && typeof(System.Windows.Application).IsAssignableFrom(applicationType))
+                            if (applicationType != null && typeof(Application).IsAssignableFrom(applicationType))
                             {
                                 // The assembly is valid
 

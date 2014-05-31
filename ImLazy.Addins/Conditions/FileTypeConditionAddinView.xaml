@@ -10,7 +10,7 @@
     <StackPanel Orientation="Horizontal">
         <TextBlock Text="{Loc Is}" VerticalAlignment="Center" Margin="0,0,8,0"/>
         <ComboBox 
-            x:Name="cmb_FileTypes"
+            x:Name="CmbFileTypes"
             SelectedIndex="0"
             Margin="0,0,8,0" 
             VerticalAlignment="Center"

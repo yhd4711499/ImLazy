@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Data;
 using System.Windows.Markup;
 
@@ -11,11 +10,11 @@ namespace WpfLocalization
     /// </summary>
     public class BindingLocalizedValue : LocalizedValue, IServiceProvider, IProvideValueTarget
     {
-        string _resourceKey;
+        readonly string _resourceKey;
 
-        string _stringFormat;
+        readonly string _stringFormat;
 
-        IEnumerable<BindingBase> _bindings;
+        readonly IEnumerable<BindingBase> _bindings;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BindingLocalizedValue"/> class.
@@ -96,12 +95,7 @@ namespace WpfLocalization
                 {
                     var uiCulture = Property.GetUICulture();
 
-                    value = resourceManager.GetString(_resourceKey, uiCulture);
-
-                    if (value == null)
-                    {
-                        value = GetFallbackValue();
-                    }
+                    value = resourceManager.GetString(_resourceKey, uiCulture) ?? GetFallbackValue();
                 }
 
                 formatString = value;
@@ -109,7 +103,7 @@ namespace WpfLocalization
 
             var culture = Property.GetCulture();
 
-            var binding = new MultiBinding()
+            var binding = new MultiBinding
             {
                 StringFormat = formatString,
                 Mode = BindingMode.OneWay,
@@ -150,14 +144,7 @@ namespace WpfLocalization
         /// </returns>
         object IServiceProvider.GetService(Type serviceType)
         {
-            if (serviceType == typeof(IProvideValueTarget))
-            {
-                return this;
-            }
-            else
-            {
-                return null;
-            }
+            return serviceType == typeof(IProvideValueTarget) ? this : null;
         }
 
         #endregion
@@ -183,7 +170,7 @@ namespace WpfLocalization
         {
             get
             {
-                return (DependencyProperty)Property.Property;
+                return Property.Property;
             }
         }
 

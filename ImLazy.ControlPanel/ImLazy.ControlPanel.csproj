@@ -73,7 +73,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviors\CloseParentWindowBehavior.cs" />
-    <Compile Include="Behaviors\MouseDoubleClick.cs" />
     <Compile Include="Commands\AwaitableDelegateCommand.cs" />
     <Compile Include="Controls\ConditionBranchView.xaml.cs">
       <DependentUpon>ConditionBranchView.xaml</DependentUpon>
@@ -94,6 +93,7 @@
     <Compile Include="Interop\ShellComInterfaces.cs" />
     <Compile Include="Interop\ShellWrapperDefinitions.cs" />
     <Compile Include="Interop\Win32Resources.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\Resources.zh-CN.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -210,6 +210,7 @@
     <EmbeddedResource Include="Properties\Resources.zh-CN.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.zh-CN.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

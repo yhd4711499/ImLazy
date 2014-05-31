@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using ImLazy.SDK.Base.Contracts;
 using System.Windows.Controls;
-using ImLazy.RunTime;
+using ImLazy.Runtime;
 using ImLazy.Util;
 
 namespace ImLazy.Addins.ContentViews

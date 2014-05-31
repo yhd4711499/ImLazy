@@ -2,7 +2,7 @@
 using ImLazy.Addins.Utils;
 using ImLazy.SDK.Base.Contracts;
 using System.Linq;
-using ImLazy.RunTime;
+using ImLazy.Runtime;
 using WpfLocalization;
 using ImLazy.Util;
 
@@ -15,14 +15,10 @@ namespace ImLazy.Addins.Conditions
     {
         SerializableDictionary<string, object> _configuration;
 
-        static FileTypeConditionAddinView()
-        {
-        }
-
         public FileTypeConditionAddinView()
         {
             InitializeComponent();
-            cmb_FileTypes.ItemsSource = SimpleMetadataConditionAddin.FileTypes.Select(_ => _.Key.LocalString());
+            CmbFileTypes.ItemsSource = SimpleMetadataConditionAddin.FileTypes.Select(_ => _.Key.LocalString());
         }
 
         public SerializableDictionary<string, object> Configuration
@@ -31,7 +27,7 @@ namespace ImLazy.Addins.Conditions
             {
                 _configuration = new SerializableDictionary<string, object>
                 {
-                    {ConfigNames.FileType, ((LocalString) cmb_FileTypes.SelectedItem).Value}
+                    {ConfigNames.FileType, ((LocalString) CmbFileTypes.SelectedItem).Value}
                 };
                 return _configuration;
             }
@@ -47,7 +43,7 @@ namespace ImLazy.Addins.Conditions
         void UpdateForm()
         {
             if (_configuration == null) return;
-            cmb_FileTypes.SelectItem(_configuration.TryGetValue<string>(ConfigNames.FileType));
+            CmbFileTypes.SelectItem(_configuration.TryGetValue<string>(ConfigNames.FileType));
         }
     }
 }

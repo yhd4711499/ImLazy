@@ -5,9 +5,7 @@ using System.Linq;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ImLazy.ControlPanel.Util;
-using ImLazy.ControlPanel.Views;
 using ImLazy.Data;
-using System.Windows;
 
 namespace ImLazy.ControlPanel.ViewModel
 {

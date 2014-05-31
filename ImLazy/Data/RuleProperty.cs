@@ -27,7 +27,7 @@ namespace ImLazy.Data
         public static RuleProperty Create(int priority, Guid guid)
         {
 // ReSharper disable once CSharpWarnings::CS0618
-            return new RuleProperty()
+            return new RuleProperty
             {
                 Enabled = true,
                 RuleGuid = guid,

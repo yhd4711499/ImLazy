@@ -13,8 +13,8 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ComboBox x:Name="cmb_Properties" SelectionChanged="cmb_Properties_SelectionChanged" SelectedIndex="0"/>
-        <ComboBox x:Name="cmb_AvailSymbols" Grid.Column="1"/>
-        <ContentPresenter x:Name="content_param" Grid.Column="2"/>
+        <ComboBox x:Name="CmbProperties" SelectionChanged="cmb_Properties_SelectionChanged" SelectedIndex="0"/>
+        <ComboBox x:Name="CmbAvailSymbols" Grid.Column="1"/>
+        <ContentPresenter x:Name="ContentParam" Grid.Column="2"/>
     </Grid>
 </UserControl>

@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
 using System.Windows;
 using System.Windows.Controls;
 using ImLazy.Addins.Utils;
 using ImLazy.SDK.Base.Contracts;
-using ImLazy.RunTime;
+using ImLazy.Runtime;
 using ImLazy.SDK.Lexer;
 using ImLazy.Util;
 
@@ -26,7 +25,7 @@ namespace ImLazy.Addins.Conditions
             CmbSubjects.SelectionChanged += CmbSubjectsOnSelectionChanged;
             CmbVerbs.SelectionChanged += CmbVerbsOnSelectionChanged;
 
-            CmbSubjects.ItemsSource = LexerRuntime.Instance.Subjects.Select(_=>_.Value);
+            CmbSubjects.ItemsSource = LexerAddinHost.Instance.Subjects.Select(_=>_.Value);
             CmbSubjects.SelectedIndex = 0;
         }
 
@@ -59,7 +58,7 @@ namespace ImLazy.Addins.Conditions
 
             // 获取Object对象，用它生成宾语的视图
             // 若没有Object对象，将宾语容器置null并隐藏
-            var objects = LexerRuntime.Instance.GetSupportedObjectsByVerbType(verb.GetObjectType(verbType));
+            var objects = LexerAddinHost.Instance.GetSupportedObjectsByVerbType(verb.GetObjectType(verbType));
             if (objects == null || !objects.Any())
             {
                 Content.Visibility = Visibility.Collapsed;
@@ -100,7 +99,7 @@ namespace ImLazy.Addins.Conditions
             _isDirty = true;
 
             var name = subject.GetVerbType();
-            var verbs = LexerRuntime.Instance.GetSupportedVerbsByType(name);
+            var verbs = LexerAddinHost.Instance.GetSupportedVerbsByType(name);
             if (!verbs.Any())
             {
                 CmbVerbs.Visibility = Visibility.Collapsed;

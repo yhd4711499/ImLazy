@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 using ImLazy.SDK.Base.Contracts;
 using ImLazy.Data;
 using log4net;
-using LogManager = ImLazy.RunTime.LogManager;
+using LogManager = ImLazy.Runtime.LogManager;
 
 namespace ImLazy.Util
 {
@@ -57,7 +57,7 @@ namespace ImLazy.Util
         {
             var ser = new DataContractJsonSerializer(typeof(T));
             var ms = new MemoryStream(Encoding.UTF8.GetBytes(jsonString));
-            T obj = (T)ser.ReadObject(ms);
+            var obj = (T)ser.ReadObject(ms);
             return obj;
         }
 

@@ -1,4 +1,4 @@
-﻿namespace ImLazy.RunTime
+﻿namespace ImLazy.Runtime
 {
     public static class ConfigNames
     {

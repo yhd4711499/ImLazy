@@ -6,7 +6,7 @@ using System.Linq;
 using ImLazy.SDK.Base.Contracts;
 using log4net;
 
-namespace ImLazy.RunTime
+namespace ImLazy.Runtime
 {
     /// <summary>
     /// Host all addins
@@ -33,9 +33,6 @@ namespace ImLazy.RunTime
             Log.Info("AddinHost initiating...");
             _instance.LoadAddins();
             _instance.BuildCache();
-
-            LexerRuntime.Instance.ToString();
-
             Log.Info("AddinHost initiated.");
         }
 
@@ -68,7 +65,7 @@ namespace ImLazy.RunTime
             lock (LockObj)
             {
                 #region Load addins
-                Log.Info("Loading addins from '\\Addins' subfolder and self (AddinHost.dll)...");
+                Log.Info("Loading addins from '\\Addins' subfolder and self (ImLazy.dll)...");
                 var catalog = new AggregateCatalog();
                 catalog.Catalogs.Add(new DirectoryCatalog("Addins"));
                 catalog.Catalogs.Add(new AssemblyCatalog(typeof (AddinHost).Assembly));
@@ -106,11 +103,11 @@ namespace ImLazy.RunTime
                 Log.Info("Building view creators caches...");
 
                 ConditionAddins.ForEach(
-                    _ => CacheMap<object>.ViewCreatorCacheMap.Put(_.Metadata.Type.FullName, _.Value.CreateMainView));
+                    _ => LexerAddinHost.Instance.ViewCreatorCacheMap.Put(_.Metadata.Type.FullName, _.Value.CreateMainView));
                 ActionAddins.ForEach(
-                    _ => CacheMap<object>.ViewCreatorCacheMap.Put(_.Metadata.Type.FullName, _.Value.CreateMainView));
+                    _ => LexerAddinHost.Instance.ViewCreatorCacheMap.Put(_.Metadata.Type.FullName, _.Value.CreateMainView));
                 OtherAddins.ForEach(
-                    _ => CacheMap<object>.ViewCreatorCacheMap.Put(_.Metadata.Type.FullName, _.Value.CreateMainView));
+                    _ => LexerAddinHost.Instance.ViewCreatorCacheMap.Put(_.Metadata.Type.FullName, _.Value.CreateMainView));
 
                 #endregion
 
@@ -119,9 +116,9 @@ namespace ImLazy.RunTime
                 Log.Info("Building functions caches...");
 
                 ConditionAddins.ForEach(
-                    _ => CacheMap<object>.ConditionCacheMap.Put(_.Metadata.Type.FullName, _.Value.IsMatch));
+                    _ => Executor.Instance.ConditionCacheMap.Put(_.Metadata.Type.FullName, _.Value.IsMatch));
                 ActionAddins.ForEach(
-                    _ => CacheMap<object>.ActionCacheMap.Put(_.Metadata.Type.FullName, _.Value.DoAction));
+                    _ => Executor.Instance.ActionCacheMap.Put(_.Metadata.Type.FullName, _.Value.DoAction));
 
                 Log.Info("Done caching.");
 

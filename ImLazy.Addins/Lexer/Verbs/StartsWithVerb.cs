@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.Composition;
+﻿using System.ComponentModel.Composition;
 using ImLazy.SDK.Lexer;
 
 namespace ImLazy.Addins.Lexer.Verbs

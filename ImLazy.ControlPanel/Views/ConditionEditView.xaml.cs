@@ -14,7 +14,7 @@ namespace ImLazy.ControlPanel.Views
     public partial class ConditionEditView
     {
         Point _lastMouseDown;
-        FrameworkElement draggedItem, _target;
+        FrameworkElement _draggedItem, _target;
         private ICollection<ConditionCorpViewModel> _itemsSource; 
         public ConditionEditView()
         {
@@ -41,18 +41,18 @@ namespace ImLazy.ControlPanel.Views
             {
                 if (e.LeftButton == MouseButtonState.Pressed)
                 {
-                    Point currentPosition = e.GetPosition(this);
+                    var currentPosition = e.GetPosition(this);
 
 
-                    draggedItem = (FrameworkElement)sender;
-                    if (draggedItem != null)
+                    _draggedItem = (FrameworkElement)sender;
+                    if (_draggedItem != null)
                     {
-                        var source = FindVisualParent<ItemsControl>(draggedItem);
+                        var source = FindVisualParent<ItemsControl>(_draggedItem);
                         if (source == null) return;
                         var originalControl = e.OriginalSource as FrameworkElement;
                         if (originalControl == null) return;
                         var data = new DataObject(originalControl.DataContext);
-                        DragDropEffects finalDropEffect = DragDrop.DoDragDrop(source, data,
+                        var finalDropEffect = DragDrop.DoDragDrop(source, data,
                             DragDropEffects.Move);
                         //Checking target is not null and item is dragging(moving)
                         if ((finalDropEffect == DragDropEffects.Move) && (_target != null))
@@ -62,7 +62,7 @@ namespace ImLazy.ControlPanel.Views
                             {
                                 CopyItem(originalControl.DataContext as ConditionCorpViewModel, _target.DataContext as ConditionBranchViewModel);
                                 _target = null;
-                                draggedItem = null;
+                                _draggedItem = null;
                             }
 
                         }
@@ -79,19 +79,12 @@ namespace ImLazy.ControlPanel.Views
             try
             {
 
-                Point currentPosition = e.GetPosition(this);
+                var currentPosition = e.GetPosition(this);
 
 
                 // Verify that this is a valid drop and then store the drop target
-                ContentControl item = GetNearestContainer(e.OriginalSource as UIElement);
-                if (CheckDropTarget(draggedItem.DataContext as ConditionCorpViewModel, item.DataContext as ConditionCorpViewModel))
-                {
-                    e.Effects = DragDropEffects.Move;
-                }
-                else
-                {
-                    e.Effects = DragDropEffects.None;
-                }
+                var item = GetNearestContainer(e.OriginalSource as UIElement);
+                e.Effects = CheckDropTarget(_draggedItem.DataContext as ConditionCorpViewModel, item.DataContext as ConditionCorpViewModel) ? DragDropEffects.Move : DragDropEffects.None;
                 e.Handled = true;
             }
             catch (Exception)
@@ -107,10 +100,10 @@ namespace ImLazy.ControlPanel.Views
                 e.Handled = true;
 
                 // Verify that this is a valid drop and then store the drop target
-                ContentControl TargetItem = GetNearestContainer(e.OriginalSource as UIElement);
-                if (TargetItem != null && draggedItem != null)
+                var targetItem = GetNearestContainer(e.OriginalSource as UIElement);
+                if (targetItem != null && _draggedItem != null)
                 {
-                    _target = TargetItem;
+                    _target = targetItem;
                     e.Effects = DragDropEffects.Move;
 
                 }
@@ -126,28 +119,28 @@ namespace ImLazy.ControlPanel.Views
             return isEqual;
 
         }
-        private void CopyItem(ConditionCorpViewModel _sourceData, ConditionBranchViewModel _targetData)
+        private void CopyItem(ConditionCorpViewModel sourceData, ConditionBranchViewModel targetData)
         {
 
             //Asking user wether he want to drop the dragged TreeViewItem here or not
-            if (MessageBox.Show("Would you like to drop " + _sourceData + " into " + _targetData + "", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Would you like to drop " + sourceData + " into " + targetData + "", "", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 try
                 {
                     
                     //adding dragged TreeViewItem in target TreeViewItem
-                    if (_targetData != null)
+                    if (targetData != null)
                     {
-                        _targetData.InsertCondition(0, _sourceData);
+                        targetData.InsertCondition(0, sourceData);
                     }
 
-                    if (_sourceData.Parent == null)
+                    if (sourceData.Parent == null)
                     {
                         
                     }
                     else
                     {
-                        _sourceData.Parent.DeleteConditionCommand.Execute(_sourceData);
+                        sourceData.Parent.DeleteConditionCommand.Execute(sourceData);
                     }
                 }
                 catch
@@ -165,11 +158,11 @@ namespace ImLazy.ControlPanel.Views
                 return null;
             }
 
-            UIElement parent = VisualTreeHelper.GetParent(child) as UIElement;
+            var parent = VisualTreeHelper.GetParent(child) as UIElement;
 
             while (parent != null)
             {
-                TObject found = parent as TObject;
+                var found = parent as TObject;
                 if (found != null)
                 {
                     return found;
@@ -185,7 +178,7 @@ namespace ImLazy.ControlPanel.Views
         private ContentControl GetNearestContainer(UIElement element)
         {
             // Walk up the element tree to the nearest tree view item.
-            ContentControl container = element as ContentControl;
+            var container = element as ContentControl;
             while ((container == null) && (element != null))
             {
                 element = VisualTreeHelper.GetParent(element) as UIElement;

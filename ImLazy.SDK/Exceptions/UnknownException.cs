@@ -7,7 +7,7 @@ namespace ImLazy.SDK.Exceptions
     {
         public override int GetErrorCode()
         {
-            return ErrorCodeDefinitions.ERR_Unknown;
+            return ErrorCodeDefinitions.ErrUnknown;
         }
     }
 }

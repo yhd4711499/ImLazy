@@ -13,7 +13,7 @@ namespace ImLazy.ControlPanel.Commands
 
         public bool IsExecuting { get; private set; }
 
-        public RelayAsyncCommand(Action<T> execute, Func<T, Boolean> canExecute)
+        public RelayAsyncCommand(Action<T> execute, Func<T, Boolean> canExecute = null)
         {
             IsExecuting = false;
             if (execute == null)
@@ -22,10 +22,6 @@ namespace ImLazy.ControlPanel.Commands
             }
             _execute = execute;
             _canExecute = canExecute;
-        }
-
-        public RelayAsyncCommand(Action<T> execute):this(execute,null)
-        {
         }
 
         public bool CanExecute(object parameter)

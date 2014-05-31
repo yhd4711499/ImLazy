@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,7 @@ namespace ImLazy.Util
         public static void ToFolder(string filePath, string targetPath, Action<string,string> action)
         {
             var name = Path.GetFileName(filePath);
+            Debug.Assert(name != null, "name != null");
             var fullPath = Path.Combine(targetPath, name);
             action(filePath, fullPath);
         }
