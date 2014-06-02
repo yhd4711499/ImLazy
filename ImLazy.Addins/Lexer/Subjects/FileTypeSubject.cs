@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using ImLazy.Addins.Annotations;
 using ImLazy.SDK.Lexer;
 
 namespace ImLazy.Addins.Lexer.Subjects
@@ -27,25 +28,45 @@ namespace ImLazy.Addins.Lexer.Subjects
 
         static readonly LexerType LoveAction = new LexerType(null, "LoveAction", CanonicalNamePrefix);
 
+        static readonly Dictionary<Func<string, string, bool>, LexerType> Conditions = new Dictionary<Func<string, string, bool>, LexerType>
+        {
+            { (name, ext) => Split("第一会所|第一會所|女優|女优|av|草榴|sex|逼|奸|漂亮").Any(name.Contains), LoveAction },
+            { (name, ext) => name != null && LoveActionRegex.IsMatch(name), LoveAction },
+            { (name, ext) => Matches(ext, "rar|zip|7z"), Archieve },
+            { (name, ext) => Matches(ext, "txt|doc|docx|chm|pdf|rtf"), Document },
+            { (name, ext) => Matches(ext, "mp3|aac|flac|wav|ape|ogg"), Audio },
+            { (name, ext) => Matches(ext, "avi|mp4|mpg|mkv|wmv|rm|rmvb|flv"), Video },
+            { (name, ext) => Matches(ext, "jpg|jpeg|bmp|png|gif|tiff|raw"), Picture },
+            { (name, ext) => Matches(ext, "gp3|gp4|gp5|gtp|gpx"), GuitarProTab },
+        };
+
         public static readonly IEnumerable<LexerType> SupportedTypes = new List<LexerType>
         {
             File, Archieve, Folder, Document, Audio, Video, Picture, GuitarProTab, LoveAction
         };
 
-        private static readonly Regex LoveActionRegex = new Regex(@"((gachi)|(pgd)|(mxgs)|(siro)|(sw))\w*\W?\d");
+        private static readonly Regex LoveActionRegex = new Regex(@"((gachi)|(pgd)|(mxgs)|(siro)|(sw)|(s-cute)|(yrz)|(sero))\w*\W?\d", RegexOptions.IgnoreCase);
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="listInString">多个后缀，用,分隔，不包含. 如"txt,doc,docx"</param>
+        /// <param name="listInString">多个后缀，用|分隔，不包含. 如"txt,doc,docx"</param>
         /// <returns></returns>
-        private static bool InList(string source, string listInString)
+        private static bool Matches(string source, string listInString)
         {
+            if (String.IsNullOrEmpty(source)) return false;
+
             var list = listInString.Split('|');
             return list.Any(_ => _.Equals(source, StringComparison.InvariantCultureIgnoreCase));
         }
+
+        private static IEnumerable<string> Split(string source)
+        {
+            return source.Split('|');
+        } 
         public string Name { get { return "FileTypeSubject"; } }
-        public LexerType ElementType { get; private set; }
+        public LexerType ElementType { get; [UsedImplicitly] private set; }
 
         public LexerType GetVerbType()
         {
@@ -55,64 +76,19 @@ namespace ImLazy.Addins.Lexer.Subjects
         public object GetProperty(string filePath)
         {
             LexerType type = null;
-            do
+            if (Directory.Exists(filePath))
+                type = Folder;
+            if (System.IO.File.Exists(filePath))
+                type = File;
+
+            var extension = Path.GetExtension(filePath);
+            var shortName = Path.GetFileNameWithoutExtension(filePath);
+
+            foreach (var condition in Conditions.Where(condition => condition.Key(shortName, extension)))
             {
-                if (Directory.Exists(filePath))
-                    type = Folder;
-
-                if (System.IO.File.Exists(filePath))
-                    type = File;
-
-                var extension = Path.GetExtension(filePath);
-                if (!String.IsNullOrEmpty(extension))
-                {
-                    var shortExt = extension.Substring(1);
-                    if (InList(shortExt, "rar|zip|7z"))
-                    {
-                        type = Archieve;
-                        break;
-                    }
-                    if (InList(shortExt, "txt|doc|docx|chm|pdf|rtf"))
-                    {
-                        type = Document;
-                        break;
-                    }
-                    if (InList(shortExt, "mp3|aac|flac|wav|ape|ogg"))
-                    {
-                        type = Audio;
-                        break;
-                    }
-                    if (InList(shortExt, "avi|mp4|mpg|mkv|wmv|rm|rmvb|flv"))
-                    {
-                        type = Video;
-                        break;
-                    }
-                    if (InList(shortExt, "jpg|jpeg|bmp|png|gif|tiff|raw"))
-                    {
-                        type = Picture;
-                        break;
-                    }
-                    if (InList(shortExt, "gp3|gp4|gp5|gtp|gpx"))
-                    {
-                        type = GuitarProTab;
-                        break;
-                    }
-                }
-                var name = Path.GetFileNameWithoutExtension(filePath);
-                if (String.IsNullOrEmpty(name)) break;
-                name = name.ToLower();
-                if (InList(name, "第一会所|第一會所|女優|女优|av|草榴|sex"))
-                {
-                    type = LoveAction;
-                    break;
-                }
-
-                if (LoveActionRegex.IsMatch(name))
-                {
-                    type = LoveAction;
-                    break;
-                }
-            } while (false);
+                type = condition.Value;
+                break;
+            }
             
             return type;
         }

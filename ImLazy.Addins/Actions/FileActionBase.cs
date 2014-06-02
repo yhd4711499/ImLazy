@@ -14,6 +14,21 @@ namespace ImLazy.Addins.Actions
     {
         private string _actionName;
         private static readonly ILog Log = LogManager.GetLogger(typeof(FileActionBase));
+
+        /// <summary>
+        /// convert to abs path if necessary.
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <param name="targetPath"></param>
+        /// <returns>Abs path</returns>
+        private static string GetAbsPath(string filePath, string targetPath)
+        {
+            if (targetPath.StartsWith("/") || targetPath.StartsWith("\\"))
+                // ReSharper disable once AssignNullToNotNullAttribute
+                return Path.Combine(Path.GetDirectoryName(filePath), targetPath.Remove(0, 1));
+            return targetPath;
+        }
+
         public void DoAction(string filePath, SerializableDictionary<string, object> dic)
         {
             var targetPath = dic.TryGetValue<string>(ConfigNames.ObjectValue);
@@ -21,31 +36,29 @@ namespace ImLazy.Addins.Actions
             {
                 throw new Exception(String.Format("Target path exist : {0}. Unable to proceed !", targetPath));
             }
-            if (targetPath.StartsWith("/") || targetPath.StartsWith("\\"))
-                // ReSharper disable once AssignNullToNotNullAttribute
-                targetPath = Path.Combine(Path.GetDirectoryName(filePath), targetPath.Remove(0,1));
-            if (Directory.Exists(targetPath))
+
+            // convert to abs path if necessary.
+            targetPath = GetAbsPath(filePath, targetPath);
+
+            Action<string, string> action;
+
+            if (String.IsNullOrEmpty(Path.GetExtension(targetPath)))
             {
                 // targetPath is dir. So copy filePath to targetPath folder
-                ExecuteFileAction(filePath, targetPath, (f, t) => FolderUtil.ToFolder(f, t, _action));
+                action = (f, t) => FolderUtil.ToFolder(f, t, _action);
+
+                // dirs should be made first if needed.
+                FolderUtil.MakeDirs(targetPath);
             }
             else
             {
-                // targetPath is not dir or is non-existed dir
-                if (String.IsNullOrEmpty(Path.GetExtension(targetPath)))
-                {
-                    // no extension means the targetPath is a dir path.
-                    // so the dirs should be made first then followed by copying.
-                    FolderUtil.MakeDirs(targetPath);
-                    ExecuteFileAction(filePath, targetPath, (f, t) => FolderUtil.ToFolder(f, t, _action));
-                }
-                else
-                {
-                    // now targetPath is a full path.(ie. "D:\temp\a.ext")
-                    // so copy from filePath directly to targetPath
-                    ExecuteFileAction(filePath, targetPath, _action);
-                }
+                // now targetPath is a full path.(ie. "D:\temp\a.ext")
+                // so copy from filePath directly to targetPath
+                action = _action;
             }
+
+            // ready? go!
+            ExecuteFileAction(filePath, targetPath, action);
         }
 
         private void ExecuteFileAction(string filePath, string targetPath, Action<string,string> action)

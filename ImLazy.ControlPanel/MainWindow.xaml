@@ -5,7 +5,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:viewModel="clr-namespace:ImLazy.ControlPanel.ViewModel"
         x:Class="ImLazy.ControlPanel.MainWindow"
-        Title="MainWindow" Height="480" Width="590" MaxWidth="590" MinWidth="590" WindowStartupLocation="CenterScreen">
+        Title="ImLazy" Height="480" Width="590" MaxWidth="590" MinWidth="590" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <DataTemplate x:Key="RuleItemTempalte" DataType="viewModel:RuleViewModel">
             <Grid Background="Transparent">

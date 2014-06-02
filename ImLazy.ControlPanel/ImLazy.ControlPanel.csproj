@@ -73,6 +73,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviors\CloseParentWindowBehavior.cs" />
+    <Compile Include="Behaviors\ShortkeyCommand.cs" />
     <Compile Include="Commands\AwaitableDelegateCommand.cs" />
     <Compile Include="Controls\ConditionBranchView.xaml.cs">
       <DependentUpon>ConditionBranchView.xaml</DependentUpon>

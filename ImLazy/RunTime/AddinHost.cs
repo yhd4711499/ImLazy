@@ -47,9 +47,7 @@ namespace ImLazy.Runtime
         public IEnumerable<Lazy<IActionAddin, IActionAddinMetadata>> ActionAddins { get; private set; }
 
         [ImportMany]
-
         public IEnumerable<Lazy<IConditionAddin, IConditionAddinMetadata>> ConditionAddins { get; private set; }
-
 
         [ImportMany]
         private IEnumerable<Lazy<IAddin, IAddinMetadata>> OtherAddins { get; set; }
@@ -79,7 +77,7 @@ namespace ImLazy.Runtime
                     var addinMetadatas = c as IAddinMetadata[] ?? c.ToArray();
                     return !addinMetadatas.Any() ? String.Empty: String.Join("\n\t\t", addinMetadatas.Select(_=>_.Type.Name));
                 });
-                Log.InfoFormat("Load addins finished.\n\tConditionAddins has {0}\n\t\t{1}\n\tActionAddins has {2}\n\t\t{3}\n\tOtherddins has {4}\n\t\t{5}",
+                Log.InfoFormat("Loading finished. Available addins are listed below:\n\t{0} ConditionAddins\n\t\t{1}\n\t{2} ActionAddins\n\t\t{3}\n\t{4} Otherddins\n\t\t{5}",
                     ConditionAddins.Count(),
                     f(ConditionAddins.Select(_ => _.Metadata)),
                     ActionAddins.Count(),

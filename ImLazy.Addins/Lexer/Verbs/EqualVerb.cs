@@ -26,12 +26,9 @@ namespace ImLazy.Addins.Lexer.Verbs
         public bool IsMatch(object property, object value)
         {
             var strValue = value as string;
-            if (strValue != null)
-            {
-                var values = strValue.Split('|');
-                return values.Any(_ => _.Equals((string)property));
-            }
-            return property.Equals(value);
+            if (strValue == null) return property.Equals(value);
+            var values = strValue.Split('|');
+            return values.Any(_ => _.Equals((string)property));
         }
     }
 }

@@ -21,12 +21,9 @@ namespace ImLazy.Addins.Lexer.Verbs
         public bool IsMatch(object property, object value)
         {
             var strValue = value as string;
-            if (strValue != null)
-            {
-                var values = strValue.Split('|');
-                return values.Any(_ => GetResult((string)property, _));
-            }
-            throw new NotSupportedException("StringVerbBase only accepts string value!");
+            if (strValue == null) throw new NotSupportedException("StringVerbBase only accepts string value!");
+            var values = strValue.Split('|');
+            return values.Any(_ => GetResult((string)property, _));
         }
 
         protected abstract bool GetResult(string a, string b);

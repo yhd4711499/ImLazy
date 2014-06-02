@@ -70,7 +70,7 @@ namespace ImLazy.Runtime
             lock (LockObj)
             {
                 #region Load addins
-                Log.Info("Loading addins from '\\Addins' subfolder and self (ImLazy.dll)...");
+                Log.Info("Loading lexer addins from '\\Addins' subfolder and self (ImLazy.dll)...");
                 var catalog = new AggregateCatalog();
                 catalog.Catalogs.Add(new DirectoryCatalog("Addins"));
                 catalog.Catalogs.Add(new AssemblyCatalog(GetType().Assembly));
@@ -84,7 +84,7 @@ namespace ImLazy.Runtime
                     var addinMetadatas = c as ILexer[] ?? c.ToArray();
                     return !addinMetadatas.Any() ? String.Empty : String.Join("\n\t\t", addinMetadatas.Select(_ => _.GetType().FullName));
                 });
-                Log.InfoFormat("Load addins finished.\n\tSubjects has {0}\n\t\t{1}\n\tVerbs has {2}\n\t\t{3}\n\tObjects has {4}\n\t\t{5}",
+                Log.InfoFormat("Loading finished. Available addins are listed below:\n\t{0} Subjects\n\t\t{1}\n\t{2} Verbs\n\t\t{3}\n\t{4} Objects\n\t\t{5}",
                     Subjects.Count(),
                     f(Subjects.Select(_=>_.Value)),
                     Verbs.Count(),

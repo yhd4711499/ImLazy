@@ -48,6 +48,7 @@
     <Compile Include="Base\Contracts\IEditView.cs" />
     <Compile Include="Base\Contracts\IEditViewBranch.cs" />
     <Compile Include="Exceptions\BaseException.cs" />
+    <Compile Include="Exceptions\CheckException.cs" />
     <Compile Include="Exceptions\UnknownException.cs" />
     <Compile Include="Exceptions\ErrorCodeDefinitions.cs" />
     <Compile Include="Exceptions\NotPrivilligedException.cs" />

@@ -173,4 +173,7 @@
   <data name="Stopped" xml:space="preserve">
     <value>已停止</value>
   </data>
+  <data name="ERR_0x00000002" xml:space="preserve">
+    <value>正则表达式格式错误。</value>
+  </data>
 </root>

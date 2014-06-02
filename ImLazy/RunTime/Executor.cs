@@ -107,36 +107,7 @@ namespace ImLazy.Runtime
                     if (IsMatch(rule.ConditionBranch, fe))
                     {
                         // Execution the actions
-                        Log.Debug("ConditionBranch matched. Performing actions...");
-                        int passed = 0, failed = 0;
-                        rule.Actions.ForEach(action =>
-                        {
-                            Log.DebugFormat("Searching action {0} (name : {1}) ...", action.AddinType, action.Name);
-                            var actionMethod = ActionCacheMap.Get(action.AddinType);
-                            if (actionMethod == null)
-                            {
-                                Log.Warn("Action not found!");
-                                return;
-                            }
-                            Log.Debug("Try performing action ...");
-                            try
-                            {
-                                actionMethod(fe, action.Config);
-                                passed++;
-                                Log.Debug("Passed!");
-                            }
-                            catch (Exception ex)
-                            {
-                                failed++;
-                                Log.Error("Action failed!", ex);
-                            }
-                            finally
-                            {
-                                // Remove record to avoid memory leak
-                                Records.Remove(rp.RuleGuid, fe);
-                            }
-                        });
-                        Log.DebugFormat("Actions all done. Passed:{0}, failed:{1}", passed, failed);
+                        ExecuteAction(rule, fe, rp);
                     }
                     else
                     {
@@ -144,6 +115,40 @@ namespace ImLazy.Runtime
                     }
                 }
             });
+        }
+
+        private void ExecuteAction(Rule rule, string fe, RuleProperty rp)
+        {
+            Log.Debug("ConditionBranch matched. Performing actions...");
+            int passed = 0, failed = 0;
+            rule.Actions.ForEach(action =>
+            {
+                Log.DebugFormat("Searching action {0} (name : {1}) ...", action.AddinType, action.Name);
+                var actionMethod = ActionCacheMap.Get(action.AddinType);
+                if (actionMethod == null)
+                {
+                    Log.Warn("Action not found!");
+                    return;
+                }
+                Log.Debug("Try performing action ...");
+                try
+                {
+                    actionMethod(fe, action.Config);
+                    passed++;
+                    Log.Debug("Passed!");
+                }
+                catch (Exception ex)
+                {
+                    failed++;
+                    Log.Error("Action failed!", ex);
+                }
+                finally
+                {
+                    // Remove record to avoid memory leak
+                    Records.Remove(rp.RuleGuid, fe);
+                }
+            });
+            Log.DebugFormat("Actions all done. Passed:{0}, failed:{1}", passed, failed);
         }
 
         private bool IsMatch(ConditionCorp corp ,string filePath)
@@ -154,7 +159,16 @@ namespace ImLazy.Runtime
                 var leaf = corp as ConditionLeaf;
                 if (leaf != null)
                 {
-                    return ConditionCacheMap.Get(leaf.AddinType)(filePath, leaf.Config);
+                    var match = false;
+                    try
+                    {
+                        match = ConditionCacheMap.Get(leaf.AddinType)(filePath, leaf.Config);
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(String.Format("Failed in matching {0}, config: {1}", filePath, leaf.Config), e);
+                    }
+                    return match;
                 }
                 var branch = corp as ConditionBranch;
                 if (branch == null || branch.SubConditions == null || !branch.SubConditions.Any())

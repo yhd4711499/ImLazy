@@ -2,7 +2,6 @@
 using ImLazy.Addins.Utils;
 using ImLazy.SDK.Base.Contracts;
 using System.ComponentModel.Composition;
-using System.IO;
 
 namespace ImLazy.Addins.Actions
 {

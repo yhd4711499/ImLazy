@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Input;
+using ImLazy.ControlPanel.Behaviors;
 using ImLazy.ControlPanel.ViewModel;
 using ImLazy.ControlPanel.Views;
 
@@ -25,6 +27,9 @@ namespace ImLazy.ControlPanel.Util
             };
             w.MaxWidth = w.Width + 140;
             w.Height = (ruleVm.Rule.ConditionBranch.Sum() + 2 + ruleVm.Rule.Actions.Sum()) * 50 + 80;
+            var sc = new ShortkeyCommand();
+            sc.AddAction(Key.Escape, window => window.Close());
+            sc.Attach(w);
             return w;
         }
     }

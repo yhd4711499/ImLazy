@@ -26,7 +26,6 @@ namespace ImLazy.Addins.Conditions
             CmbVerbs.SelectionChanged += CmbVerbsOnSelectionChanged;
 
             CmbSubjects.ItemsSource = LexerAddinHost.Instance.Subjects.Select(_=>_.Value);
-            CmbSubjects.SelectedIndex = 0;
         }
 
         void UpdateUi()
@@ -67,13 +66,10 @@ namespace ImLazy.Addins.Conditions
             }
             else
             {
-                Content.Visibility = Visibility;
-                var dic = new SerializableDictionary<string, object>();
-                if (_configuration != null)
-                {
-                    _configuration.ForEach(_ => dic.Add(_.Key, _.Value));
-                }
+                var dic = _configuration == null ? 
+                    new SerializableDictionary<string, object>() : new SerializableDictionary<string, object>(_configuration);
                 var obj = objects.FirstOrDefault().Value;
+                Content.Visibility = Visibility.Visible;
                 Content.Content = obj.CreateMainView(dic);
                 _objectTypeString = obj.GetType().ToString();
             }
@@ -141,6 +137,8 @@ namespace ImLazy.Addins.Conditions
             {
                 if (_configuration == value)
                     return;
+                if(_configuration == null)
+                    CmbSubjects.SelectedIndex = 0;
                 _isDirty = true;
                 _configuration = value;
                 UpdateUi();

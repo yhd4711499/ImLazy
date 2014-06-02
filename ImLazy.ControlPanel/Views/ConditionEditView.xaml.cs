@@ -39,35 +39,28 @@ namespace ImLazy.ControlPanel.Views
         {
             try
             {
-                if (e.LeftButton == MouseButtonState.Pressed)
-                {
-                    var currentPosition = e.GetPosition(this);
+                if (e.LeftButton != MouseButtonState.Pressed) return;
+                var currentPosition = e.GetPosition(this);
 
 
-                    _draggedItem = (FrameworkElement)sender;
-                    if (_draggedItem != null)
-                    {
-                        var source = FindVisualParent<ItemsControl>(_draggedItem);
-                        if (source == null) return;
-                        var originalControl = e.OriginalSource as FrameworkElement;
-                        if (originalControl == null) return;
-                        var data = new DataObject(originalControl.DataContext);
-                        var finalDropEffect = DragDrop.DoDragDrop(source, data,
-                            DragDropEffects.Move);
-                        //Checking target is not null and item is dragging(moving)
-                        if ((finalDropEffect == DragDropEffects.Move) && (_target != null))
-                        {
-                            // A Move drop was accepted
-                            if (CheckDropTarget(originalControl.DataContext as ConditionCorpViewModel, _target.DataContext as ConditionCorpViewModel))
-                            {
-                                CopyItem(originalControl.DataContext as ConditionCorpViewModel, _target.DataContext as ConditionBranchViewModel);
-                                _target = null;
-                                _draggedItem = null;
-                            }
-
-                        }
-                    }
-                }
+                _draggedItem = (FrameworkElement)sender;
+                if (_draggedItem == null) return;
+                var source = FindVisualParent<ItemsControl>(_draggedItem);
+                if (source == null) return;
+                var originalControl = e.OriginalSource as FrameworkElement;
+                if (originalControl == null) return;
+                var data = new DataObject(originalControl.DataContext);
+                var finalDropEffect = DragDrop.DoDragDrop(source, data,
+                    DragDropEffects.Move);
+                //Checking target is not null and item is dragging(moving)
+                if ((finalDropEffect != DragDropEffects.Move) || (_target == null)) return;
+                // A Move drop was accepted
+                if (
+                    !CheckDropTarget(originalControl.DataContext as ConditionCorpViewModel,
+                        _target.DataContext as ConditionCorpViewModel)) return;
+                CopyItem(originalControl.DataContext as ConditionCorpViewModel, _target.DataContext as ConditionBranchViewModel);
+                _target = null;
+                _draggedItem = null;
             }
             catch (Exception)
             {

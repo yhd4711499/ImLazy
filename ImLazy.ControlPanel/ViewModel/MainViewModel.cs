@@ -49,21 +49,18 @@ namespace ImLazy.ControlPanel.ViewModel
                                           () =>
                                           {
                                               var d = new VistaFolderBrowserDialog();
-                                              if (d.ShowDialog() == true)
+                                              if (d.ShowDialog() != true) return;
+                                              if (Folders.Select(_ => _.Folder.FolderPath).Contains(d.SelectedPath))
                                               {
-                                                  if (Folders.Select(_ => _.Folder.FolderPath).Contains(d.SelectedPath))
-                                                  {
-                                                      MessageBox.Show("已存在相同的目录。");
-                                                  }
-                                                  else
-                                                  {
-                                                      var f = Folder.Create();
-                                                      f.FolderPath = d.SelectedPath;
-                                                      Folders.Add(new FolderViewModel(f, null));
-                                                      DataStorage.Instance.Folders.Add(f);
-                                                      DataStorage.Instance.Save();
-                                                  }
-
+                                                  MessageBox.Show("已存在相同的目录。");
+                                              }
+                                              else
+                                              {
+                                                  var f = Folder.Create();
+                                                  f.FolderPath = d.SelectedPath;
+                                                  Folders.Add(new FolderViewModel(f, null));
+                                                  DataStorage.Instance.Folders.Add(f);
+                                                  DataStorage.Instance.Save();
                                               }
                                           }));
             }
