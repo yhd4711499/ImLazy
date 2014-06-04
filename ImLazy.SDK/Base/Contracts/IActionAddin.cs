@@ -12,6 +12,7 @@ namespace ImLazy.SDK.Base.Contracts
         /// </summary>
         /// <param name="filePath">路径（目录或文件）</param>
         /// <param name="dic">设置</param>
-        void DoAction(string filePath, SerializableDictionary<string, object> dic);
+        /// <param name="updatedFilePath">更新后的路径</param>
+        void DoAction(string filePath, SerializableDictionary<string, object> dic, out string updatedFilePath);
     }
 }

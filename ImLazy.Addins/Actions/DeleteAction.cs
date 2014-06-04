@@ -9,9 +9,10 @@ namespace ImLazy.Addins.Actions
     [Export(typeof(IActionAddin))]
     public class DeleteAction:IActionAddin
     {
-        public void DoAction(string filePath, SerializableDictionary<string, object> dic)
+        public void DoAction(string filePath, SerializableDictionary<string, object> dic, out string updatedPath)
         {
             FileSystemUtil.DeleteFileOrFolder(filePath);
+            updatedPath = null;
         }
 
         public IEditView CreateMainView(SerializableDictionary<string, object> config)

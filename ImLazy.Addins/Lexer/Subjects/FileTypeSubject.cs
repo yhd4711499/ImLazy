@@ -56,7 +56,8 @@ namespace ImLazy.Addins.Lexer.Subjects
         private static bool Matches(string source, string listInString)
         {
             if (String.IsNullOrEmpty(source)) return false;
-
+            while(source[0] == '.')
+                source = source.Remove(0, 1);
             var list = listInString.Split('|');
             return list.Any(_ => _.Equals(source, StringComparison.InvariantCultureIgnoreCase));
         }

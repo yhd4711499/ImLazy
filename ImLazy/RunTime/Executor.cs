@@ -12,8 +12,11 @@ namespace ImLazy.Runtime
     {
         public readonly static Executor Instance = new Executor();
 
-        private readonly CacheMap<Func<string, SerializableDictionary<string, object>, bool>> _conditionCacheMap = new CacheMap<Func<string, SerializableDictionary<string, object>, bool>>();
-        private readonly CacheMap<Action<string, SerializableDictionary<string, object>>> _actionCacheMap = new CacheMap<Action<string, SerializableDictionary<string, object>>>();
+        public delegate void ImLazyAction(string arg1, SerializableDictionary<string, object> arg2, out string path);
+        public delegate bool ImLazyFunc(string arg1, SerializableDictionary<string, object> arg2);
+
+        private readonly CacheMap<ImLazyFunc> _conditionCacheMap = new CacheMap<ImLazyFunc>();
+        private readonly CacheMap<ImLazyAction> _actionCacheMap = new CacheMap<ImLazyAction>();
         private readonly CacheMap<Rule> _ruleCacheMap = new CacheMap<Rule>();
 
         private readonly HashSet<string> _execludsions = new HashSet<string>
@@ -23,12 +26,12 @@ namespace ImLazy.Runtime
             ".td"
         };
 
-        public CacheMap<Func<string, SerializableDictionary<string, object>, bool>> ConditionCacheMap
+        public CacheMap<ImLazyFunc> ConditionCacheMap
         {
             get { return _conditionCacheMap; }
         }
 
-        public CacheMap<Action<string, SerializableDictionary<string, object>>> ActionCacheMap
+        public CacheMap<ImLazyAction> ActionCacheMap
         {
             get { return _actionCacheMap; }
         }
@@ -133,7 +136,13 @@ namespace ImLazy.Runtime
                 Log.Debug("Try performing action ...");
                 try
                 {
-                    actionMethod(fe, action.Config);
+                    string updatedPath;
+                    actionMethod(fe, action.Config, out updatedPath);
+                    if (updatedPath != null)
+                    {
+                        Log.DebugFormat("Path has been updated to [{0}]", updatedPath);
+                        fe = updatedPath;
+                    }
                     passed++;
                     Log.Debug("Passed!");
                 }

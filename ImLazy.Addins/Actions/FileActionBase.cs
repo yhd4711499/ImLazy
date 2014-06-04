@@ -29,13 +29,15 @@ namespace ImLazy.Addins.Actions
             return targetPath;
         }
 
-        public void DoAction(string filePath, SerializableDictionary<string, object> dic)
+        public void DoAction(string filePath, SerializableDictionary<string, object> dic, out string updatedPath)
         {
             var targetPath = dic.TryGetValue<string>(ConfigNames.ObjectValue);
             if (File.Exists(targetPath))
             {
                 throw new Exception(String.Format("Target path exist : {0}. Unable to proceed !", targetPath));
             }
+
+            string newPath = null;
 
             // convert to abs path if necessary.
             targetPath = GetAbsPath(filePath, targetPath);
@@ -49,19 +51,25 @@ namespace ImLazy.Addins.Actions
 
                 // dirs should be made first if needed.
                 FolderUtil.MakeDirs(targetPath);
+
+                // update path
+                newPath = Path.Combine(targetPath, Path.GetFileName(filePath));
             }
             else
             {
                 // now targetPath is a full path.(ie. "D:\temp\a.ext")
                 // so copy from filePath directly to targetPath
                 action = _action;
+
+                // update path
+                newPath = targetPath;
             }
 
             // ready? go!
-            ExecuteFileAction(filePath, targetPath, action);
+            updatedPath = TryExecuteFileAction(filePath, targetPath, action) ? newPath : null;
         }
 
-        private void ExecuteFileAction(string filePath, string targetPath, Action<string,string> action)
+        private bool TryExecuteFileAction(string filePath, string targetPath, Action<string,string> action)
         {
             // there is no need to check both path.
             /*if (FileSystemUtil.IsFileLocked(filePath))
@@ -74,7 +82,7 @@ namespace ImLazy.Addins.Actions
                 Log.InfoFormat("Target:[{0}] seems to be locked. Try it next time.", targetPath);
                 return;
             }*/
-            
+            var result = true;
             try
             {
                 action(filePath, targetPath);
@@ -83,7 +91,9 @@ namespace ImLazy.Addins.Actions
             catch
             {
                 Log.WarnFormat("\"{0}\" seems to be locked. Try it next time.", filePath);
+                result = false;
             }
+            return result;
         }
 
         private Action<string, string> _action;
