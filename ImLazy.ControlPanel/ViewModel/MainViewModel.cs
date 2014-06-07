@@ -3,6 +3,7 @@ using GalaSoft.MvvmLight.Command;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Linq;
+using ImLazy.ControlPanel.Views;
 using ImLazy.Data;
 using ImLazy.ControlPanel.Util;
 using ImLazy.Runtime;
@@ -86,6 +87,51 @@ namespace ImLazy.ControlPanel.ViewModel
                            p => p != null));
             }
         }
+
+        private RelayCommand<FolderViewModel> _walkthroughCommnad;
+
+        /// <summary>
+        /// Gets the WalkthroughCommnad.
+        /// </summary>
+        public RelayCommand<FolderViewModel> WalkthroughCommnad
+        {
+            get
+            {
+                return _walkthroughCommnad
+                       ?? (_walkthroughCommnad = new RelayCommand<FolderViewModel>(
+                           async p =>
+                           {
+                               var results = await Executor.Instance.Walkthrough(p.Folder);
+                               var view = new WalkthroughResultsView();
+                               view.SetResults(results);
+                               WindowUtil.CreateWindow(view, "Walkthrough".Local()).ShowDialog();
+                           },
+                           p => p != null));
+            }
+        }
+
+        private RelayCommand _walkthroughAllCommnad;
+
+        /// <summary>
+        /// Gets the WalkthroughCommnad.
+        /// </summary>
+        public RelayCommand WalkthroughAllCommnad
+        {
+            get
+            {
+                return _walkthroughAllCommnad
+                       ?? (_walkthroughAllCommnad = new RelayCommand(
+                           async () =>
+                           {
+                               var results = await Executor.Instance.Walkthrough(Folders.Select(_=>_.Folder).ToArray());
+                               var view = new WalkthroughResultsView();
+                               view.SetResults(results);
+                               WindowUtil.CreateWindow(view, "Walkthrough".Local()).ShowDialog();
+                           },
+                           () => true));
+            }
+        }
+        
         #endregion
 
         /// <summary>

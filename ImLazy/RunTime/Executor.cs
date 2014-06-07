@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using CuttingEdge.Conditions;
+using System.Threading.Tasks;
 using ImLazy.Data;
 using log4net;
 
@@ -61,76 +61,85 @@ namespace ImLazy.Runtime
             Records.Remove(ruleGuid);
         }
 
+        public Task<IEnumerable<WalkthroughResult>> Walkthrough(params Folder[] folders)
+        {
+            // 每个目录都在各自的线程中运行
+            return Task.Factory.StartNew<IEnumerable<WalkthroughResult>>(() =>
+            {
+                var results = new List<WalkthroughResult>();
+                folders.ForEach(_ => results.AddRange(Do(_, true)));
+                return results;
+            });
+        }
+
         public void Execute(IEnumerable<Folder> folders)
         {
-            Condition.Requires(folders, "folders").IsNotNull();
-            
             // 每个目录都在各自的线程中运行
             var enumerable = folders as Folder[] ?? folders.ToArray();
-            enumerable.AsParallel().ForAll(Do);
+            enumerable.AsParallel().ForAll(_=>Do(_));
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="folder"></param>
-        private void Do(Folder folder)
+        /// <param name="walkthrough"></param>
+        private IEnumerable<WalkthroughResult> Do(Folder folder, bool walkthrough = false)
         {
             var entries = from entry in Directory.EnumerateFileSystemEntries(folder.FolderPath)
                 let fileName = Path.GetFileName(entry)
                 where fileName != null && !_execludsions.Any(fileName.Contains)
                 select entry;
-            
+            var results = new List<WalkthroughResult>();
             entries.AsParallel().ForEach(fe =>
             {
                 foreach (var rp in folder.RuleProperties.Where(_=>_.Enabled))
                 {
-                    // Is the file-rule untouched since last execution?
-                    int lastExeTime, lastWriteTime = File.GetLastWriteTime(fe).Millisecond;
-                    if (Records.TryGetValue(rp.RuleGuid, fe, out lastExeTime) && lastExeTime == lastWriteTime)
+                    if (!walkthrough)
                     {
-                        // If so, skip it.
-                        Log.DebugFormat("{0} : {1} has no changes since last exectution and is skipped.", rp.RuleGuid, fe);
-                        continue;
+                        // Is the file-rule untouched since last execution?
+                        int lastExeTime, lastWriteTime = File.GetLastWriteTime(fe).Millisecond;
+                        if (Records.TryGetValue(rp.RuleGuid, fe, out lastExeTime) && lastExeTime == lastWriteTime)
+                        {
+                            // If so, skip it.
+                            Log.DebugFormat("{0} : {1} has no changes since last execution and is skipped.", rp.RuleGuid, fe);
+                            continue;
+                        }
+                        Records[rp.RuleGuid, fe] = lastWriteTime;
                     }
-                    Records[rp.RuleGuid, fe] = lastWriteTime;
 
                     // Get the rule by guid
-                    Log.DebugFormat("Searching for rule with GUID:{0}...", rp.RuleGuid);
                     var rule = RuleCacheMap.Get(rp.RuleGuid);
                     if (rule == null)
                     {
                         Log.WarnFormat("Target rule [{0}] not found!", rp.RuleGuid);
                         continue;
                     }
-                    Log.DebugFormat("Target rule founded with name:[{0}]", rule.Name);
 
                     // Check file by the conditions of the rule
-                    Log.DebugFormat("Checking [{0}] ...", fe);
-                    if (IsMatch(rule.ConditionBranch, fe))
-                    {
-                        // Execution the actions
-                        ExecuteAction(rule, fe, rp);
-                    }
-                    else
-                    {
-                        Log.Debug("Condition not match and was Skipped.");
-                    }
+                    if (!IsMatch(rule.ConditionBranch, fe)) continue;
+
+                    results.Add(new WalkthroughResult(fe, rule.Name, folder.FolderPath));
+
+                    if (walkthrough) return;
+                    
+                    Log.Debug("Condition matched. Performing actions...");
+                    // Execution the actions
+                    ExecuteAction(rule, fe, rp);
                 }
             });
+            return results;
         }
 
         private void ExecuteAction(Rule rule, string fe, RuleProperty rp)
         {
-            Log.Debug("ConditionBranch matched. Performing actions...");
             int passed = 0, failed = 0;
             rule.Actions.ForEach(action =>
             {
-                Log.DebugFormat("Searching action {0} (name : {1}) ...", action.AddinType, action.Name);
                 var actionMethod = ActionCacheMap.Get(action.AddinType);
                 if (actionMethod == null)
                 {
-                    Log.Warn("Action not found!");
+                    Log.WarnFormat("Action [name:{0}, type:{1}] not found!", action.Name, action.AddinType);
                     return;
                 }
                 Log.Debug("Try performing action ...");
@@ -222,17 +231,6 @@ namespace ImLazy.Runtime
                     pairs[filePath] = value;
                 }
             }
-
-            /// <summary>
-            /// Get the computed hash code
-            /// </summary>
-            /// <param name="propertyGuid"></param>
-            /// <param name="filePath"></param>
-            /// <returns></returns>
-            /*private static int CalcHash(RuleProperty p, string filePath)
-            {
-                return p.GetHashCode() + 31 * filePath.GetHashCode();
-            }*/
 
             public void Remove(Guid propertyGuid, string filePath)
             {

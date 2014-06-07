@@ -28,7 +28,7 @@ namespace ImLazy.ControlPanel.ViewModel
             get
             {
                 if (_mainView != null) return _mainView;
-                var creator = LexerAddinHost.Instance.ViewCreatorCacheMap.Get(AddinInfo.AddinType);
+                var creator = AddinHost.Instance.ViewCreatorCacheMap.Get(AddinInfo.AddinType);
                 if (creator == null)
                 {
                     // TODO:error

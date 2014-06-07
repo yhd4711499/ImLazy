@@ -15,7 +15,7 @@ namespace ImLazy.Runtime
         private static readonly object LockObj = new object();
         private static readonly ILog Log = LogManager.GetLogger(typeof(LexerAddinHost));
 
-        public readonly CacheMap<Func<SerializableDictionary<string, object>, IEditView>> ViewCreatorCacheMap = new CacheMap<Func<SerializableDictionary<string, object>, IEditView>>();
+        public readonly CacheMap<Func<SerializableDictionary<string, object>, LexerType, IEditView>> ViewCreatorCacheMap = new CacheMap<Func<SerializableDictionary<string, object>, LexerType, IEditView>>();
 
         public readonly CacheMap<Func<string, object>> SubjectsCacheMap = new CacheMap<Func<string, object>>();
 

@@ -176,10 +176,5 @@ namespace ImLazy.ControlPanel.ViewModel
             if (e.OldItems != null)
                 e.OldItems.OfType<RuleViewModel>().ForEach(r => Executor.Instance.RuleCacheMap.Remove(r.Rule.Guid));
         }
-
-        public override string ToString()
-        {
-            return Folder.ToString();
-        }
     }
 }

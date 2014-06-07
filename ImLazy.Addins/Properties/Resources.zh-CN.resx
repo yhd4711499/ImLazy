@@ -240,4 +240,43 @@
   <data name="Archieve" xml:space="preserve">
     <value>压缩包</value>
   </data>
+  <data name="Centries" xml:space="preserve">
+    <value>世纪</value>
+  </data>
+  <data name="Days" xml:space="preserve">
+    <value>天</value>
+  </data>
+  <data name="Decades" xml:space="preserve">
+    <value>十年</value>
+  </data>
+  <data name="EndsWithVerb" xml:space="preserve">
+    <value>的结尾是</value>
+  </data>
+  <data name="Hours" xml:space="preserve">
+    <value>小时</value>
+  </data>
+  <data name="MatchRegexVerb" xml:space="preserve">
+    <value>匹配正则表达式</value>
+  </data>
+  <data name="ModifyDateSubject" xml:space="preserve">
+    <value>修改日期</value>
+  </data>
+  <data name="Months" xml:space="preserve">
+    <value>月</value>
+  </data>
+  <data name="OlderThanVerb" xml:space="preserve">
+    <value>早于</value>
+  </data>
+  <data name="StartsWithVerb" xml:space="preserve">
+    <value>的开头是</value>
+  </data>
+  <data name="Weeks" xml:space="preserve">
+    <value>周</value>
+  </data>
+  <data name="Years" xml:space="preserve">
+    <value>年</value>
+  </data>
+  <data name="LoveAction" xml:space="preserve">
+    <value>爱情动作片</value>
+  </data>
 </root>

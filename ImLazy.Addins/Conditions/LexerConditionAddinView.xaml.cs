@@ -60,8 +60,8 @@ namespace ImLazy.Addins.Conditions
             var objects = LexerAddinHost.Instance.GetSupportedObjectsByVerbType(verb.GetObjectType(verbType));
             if (objects == null || !objects.Any())
             {
-                Content.Visibility = Visibility.Collapsed;
-                Content.Content = null;
+                ObjectContent.Visibility = Visibility.Collapsed;
+                ObjectContent.Content = null;
                 _objectTypeString = null;
             }
             else
@@ -69,8 +69,8 @@ namespace ImLazy.Addins.Conditions
                 var dic = _configuration == null ? 
                     new SerializableDictionary<string, object>() : new SerializableDictionary<string, object>(_configuration);
                 var obj = objects.FirstOrDefault().Value;
-                Content.Visibility = Visibility.Visible;
-                Content.Content = obj.CreateMainView(dic);
+                ObjectContent.Visibility = Visibility.Visible;
+                ObjectContent.Content = obj.CreateMainView(dic, verb.GetObjectType(verbType));
                 _objectTypeString = obj.GetType().ToString();
             }
         }
@@ -99,8 +99,8 @@ namespace ImLazy.Addins.Conditions
             if (!verbs.Any())
             {
                 CmbVerbs.Visibility = Visibility.Collapsed;
-                Content.Visibility = Visibility.Collapsed;
-                Content.Content = null;
+                ObjectContent.Visibility = Visibility.Collapsed;
+                ObjectContent.Content = null;
             }
             else
             {
@@ -122,15 +122,11 @@ namespace ImLazy.Addins.Conditions
                     {ConfigNames.Subject,CmbSubjects.SelectedItem.GetType().FullName},
                     {ConfigNames.Verb, CmbVerbs.SelectedItem.GetType().FullName},
                 };
-                if (Content.Content != null)
-                {
-                    _configuration.Add(ConfigNames.Object,
-                        _objectTypeString);
-                    var config = ((IEditView) Content.Content).Configuration;
-                    config.ForEach(_=>_configuration.Add(_.Key, _.Value));
-                    /*_configuration.Add(ConfigNames.ObjectValue,
-                        ((IEditView)Content.Content).Configuration.TryGetValue(ConfigNames.ObjectValue));*/
-                }
+                if (ObjectContent.Content == null) return _configuration;
+                _configuration.Add(ConfigNames.Object,
+                    _objectTypeString);
+                var config = ((IEditView) ObjectContent.Content).Configuration;
+                config.ForEach(_=>_configuration[_.Key] = _.Value);
                 return _configuration;
             }
             set

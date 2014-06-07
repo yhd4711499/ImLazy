@@ -17,18 +17,24 @@ namespace ImLazy.Addins.Lexer.Subjects
 
         public static readonly LexerType FileType = new LexerType(LexerTypes.TypeType, "FileType", CanonicalNamePrefix);
 
-        static readonly LexerType File = new LexerType(null, "AnyFile", CanonicalNamePrefix);
-        static readonly LexerType Archieve = new LexerType(null, "Archieve", CanonicalNamePrefix);
-        static readonly LexerType Folder = new LexerType(null, "Folder", CanonicalNamePrefix);
-        static readonly LexerType Document = new LexerType(File, "Document", CanonicalNamePrefix);
-        static readonly LexerType Audio = new LexerType(File, "Audio", CanonicalNamePrefix);
-        static readonly LexerType Video = new LexerType(File, "Video", CanonicalNamePrefix);
-        static readonly LexerType Picture = new LexerType(File, "Picture", CanonicalNamePrefix);
-        static readonly LexerType GuitarProTab = new LexerType(File, "GuitarProTab", CanonicalNamePrefix);
+        private static readonly LexerType File = new LexerType(null, "AnyFile", CanonicalNamePrefix);
+        private static readonly LexerType Archieve = new LexerType(null, "Archieve", CanonicalNamePrefix);
+        private static readonly LexerType Folder = new LexerType(null, "Folder", CanonicalNamePrefix);
+        private static readonly LexerType Document = new LexerType(File, "Document", CanonicalNamePrefix);
+        private static readonly LexerType Audio = new LexerType(File, "Audio", CanonicalNamePrefix);
+        private static readonly LexerType Video = new LexerType(File, "Video", CanonicalNamePrefix);
+        private static readonly LexerType Picture = new LexerType(File, "Picture", CanonicalNamePrefix);
+        private static readonly LexerType GuitarProTab = new LexerType(File, "GuitarProTab", CanonicalNamePrefix);
+        private static readonly LexerType LoveAction = new LexerType(null, "LoveAction", CanonicalNamePrefix);
 
-        static readonly LexerType LoveAction = new LexerType(null, "LoveAction", CanonicalNamePrefix);
+        public static readonly IEnumerable<LexerType> SupportedTypes = new List<LexerType>
+        {
+            File, Archieve, Folder, Document, Audio, Video, Picture, GuitarProTab, LoveAction
+        };
 
-        static readonly Dictionary<Func<string, string, bool>, LexerType> Conditions = new Dictionary<Func<string, string, bool>, LexerType>
+        private static readonly Regex LoveActionRegex = new Regex(@"((gachi)|(pgd)|(mxgs)|(siro)|(sw)|(s-cute)|(yrz)|(sero)|(abp))\w*\W?\d", RegexOptions.IgnoreCase);
+
+        private static readonly Dictionary<Func<string, string, bool>, LexerType> Conditions = new Dictionary<Func<string, string, bool>, LexerType>
         {
             { (name, ext) => Split("第一会所|第一會所|女優|女优|av|草榴|sex|逼|奸|漂亮").Any(name.Contains), LoveAction },
             { (name, ext) => name != null && LoveActionRegex.IsMatch(name), LoveAction },
@@ -40,13 +46,6 @@ namespace ImLazy.Addins.Lexer.Subjects
             { (name, ext) => Matches(ext, "gp3|gp4|gp5|gtp|gpx"), GuitarProTab },
         };
 
-        public static readonly IEnumerable<LexerType> SupportedTypes = new List<LexerType>
-        {
-            File, Archieve, Folder, Document, Audio, Video, Picture, GuitarProTab, LoveAction
-        };
-
-        private static readonly Regex LoveActionRegex = new Regex(@"((gachi)|(pgd)|(mxgs)|(siro)|(sw)|(s-cute)|(yrz)|(sero))\w*\W?\d", RegexOptions.IgnoreCase);
-        
         /// <summary>
         /// 
         /// </summary>

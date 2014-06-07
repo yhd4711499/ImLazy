@@ -27,7 +27,7 @@ namespace ImLazy.Addins.Lexer.Objects
             return LexerType.FromFullName(value);
         }
 
-        public IEditView CreateMainView(SerializableDictionary<string, object> config)
+        public IEditView CreateMainView(SerializableDictionary<string, object> config, LexerType type)
         {
             config[ConfigNames.AvailableItems] = FileTypeSubject.SupportedTypes;//.Select(_ => _.Name);
             return new ComboxContent { Configuration = config, MinWidth = 50};

@@ -7,6 +7,13 @@
         x:Class="ImLazy.ControlPanel.MainWindow"
         Title="ImLazy" Height="480" Width="590" MaxWidth="590" MinWidth="590" WindowStartupLocation="CenterScreen">
     <Window.Resources>
+        <DataTemplate x:Key="FolderItemTemplate" DataType="viewModel:FolderViewModel">
+            <StackPanel Orientation="Horizontal">
+                <Image Width="32" Height="32" Source="{Binding Folder.FolderPath, Converter={StaticResource PathToImageConverter}}"></Image>
+                <TextBlock Text="{Binding Folder.FolderPath, Converter={StaticResource ShortPathConverter}}"></TextBlock>
+            </StackPanel>
+        </DataTemplate>
+        
         <DataTemplate x:Key="RuleItemTempalte" DataType="viewModel:RuleViewModel">
             <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
@@ -60,7 +67,8 @@
 							<ListBox
 								SelectedIndex="0"
 								x:Name="ListBox" 
-								ItemsSource="{Binding Folders}" 
+								ItemsSource="{Binding Folders}"
+                                ItemTemplate="{StaticResource FolderItemTemplate}"
 								Margin="0,0,0,24"/>
 							<Button
 								Content="+" 
@@ -75,6 +83,21 @@
 								HorizontalAlignment="Left"
 								Command="{Binding DeleteFolderCommand}" 
 								CommandParameter="{Binding SelectedItem, ElementName=ListBox}"
+								Style="{StaticResource SimbolButtonStyle}"/>
+                            <Button
+								Margin="80,0,0,0"
+								Content="-" 
+								VerticalAlignment="Bottom"
+								HorizontalAlignment="Left"
+								Command="{Binding WalkthroughCommnad}" 
+								CommandParameter="{Binding SelectedItem, ElementName=ListBox}"
+								Style="{StaticResource SimbolButtonStyle}"/>
+                            <Button
+								Margin="120,0,0,0"
+								Content="-" 
+								VerticalAlignment="Bottom"
+								HorizontalAlignment="Left"
+								Command="{Binding WalkthroughAllCommnad}"
 								Style="{StaticResource SimbolButtonStyle}"/>
 						</Grid>
 					</GroupBox>

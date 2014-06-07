@@ -10,6 +10,6 @@ namespace ImLazy.SDK.Lexer
         /// <summary>
         /// 获取插件的视图
         /// </summary>
-        IEditView CreateMainView(SerializableDictionary<string, object> config);
+        IEditView CreateMainView(SerializableDictionary<string, object> config, LexerType type);
     }
 }

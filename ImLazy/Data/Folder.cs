@@ -22,8 +22,6 @@ namespace ImLazy.Data
             set
             {
                 _folderPath = value;
-                var splits = _folderPath.Split('\\');
-                _displayPath = splits.Length > 2 ? splits.Last() : _folderPath;
             }
         }
 
@@ -39,14 +37,13 @@ namespace ImLazy.Data
             };
         }
 
-        private string _displayPath;
         /// <summary>
         /// 
         /// </summary>
         /// <returns><see cref="FolderPath"/></returns>
         public override string ToString()
         {
-            return _displayPath;
+            return FolderPath;
         }
     }
 }

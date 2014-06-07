@@ -4,6 +4,7 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using ImLazy.SDK.Base.Contracts;
+using ImLazy.SDK.Lexer;
 using log4net;
 
 namespace ImLazy.Runtime
@@ -40,6 +41,8 @@ namespace ImLazy.Runtime
         {
             Log.Info("AddinHost finalized.");
         }
+
+        public readonly CacheMap<Func<SerializableDictionary<string, object>, IEditView>> ViewCreatorCacheMap = new CacheMap<Func<SerializableDictionary<string, object>, IEditView>>();
 
         #region Addins
         // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -99,14 +102,14 @@ namespace ImLazy.Runtime
                 #region Cache ViewCreator func to CacheMap<object>
 
                 Log.Info("Building view creators caches...");
-
+                
                 ConditionAddins.ForEach(
-                    _ => LexerAddinHost.Instance.ViewCreatorCacheMap.Put(_.Metadata.Type.FullName, _.Value.CreateMainView));
+                    _ => ViewCreatorCacheMap.Put(_.Metadata.Type.FullName, _.Value.CreateMainView));
                 ActionAddins.ForEach(
-                    _ => LexerAddinHost.Instance.ViewCreatorCacheMap.Put(_.Metadata.Type.FullName, _.Value.CreateMainView));
+                    _ => ViewCreatorCacheMap.Put(_.Metadata.Type.FullName, _.Value.CreateMainView));
                 OtherAddins.ForEach(
-                    _ => LexerAddinHost.Instance.ViewCreatorCacheMap.Put(_.Metadata.Type.FullName, _.Value.CreateMainView));
-
+                    _ => ViewCreatorCacheMap.Put(_.Metadata.Type.FullName, _.Value.CreateMainView));
+                
                 #endregion
 
                 #region Cache addins main func to according cache map

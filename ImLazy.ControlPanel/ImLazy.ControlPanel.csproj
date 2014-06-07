@@ -55,6 +55,8 @@
       <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.0.13.1.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -85,11 +87,17 @@
     <Compile Include="Converters\BooleanConverter.cs" />
     <Compile Include="Converters\BooleanToStringConverter.cs" />
     <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
+    <Compile Include="Converters\GetFolderConverter.cs" />
+    <Compile Include="Converters\PathToImageConverter.cs" />
+    <Compile Include="Converters\ShortPathConverter.cs" />
     <Compile Include="Converters\Status.cs" />
     <Compile Include="Converters\StatusConverter.cs" />
+    <Compile Include="Converters\StringConverterBase.cs" />
     <Compile Include="Interop\ComDlgResources.cs" />
     <Compile Include="Interop\COMGuids.cs" />
     <Compile Include="Interop\ErrorHelper.cs" />
+    <Compile Include="Interop\IconHelper.cs" />
+    <Compile Include="Interop\IconListManager.cs" />
     <Compile Include="Interop\IProgressDialog.cs" />
     <Compile Include="Interop\ShellComInterfaces.cs" />
     <Compile Include="Interop\ShellWrapperDefinitions.cs" />
@@ -132,6 +140,9 @@
     </Compile>
     <Compile Include="Views\ServiceControlView.xaml.cs">
       <DependentUpon>ServiceControlView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\WalkthroughResultsView.xaml.cs">
+      <DependentUpon>WalkthroughResultsView.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\ConditionBranchView.xaml">
       <SubType>Designer</SubType>
@@ -190,6 +201,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ServiceControlView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WalkthroughResultsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

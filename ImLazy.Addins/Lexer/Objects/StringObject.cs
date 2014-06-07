@@ -30,7 +30,7 @@ namespace ImLazy.Addins.Lexer.Objects
             return value;
         }
 
-        public IEditView CreateMainView(SerializableDictionary<string, object> config)
+        public IEditView CreateMainView(SerializableDictionary<string, object> config, LexerType type)
         {
             return new TextContent {Configuration = config, MinWidth = 50};
         }
