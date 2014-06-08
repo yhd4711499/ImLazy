@@ -18,9 +18,12 @@ namespace ImLazy.Addins.Actions
         /// <summary>
         /// convert to abs path if necessary.
         /// </summary>
-        /// <param name="filePath"></param>
-        /// <param name="targetPath"></param>
-        /// <returns>Abs path</returns>
+        /// <param name="filePath">the file path of source file which you want do something with.
+        /// <para>e.g. "d:/Downloads"</para></param>
+        /// <param name="targetPath">the target folder or file path
+        /// <para>e.g. "/tmp"</para></param>
+        /// <returns>Abs path
+        /// <para>e.g. "d:/Downloads/tmp"</para></returns>
         private static string GetAbsPath(string filePath, string targetPath)
         {
             if (targetPath.StartsWith("/") || targetPath.StartsWith("\\"))
@@ -37,7 +40,7 @@ namespace ImLazy.Addins.Actions
                 throw new Exception(String.Format("Target path exist : {0}. Unable to proceed !", targetPath));
             }
 
-            string newPath = null;
+            string newPath;
 
             // convert to abs path if necessary.
             targetPath = GetAbsPath(filePath, targetPath);

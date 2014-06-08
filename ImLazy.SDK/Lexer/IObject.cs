@@ -5,6 +5,7 @@ namespace ImLazy.SDK.Lexer
 {
     public interface IObject : ILexer
     {
+        LexerType ElementType { get; }
         object GetObject(string value);
 
         /// <summary>

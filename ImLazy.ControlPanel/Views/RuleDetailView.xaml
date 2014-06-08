@@ -9,6 +9,7 @@
     x:Class="ImLazy.ControlPanel.Views.RuleDetailView" 
     mc:Ignorable="d"
     d:DesignHeight="300" d:DesignWidth="300">
+    
     <Grid Margin="{StaticResource DefaultMargin}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -16,13 +17,33 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Margin="{StaticResource DefaultMargin}">
-            <TextBlock TextWrapping="Wrap" Text="{Loc Name}" VerticalAlignment="Center" Margin="0,0,10,0"/>
-            <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" MinWidth="75"/>
-            <CheckBox Margin="10,0,0,0" IsChecked="{Binding Enabled, Mode=TwoWay}" VerticalAlignment="Center" Content="{Loc Enabled}"/>
+        
+        <!-- info -->
+        <StackPanel>
+            <!-- about parent folder -->
+            <StackPanel DataContext="{Binding FolderParent}" Orientation="Horizontal" Margin="{StaticResource DefaultMargin}">
+                <Image
+                    Width="32" Height="32"
+                    Source="{Binding Folder.FolderPath, Converter={StaticResource PathToImageConverter}}"
+                    HorizontalAlignment="Left"/>
+                <TextBlock Margin="8,0,0,0" Text="{Binding Folder.FolderPath, Converter={StaticResource ShortPathConverter}}"/>
+            </StackPanel>
+            
+            <!-- basi info -->
+            <StackPanel Orientation="Horizontal" Margin="{StaticResource DefaultMargin}">
+                <TextBlock TextWrapping="Wrap" Text="{Loc Name}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" MinWidth="75"/>
+                <CheckBox Margin="10,0,0,0" IsChecked="{Binding Enabled, Mode=TwoWay}" VerticalAlignment="Center" Content="{Loc Enabled}"/>
+            </StackPanel>
         </StackPanel>
+        
+        <!-- conditions -->
         <views:ConditionEditView DataContext="{Binding Conditions}" Grid.Row="1" Margin="{StaticResource DefaultMargin}"/>
+        
+        <!-- actions -->
         <views:ActionsView DataContext="{Binding Actions}" Grid.Row="2" Margin="{StaticResource DefaultMargin}"/>
+        
+        <!-- buttons -->
         <Button 
             Content="{Loc Save}" 
             Command="{Binding SaveCommand}" 

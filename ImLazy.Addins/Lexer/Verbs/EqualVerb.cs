@@ -8,14 +8,10 @@ namespace ImLazy.Addins.Lexer.Verbs
     [ExportMetadata("Name", "ImLazy.Addins.Lexer.Verbs.EqualVerb")]
     public class EqualVerb : IVerb
     {
+        private static readonly LexerType[] SupportedSubjectTypes = { LexerTypes.String };
         public string Name
         {
             get { return "EqualVerb"; }
-        }
-
-        public LexerType ElementType
-        {
-            get { return LexerTypes.ObjectType; }
         }
 
         public LexerType GetObjectType(LexerType verbType)
@@ -23,12 +19,17 @@ namespace ImLazy.Addins.Lexer.Verbs
             return verbType;
         }
 
-        public bool IsMatch(object property, object value)
+        public LexerType[] GetSupportedSubjectTypes()
+        {
+            return SupportedSubjectTypes;
+        }
+
+        public bool IsMatch(object subject, object value)
         {
             var strValue = value as string;
-            if (strValue == null) return property.Equals(value);
+            if (strValue == null) return subject.Equals(value);
             var values = strValue.Split('|');
-            return values.Any(_ => _.Equals((string)property));
+            return values.Any(_ => _.Equals((string)subject));
         }
     }
 }

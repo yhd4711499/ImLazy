@@ -17,7 +17,7 @@ namespace ImLazy.Addins.ContentViews
         private readonly TextBox _textBox;
         private readonly ComboBox _unitComboBox;
 
-        private static readonly LocalString[] Units = Enum.GetNames(typeof(OlderThanVerb.Units)).Select(_=>_.LocalString()).ToArray();
+        private static readonly LocalString[] Units = Enum.GetNames(typeof(IsNotInTheLastVerb.Units)).Select(_=>_.LocalString()).ToArray();
 
         public SerializableDictionary<string, object> Configuration
         {
@@ -25,12 +25,12 @@ namespace ImLazy.Addins.ContentViews
             {
                 return new SerializableDictionary<string, object>
                 {
-                    {ConfigNames.ObjectValue, OlderThanVerb.ToConfigString(_textBox.Text, (string)_unitComboBox.SelectedItem)}
+                    {ConfigNames.ObjectValue, IsNotInTheLastVerb.ToConfigString(_textBox.Text, ((LocalString)_unitComboBox.SelectedItem).Value)}
                 };
             }
             set
             {
-                var args = OlderThanVerb.GetConfigArguments(value.TryGetValue<string>(ConfigNames.ObjectValue));
+                var args = IsNotInTheLastVerb.GetConfigArguments(value.TryGetValue<string>(ConfigNames.ObjectValue));
                 _textBox.Text = args[0];
                 _unitComboBox.SelectItem(args[1]);
             }

@@ -81,7 +81,7 @@ namespace Etier.IconHelper
 		/// Used to access system folder icons.
 		/// </summary>
 		/// <param name="size">Specify large or small icons.</param>
-		/// <param name="folderType">Specify open or closed FolderType.</param>
+		/// <param name="folderType">Specify open or closed Folder.</param>
 		/// <returns>System.Drawing.Icon</returns>
 		public static System.Drawing.Icon GetFolderIcon( IconSize size, FolderType folderType )
 		{

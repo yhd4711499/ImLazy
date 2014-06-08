@@ -22,7 +22,7 @@ namespace ImLazy.Addins.Lexer.Objects
 
         public LexerType ElementType
         {
-            get { return LexerTypes.StringType; }
+            get { return LexerTypes.String; }
         }
 
         public object GetObject(string value)

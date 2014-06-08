@@ -6,24 +6,26 @@ namespace ImLazy.Addins.Lexer.Verbs
 {
     public abstract class StringVerbBase:IVerb
     {
-        public abstract string Name { get; }
+        private static readonly LexerType[] SupportedSubjectTypes = { LexerTypes.String };
 
-        public LexerType ElementType
-        {
-            get { return LexerTypes.StringType; }
-        }
+        public abstract string Name { get; }
 
         public LexerType GetObjectType(LexerType verbType)
         {
             return verbType;
         }
 
-        public bool IsMatch(object property, object value)
+        public LexerType[] GetSupportedSubjectTypes()
+        {
+            return SupportedSubjectTypes;
+        }
+
+        public bool IsMatch(object subject, object value)
         {
             var strValue = value as string;
             if (strValue == null) throw new NotSupportedException("StringVerbBase only accepts string value!");
             var values = strValue.Split('|');
-            return values.Any(_ => GetResult((string)property, _));
+            return values.Any(_ => GetResult((string)subject, _));
         }
 
         protected abstract bool GetResult(string a, string b);

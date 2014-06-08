@@ -11,8 +11,7 @@ namespace ImLazy.Data
     [Serializable]
     public class ConditionBranch : ConditionCorp
     {
-        [XmlIgnore]
-        public ConditionMode Mode { get; private set; }
+        public ConditionMode Mode { get; set; }
 
         public ConditionBranch()
         {
@@ -43,6 +42,7 @@ namespace ImLazy.Data
         public int Sum()
         {
             var sum = 1;
+
             SubConditions.ForEach(_ =>
             {
                 sum++;

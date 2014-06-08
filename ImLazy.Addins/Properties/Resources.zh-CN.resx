@@ -264,8 +264,8 @@
   <data name="Months" xml:space="preserve">
     <value>月</value>
   </data>
-  <data name="OlderThanVerb" xml:space="preserve">
-    <value>早于</value>
+  <data name="IsInTheLastVerb" xml:space="preserve">
+    <value>是最近的</value>
   </data>
   <data name="StartsWithVerb" xml:space="preserve">
     <value>的开头是</value>
@@ -278,5 +278,17 @@
   </data>
   <data name="LoveAction" xml:space="preserve">
     <value>爱情动作片</value>
+  </data>
+  <data name="IsNotInTheLastVerb" xml:space="preserve">
+    <value>不是最近的</value>
+  </data>
+  <data name="FolderContainsVerb" xml:space="preserve">
+    <value>里面有文件或文件夹</value>
+  </data>
+  <data name="FolderNotContainsVerb" xml:space="preserve">
+    <value>里面没有文件或文件夹</value>
+  </data>
+  <data name="GetFolderSubject" xml:space="preserve">
+    <value>文件夹</value>
   </data>
 </root>

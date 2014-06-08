@@ -19,7 +19,7 @@ namespace ImLazy.Addins.Lexer.Objects
 
         public LexerType ElementType
         {
-            get { return FileTypeSubject.FileType; }
+            get { return LexerTypes.FileType; }
         }
 
         public object GetObject(string value)

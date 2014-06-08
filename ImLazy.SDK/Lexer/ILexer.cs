@@ -6,6 +6,5 @@ namespace ImLazy.SDK.Lexer
     public interface ILexer
     {
         string Name { get; }
-        LexerType ElementType { get; }
     }
 }

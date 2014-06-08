@@ -4,7 +4,6 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using ImLazy.Annotations;
-using ImLazy.SDK.Base.Contracts;
 using ImLazy.SDK.Lexer;
 using log4net;
 
@@ -14,8 +13,6 @@ namespace ImLazy.Runtime
     {
         private static readonly object LockObj = new object();
         private static readonly ILog Log = LogManager.GetLogger(typeof(LexerAddinHost));
-
-        public readonly CacheMap<Func<SerializableDictionary<string, object>, LexerType, IEditView>> ViewCreatorCacheMap = new CacheMap<Func<SerializableDictionary<string, object>, LexerType, IEditView>>();
 
         public readonly CacheMap<Func<string, object>> SubjectsCacheMap = new CacheMap<Func<string, object>>();
 
@@ -97,12 +94,12 @@ namespace ImLazy.Runtime
 
         public IEnumerable<Lazy<IVerb, ILexerData>> GetSupportedVerbsByType(LexerType nextType)
         {
-            return Verbs.Where(_ => nextType.Is(_.Value.ElementType));
+            return Verbs.Where(_ => _.Value.GetSupportedSubjectTypes().Any(__ => __.Equals(nextType)));
         }
 
         public IEnumerable<Lazy<IObject, ILexerData>> GetSupportedObjectsByVerbType(LexerType verbType)
         {
-            return Objects.Where(_ => verbType.Is(_.Value.ElementType));
+            return Objects.Where(_ => verbType.Equals(_.Value.ElementType));
         }
 
         /// <summary>
@@ -118,16 +115,11 @@ namespace ImLazy.Runtime
                 Log.Info("Building view creators, subjects and verbs caches...");
 
                 Objects.ForEach(
-                    _ =>
-                    {
-                        ViewCreatorCacheMap.Put(_.Value.GetType().FullName, _.Value.CreateMainView);
-                        ObjectsCacheMap.Put(_.Value.GetType().FullName, _.Value.GetObject);
-                    });
+                    _ => ObjectsCacheMap.Put(_.Value.GetType().FullName, _.Value.GetObject));
                 Subjects.ForEach(
                     _ => SubjectsCacheMap.Put(_.Value.GetType().FullName, _.Value.GetProperty));
                 Verbs.ForEach(
                     _ => VerbsCacheMap.Put(_.Value.GetType().FullName, _.Value.IsMatch));
-
                 Log.Info("Done caching.");
 
                 #endregion

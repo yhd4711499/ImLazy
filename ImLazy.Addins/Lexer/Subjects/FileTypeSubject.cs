@@ -15,8 +15,6 @@ namespace ImLazy.Addins.Lexer.Subjects
     {
         private const string CanonicalNamePrefix = "ImLazy.Addins.Lexer.Subjects";
 
-        public static readonly LexerType FileType = new LexerType(LexerTypes.TypeType, "FileType", CanonicalNamePrefix);
-
         private static readonly LexerType File = new LexerType(null, "AnyFile", CanonicalNamePrefix);
         private static readonly LexerType Archieve = new LexerType(null, "Archieve", CanonicalNamePrefix);
         private static readonly LexerType Folder = new LexerType(null, "Folder", CanonicalNamePrefix);
@@ -32,7 +30,7 @@ namespace ImLazy.Addins.Lexer.Subjects
             File, Archieve, Folder, Document, Audio, Video, Picture, GuitarProTab, LoveAction
         };
 
-        private static readonly Regex LoveActionRegex = new Regex(@"((gachi)|(pgd)|(mxgs)|(siro)|(sw)|(s-cute)|(yrz)|(sero)|(abp))\w*\W?\d", RegexOptions.IgnoreCase);
+        private static readonly Regex LoveActionRegex = new Regex(@"((gachi)|(pgd)|(mxgs)|(siro)|(sw)|(s-cute)|(yrz)|(sero)|(abp)|(srs))\w*\W?\d", RegexOptions.IgnoreCase);
 
         private static readonly Dictionary<Func<string, string, bool>, LexerType> Conditions = new Dictionary<Func<string, string, bool>, LexerType>
         {
@@ -70,7 +68,7 @@ namespace ImLazy.Addins.Lexer.Subjects
 
         public LexerType GetVerbType()
         {
-            return FileType;
+            return LexerTypes.FileType;
         }
 
         public object GetProperty(string filePath)

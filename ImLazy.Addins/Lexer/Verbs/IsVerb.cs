@@ -7,16 +7,21 @@ namespace ImLazy.Addins.Lexer.Verbs
     [ExportMetadata("Name", "ImLazy.Addins.Lexer.Verbs.IsVerb")]
     public class IsVerb:IVerb
     {
+        private static readonly LexerType[] SupportedSubjectTypes = { LexerTypes.FileType };
         public string Name { get { return "IsVerb"; } }
-        public LexerType ElementType { get { return LexerTypes.TypeType; } }
         public LexerType GetObjectType(LexerType verbType)
         {
             return verbType;
         }
 
-        public bool IsMatch(object property, object value)
+        public LexerType[] GetSupportedSubjectTypes()
         {
-            var actualType = (LexerType) property;
+            return SupportedSubjectTypes;
+        }
+
+        public bool IsMatch(object subject, object value)
+        {
+            var actualType = (LexerType) subject;
             var configType = (LexerType) value;
             return actualType.Is(configType);
         }

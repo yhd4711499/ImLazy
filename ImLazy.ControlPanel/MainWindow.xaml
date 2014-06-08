@@ -13,13 +13,13 @@
                 <TextBlock Text="{Binding Folder.FolderPath, Converter={StaticResource ShortPathConverter}}"></TextBlock>
             </StackPanel>
         </DataTemplate>
-        
+
         <DataTemplate x:Key="RuleItemTempalte" DataType="viewModel:RuleViewModel">
             <Grid Background="Transparent">
                 <Grid.ColumnDefinitions>
-        			<ColumnDefinition Width="*"/>
-        			<ColumnDefinition Width="Auto"/>
-        		</Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding Name}"/>
                     <TextBlock
@@ -27,56 +27,56 @@
         				Foreground="{StaticResource ColorWarnning}"
         				Visibility="{Binding Enabled, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
                     </TextBlock>
-        		</StackPanel>
-        		<Button Content="..." HorizontalAlignment="Left" Width="15" Grid.Column="1" Style="{StaticResource SimbolButtonStyle}">
-        			<i:Interaction.Triggers>
-        				<i:EventTrigger EventName="Click">
-        					<i:InvokeCommandAction Command="{Binding EditCommand}" />
-        				</i:EventTrigger>
-        			</i:Interaction.Triggers>
-        		</Button>
+                </StackPanel>
+                <Button Content="..." HorizontalAlignment="Left" Width="15" Grid.Column="1" Style="{StaticResource SimbolButtonStyle}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <i:InvokeCommandAction Command="{Binding EditCommand}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
                 <!--
                 It's a little tricky here. The "MouseDoubleClick" event can only be triggered when the InvokeCommandAction
                 is attached to a Control (Grid is not a Control). So I used a ContentControl here to act
                 as a container for InvokeCommandAction.
                 -->
-        		<ContentControl Grid.Column="0" Content="">
-        			<i:Interaction.Triggers>
-        				<i:EventTrigger EventName="MouseDoubleClick">
-        					<i:InvokeCommandAction Command="{Binding EditCommand, Mode=OneWay}"/>
-        				</i:EventTrigger>
-        			</i:Interaction.Triggers>
-        		</ContentControl>
-        	</Grid>
+                <ContentControl Grid.Column="0" Content="">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding EditCommand, Mode=OneWay}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </ContentControl>
+            </Grid>
         </DataTemplate>
     </Window.Resources>
     <Window.DataContext>
         <Binding Mode="OneWay" Path="Main" Source="{StaticResource Locator}"/>
     </Window.DataContext>
-	<Grid>
-		<TabControl Margin="{StaticResource DefaultMargin}" >
-			<TabItem Header="{Loc Rules}">
-				<Grid Margin="{StaticResource DefaultMargin}">
-					<Grid.ColumnDefinitions>
-						<ColumnDefinition Width="*"/>
-						<ColumnDefinition Width="0.7*"/>
-					</Grid.ColumnDefinitions>
+    <Grid>
+        <TabControl Margin="{StaticResource DefaultMargin}" >
+            <TabItem Header="{Loc Rules}">
+                <Grid Margin="{StaticResource DefaultMargin}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="0.7*"/>
+                    </Grid.ColumnDefinitions>
                     <GroupBox Header="{Loc Folders}"
 						Grid.Column="0">
-						<Grid>
-							<ListBox
+                        <Grid>
+                            <ListBox
 								SelectedIndex="0"
 								x:Name="ListBox" 
 								ItemsSource="{Binding Folders}"
                                 ItemTemplate="{StaticResource FolderItemTemplate}"
 								Margin="0,0,0,24"/>
-							<Button
+                            <Button
 								Content="+" 
 								VerticalAlignment="Bottom"
 								HorizontalAlignment="Left"
 								Command="{Binding AddFolderCommand}"
 								Style="{StaticResource SimbolButtonStyle}"/>
-							<Button 
+                            <Button 
 								Margin="40,0,0,0"
 								Content="-" 
 								VerticalAlignment="Bottom"
@@ -99,8 +99,8 @@
 								HorizontalAlignment="Left"
 								Command="{Binding WalkthroughAllCommnad}"
 								Style="{StaticResource SimbolButtonStyle}"/>
-						</Grid>
-					</GroupBox>
+                        </Grid>
+                    </GroupBox>
                     <GroupBox Header="{Loc Rules}"
 						Grid.Column="1">
                         <Grid>
@@ -114,14 +114,14 @@
 								DataContext="{Binding SelectedItem, ElementName=ListBox}">
                             </ListBox>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
-                            	<Button 
+                                <Button 
                             		Content="+" 
                             		VerticalAlignment="Bottom"
                             		HorizontalAlignment="Left" 
                             		Command="{Binding AddRuleCommand}"
                             		DataContext="{Binding DataContext, ElementName=LstRules}"
                             		Style="{StaticResource SimbolButtonStyle}"/>
-                            	<Button 
+                                <Button 
                             		Content="-" 
                             		VerticalAlignment="Bottom" 
                             		HorizontalAlignment="Left" 
@@ -129,7 +129,7 @@
                             		Command="{Binding DeleteRuleCommand}" 
                             		CommandParameter="{Binding SelectedItem, ElementName=LstRules}"
                             		Style="{StaticResource SimbolButtonStyle}" Margin="20,0,0,0"/>
-                            	<Button 
+                                <Button 
                             		Content="↑" 
                             		VerticalAlignment="Bottom" 
                             		HorizontalAlignment="Left" 
@@ -137,7 +137,7 @@
                             		Command="{Binding MoveUpRuleCommand}" 
                             		CommandParameter="{Binding SelectedItem, ElementName=LstRules}"
                             		Style="{StaticResource SimbolButtonStyle}" Margin="20,0,0,0"/>
-                            	<Button 
+                                <Button 
                             		Content="↓" 
                             		VerticalAlignment="Bottom" 
                             		HorizontalAlignment="Left" 
@@ -150,12 +150,17 @@
                         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->
                     </GroupBox>
                 </Grid>
-			</TabItem>
-			<TabItem Header="{Loc Settings}">
-				<Grid>
-					<views:ServiceControlView Margin="{StaticResource DefaultMargin}"/>
-				</Grid>
-			</TabItem>
-		</TabControl>
-	</Grid>
+            </TabItem>
+            <TabItem Header="{Loc Settings}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="3*"/>
+                    </Grid.ColumnDefinitions>
+                    <views:AboutView Grid.Column="0" Margin="{StaticResource DefaultMargin}"/>
+                    <views:ServiceControlView Grid.Column="1" Margin="{StaticResource DefaultMargin}"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </Window>

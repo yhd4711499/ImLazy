@@ -5,9 +5,11 @@ using ImLazy.SDK.Lexer;
 namespace ImLazy.Addins.Lexer.Verbs
 {
     [Export(typeof(IVerb))]
-    [ExportMetadata("Name", "ImLazy.Addins.Lexer.Verbs.OlderThanVerb")]
-    class OlderThanVerb : IVerb
+    [ExportMetadata("Name", "ImLazy.Addins.Lexer.Verbs.IsNotInTheLastVerb")]
+    class IsNotInTheLastVerb : IVerb
     {
+        private static readonly LexerType[] SupportedSubjectTypes = { LexerTypes.Date };
+
         internal enum Units
         {
             Hours,
@@ -19,16 +21,16 @@ namespace ImLazy.Addins.Lexer.Verbs
             Centries
         }
 
-        public string Name {get { return "OlderThanVerb"; }}
-
-        public LexerType ElementType
-        {
-            get { return LexerTypes.DateType; }
-        }
+        public virtual string Name {get { return "IsNotInTheLastVerb"; }}
 
         public LexerType GetObjectType(LexerType verbType)
         {
-            return LexerTypes.TimeSpanType;
+            return LexerTypes.TimeSpan;
+        }
+
+        public LexerType[] GetSupportedSubjectTypes()
+        {
+            return SupportedSubjectTypes;
         }
 
         public static string ToConfigString(string value, string unit)
@@ -86,9 +88,9 @@ namespace ImLazy.Addins.Lexer.Verbs
             return targetDate;
         }
 
-        public bool IsMatch(object property, object value)
+        public virtual bool IsMatch(object subject, object value)
         {
-            var baseDateTime = (DateTime) property;
+            var baseDateTime = (DateTime) subject;
             var targetTime = FromConfigString((string) value, baseDateTime);
             return DateTime.Now > targetTime;
         }

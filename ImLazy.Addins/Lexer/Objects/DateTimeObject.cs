@@ -11,7 +11,7 @@ namespace ImLazy.Addins.Lexer.Objects
     class DateTimeObject : IObject
     {
         public string Name { get { return "DateTimeObject"; } }
-        public LexerType ElementType { get { return LexerTypes.DateType; } }
+        public LexerType ElementType { get { return LexerTypes.TimeSpan; } }
         public object GetObject(string value)
         {
             return value;
@@ -19,15 +19,7 @@ namespace ImLazy.Addins.Lexer.Objects
 
         public IEditView CreateMainView(SerializableDictionary<string, object> config, LexerType type)
         {
-            if (type == LexerTypes.DateType)
-            {
-                return new DateTimeContent { Configuration = config, MinWidth = 50 };
-            }
-            if(type == LexerTypes.TimeSpanType)
-            {
-                return new TimeSpanContent { Configuration = config, MinWidth = 50 };
-            }
-            return null;
+            return new TimeSpanContent { Configuration = config, MinWidth = 50 };
         }
     }
 }

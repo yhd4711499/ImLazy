@@ -4,7 +4,6 @@ using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.Linq;
 using ImLazy.SDK.Base.Contracts;
-using ImLazy.SDK.Lexer;
 using log4net;
 
 namespace ImLazy.Runtime

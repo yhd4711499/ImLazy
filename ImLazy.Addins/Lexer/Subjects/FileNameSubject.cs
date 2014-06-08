@@ -13,7 +13,7 @@ namespace ImLazy.Addins.Lexer.Subjects
 
         public LexerType GetVerbType()
         {
-            return LexerTypes.StringType;
+            return LexerTypes.String;
         }
 
         public object GetProperty(string filePath)
