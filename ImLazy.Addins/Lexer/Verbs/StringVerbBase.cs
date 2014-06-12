@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using ImLazy.SDK.Lexer;
 
@@ -15,7 +16,7 @@ namespace ImLazy.Addins.Lexer.Verbs
             return verbType;
         }
 
-        public LexerType[] GetSupportedSubjectTypes()
+        public IEnumerable<LexerType> GetSupportedSubjectTypes()
         {
             return SupportedSubjectTypes;
         }

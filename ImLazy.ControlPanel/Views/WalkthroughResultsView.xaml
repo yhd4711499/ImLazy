@@ -21,9 +21,20 @@
         </Style>
     </UserControl.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
         <ListBox
             x:Name="ListBox"
-            HorizontalContentAlignment="Stretch">
+            HorizontalContentAlignment="Stretch"
+            Grid.RowSpan="1"
+            Grid.ColumnSpan="2"
+            Margin="{StaticResource DefaultMargin}">
             <ListBox.GroupStyle>
                 <GroupStyle ContainerStyle="{StaticResource ContainerStyle}"/>
             </ListBox.GroupStyle>
@@ -40,5 +51,19 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
+        <Button
+            Grid.Row="1"
+            Grid.Column="0"
+            Height="25"
+            Content="Execute"
+            Click="ButtonBase_OnClick"
+            Margin="{StaticResource DefaultMargin}"/>
+        <Button
+            Grid.Row="1"
+            Grid.Column="1"
+            Content="Refresh"
+            Click="RefreshButton_OnClick"
+            Margin="{StaticResource DefaultMargin}"/>
     </Grid>
 </UserControl>

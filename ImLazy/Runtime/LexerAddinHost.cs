@@ -94,11 +94,13 @@ namespace ImLazy.Runtime
 
         public IEnumerable<Lazy<IVerb, ILexerData>> GetSupportedVerbsByType(LexerType nextType)
         {
+            if (nextType == null) return null;
             return Verbs.Where(_ => _.Value.GetSupportedSubjectTypes().Any(__ => __.Equals(nextType)));
         }
 
         public IEnumerable<Lazy<IObject, ILexerData>> GetSupportedObjectsByVerbType(LexerType verbType)
         {
+            if (verbType == null) return null;
             return Objects.Where(_ => verbType.Equals(_.Value.ElementType));
         }
 

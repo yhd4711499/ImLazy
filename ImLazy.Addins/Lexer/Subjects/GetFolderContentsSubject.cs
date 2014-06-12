@@ -5,22 +5,23 @@ using ImLazy.SDK.Lexer;
 namespace ImLazy.Addins.Lexer.Subjects
 {
     [Export(typeof(ISubject))]
-    [ExportMetadata("Name", "ImLazy.Addins.Lexer.Subjects.GetFolderSubject")]
-    class GetFolderSubject:ISubject
+    [ExportMetadata("Name", "ImLazy.Addins.Lexer.Subjects.GetFolderContentsSubject")]
+    class GetFolderContentsSubject:ISubject
     {
         public string Name
         {
-            get { return "GetFolderSubject"; }
+            get { return "GetFolderContentsSubject"; }
         }
 
         public LexerType GetVerbType()
         {
-            return LexerTypes.Folder;
+            return LexerTypes.List;
         }
 
         public object GetProperty(string filePath)
         {
-            return new DirectoryInfo(filePath);
+            var dinfo = new DirectoryInfo(filePath);
+            return !dinfo.Exists ? null : dinfo.GetFileSystemInfos();
         }
     }
 }

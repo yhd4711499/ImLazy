@@ -208,7 +208,7 @@
     <value>音频</value>
   </data>
   <data name="ContainsVerb" xml:space="preserve">
-    <value>含有</value>
+    <value>包含</value>
   </data>
   <data name="Document" xml:space="preserve">
     <value>文档</value>
@@ -256,7 +256,7 @@
     <value>小时</value>
   </data>
   <data name="MatchRegexVerb" xml:space="preserve">
-    <value>匹配正则表达式</value>
+    <value>匹配正则</value>
   </data>
   <data name="ModifyDateSubject" xml:space="preserve">
     <value>修改日期</value>
@@ -282,13 +282,37 @@
   <data name="IsNotInTheLastVerb" xml:space="preserve">
     <value>不是最近的</value>
   </data>
-  <data name="FolderContainsVerb" xml:space="preserve">
-    <value>里面有文件或文件夹</value>
+  <data name="ContainsFileInfoVerb" xml:space="preserve">
+    <value>有文件或文件夹</value>
   </data>
-  <data name="FolderNotContainsVerb" xml:space="preserve">
-    <value>里面没有文件或文件夹</value>
+  <data name="NotContainsFileInfoVerb" xml:space="preserve">
+    <value>没有文件或文件夹</value>
   </data>
-  <data name="GetFolderSubject" xml:space="preserve">
-    <value>文件夹</value>
+  <data name="GetFolderContentsSubject" xml:space="preserve">
+    <value>文件夹里面</value>
+  </data>
+  <data name="IsEmptyVerb" xml:space="preserve">
+    <value>是空的</value>
+  </data>
+  <data name="IsNotEmptyVerb" xml:space="preserve">
+    <value>不是空的</value>
+  </data>
+  <data name="NotEndsWithVerb" xml:space="preserve">
+    <value>的结尾不是</value>
+  </data>
+  <data name="NotEqualVerb" xml:space="preserve">
+    <value>不是</value>
+  </data>
+  <data name="NotContainsVerb" xml:space="preserve">
+    <value>不包含</value>
+  </data>
+  <data name="NotMatchRegexVerb" xml:space="preserve">
+    <value>不匹配正则</value>
+  </data>
+  <data name="IsNotVerb" xml:space="preserve">
+    <value>不是</value>
+  </data>
+  <data name="NotStartsWithVerb" xml:space="preserve">
+    <value>的开头不是</value>
   </data>
 </root>

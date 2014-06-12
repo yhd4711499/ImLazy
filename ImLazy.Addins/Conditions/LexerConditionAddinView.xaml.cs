@@ -96,7 +96,7 @@ namespace ImLazy.Addins.Conditions
 
             var name = subject.GetVerbType();
             var verbs = LexerAddinHost.Instance.GetSupportedVerbsByType(name);
-            if (!verbs.Any())
+            if (verbs == null || !verbs.Any())
             {
                 CmbVerbs.Visibility = Visibility.Collapsed;
                 ObjectContent.Visibility = Visibility.Collapsed;

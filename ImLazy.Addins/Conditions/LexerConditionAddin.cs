@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using ImLazy.Addins.Lexer.Objects;
 using ImLazy.Addins.Utils;
 using ImLazy.SDK.Base.Contracts;
 using ImLazy.Runtime;
@@ -30,8 +31,12 @@ namespace ImLazy.Addins.Conditions
             var verb = dic.TryGetValue<string>(ConfigNames.Verb);
             var obj = dic.TryGetValue<string>(ConfigNames.Object);
             var value = dic.TryGetValue<string>(ConfigNames.ObjectValue);
-            if (!Log.CheckParams("One or more config(s) is null : ", subject, verb, obj, value))
+            if (!Log.CheckParams("One or more config(s) is null : ", subject, verb))
                 return false;
+
+            if (obj == null)
+                obj = typeof (NullObject).FullName;
+
             // get function from caches
             var fs = LexerAddinHost.Instance.SubjectsCacheMap.Get(subject);
             var fv = LexerAddinHost.Instance.VerbsCacheMap.Get(verb);

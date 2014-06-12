@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using ImLazy.SDK.Lexer;
 
@@ -28,7 +29,7 @@ namespace ImLazy.Addins.Lexer.Verbs
             return LexerTypes.TimeSpan;
         }
 
-        public LexerType[] GetSupportedSubjectTypes()
+        public IEnumerable<LexerType> GetSupportedSubjectTypes()
         {
             return SupportedSubjectTypes;
         }

@@ -12,6 +12,7 @@
   See http://www.galasoft.ch/mvvm
 */
 
+using System.Windows;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 
@@ -23,6 +24,13 @@ namespace ImLazy.ControlPanel.ViewModel
     /// </summary>
     public class ViewModelLocator
     {
+        private static ViewModelLocator _instance;
+        public static ViewModelLocator Instance
+        {
+            get { return _instance ?? (_instance = (ViewModelLocator)Application.Current.Resources["Locator"]); }
+           
+        }
+
         /// <summary>
         /// Initializes a new instance of the ViewModelLocator class.
         /// </summary>
@@ -56,5 +64,7 @@ namespace ImLazy.ControlPanel.ViewModel
         {
             get { return new ControlPanelViewModel(); }
         }
+
+        
     }
 }

@@ -33,11 +33,9 @@ namespace ImLazy.ControlPanel.ViewModel
             }
             set
             {
-                if (_status != value)
-                {
-                    _status = value;
-                    RaisePropertyChanged(StatusPropertyName);
-                }
+                if (_status == value) return;
+                _status = value;
+                RaisePropertyChanged(StatusPropertyName);
             }
         }
 
@@ -56,14 +54,6 @@ namespace ImLazy.ControlPanel.ViewModel
             get
             {
                 return _executionStatus;
-            }
-            set
-            {
-                if (_executionStatus != value)
-                {
-                    _executionStatus = value;
-                    RaisePropertyChanged(ExecutionStatusPropertyName);
-                }
             }
         }
 
@@ -87,15 +77,19 @@ namespace ImLazy.ControlPanel.ViewModel
                 {
                     _serviceStatus = value;
                     RaisePropertyChanged(ServiceStatusPropertyName);
-                    StartCommand.RaiseCanExecuteChanged();
-                    StopCommand.RaiseCanExecuteChanged();
-                    InstallCommand.RaiseCanExecuteChanged();
-                    UninstallCommand.RaiseCanExecuteChanged();
+                    NotifyAllCommands();
                 }
             }
         }
-        
-         
+
+        private void NotifyAllCommands()
+        {
+            StartCommand.RaiseCanExecuteChanged();
+            StopCommand.RaiseCanExecuteChanged();
+            InstallCommand.RaiseCanExecuteChanged();
+            UninstallCommand.RaiseCanExecuteChanged();
+        }
+
 
         private RelayCommand _startCommand;
 
@@ -142,7 +136,7 @@ namespace ImLazy.ControlPanel.ViewModel
                 return _installCommand
                        ?? (_installCommand = new RelayCommand(
                        ()=>CommonAction("InstallPending", "Installed", "InstallFailed",Service.Util.Install),
-                       ()=>!IfPendingOrAny(ServiceStatusEnum.Installed)));
+                       ()=>!IfPendingOrAny(ServiceStatusEnum.Installed, ServiceStatusEnum.Running, ServiceStatusEnum.Stopped)));
             }
         }
 
@@ -212,7 +206,10 @@ namespace ImLazy.ControlPanel.ViewModel
         {
             var st = status ?? Status;
             if (st.Update(msg.Local(), true, errorCode.LocalError()))
+            {
                 RaisePropertyChanged(st.PropertyName);
+                NotifyAllCommands();
+            }
             ServiceStatus = await Task.FromResult(Service.Util.CheckStatus());
         }
 
@@ -220,7 +217,10 @@ namespace ImLazy.ControlPanel.ViewModel
         {
             var st = status ?? Status;
             if (st.Update(msg.Local(), isError, detailInfo.Local()))
+            {
                 RaisePropertyChanged(st.PropertyName);
+                NotifyAllCommands();
+            }
             ServiceStatus = await Task.FromResult(Service.Util.CheckStatus());
         }
 

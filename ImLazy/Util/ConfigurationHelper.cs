@@ -10,6 +10,8 @@ namespace ImLazy.Util
 
         public static T TryGetValue<T>(this Dictionary<string, object> dic, string key)
         {
+            if (dic == null)
+                return default(T);
             object v;
             if (dic.TryGetValue(key, out v)) return (T) v;
             Log.WarnFormat("Config ({0}) not found! Return null or default instead.", key);

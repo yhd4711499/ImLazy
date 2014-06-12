@@ -125,13 +125,16 @@ namespace ImLazy.Runtime
                     
                     Log.Debug("Condition matched. Performing actions...");
                     // Execution the actions
-                    ExecuteAction(rule, fe, rp);
+                    ExecuteAction(rule, fe);
+
+                    // Remove record to avoid memory leak
+                    Records.Remove(rp.RuleGuid, fe);
                 }
             });
             return results;
         }
 
-        private void ExecuteAction(Rule rule, string fe, RuleProperty rp)
+        private void ExecuteAction(Rule rule, string fe)
         {
             int passed = 0, failed = 0;
             rule.Actions.ForEach(action =>
@@ -159,11 +162,6 @@ namespace ImLazy.Runtime
                 {
                     failed++;
                     Log.Error("Action failed!", ex);
-                }
-                finally
-                {
-                    // Remove record to avoid memory leak
-                    Records.Remove(rp.RuleGuid, fe);
                 }
             });
             Log.DebugFormat("Actions all done. Passed:{0}, failed:{1}", passed, failed);

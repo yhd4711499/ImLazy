@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using ImLazy.SDK.Lexer;
 
 namespace ImLazy.Addins.Lexer.Verbs
@@ -8,18 +9,18 @@ namespace ImLazy.Addins.Lexer.Verbs
     public class IsVerb:IVerb
     {
         private static readonly LexerType[] SupportedSubjectTypes = { LexerTypes.FileType };
-        public string Name { get { return "IsVerb"; } }
+        public virtual string Name { get { return "IsVerb"; } }
         public LexerType GetObjectType(LexerType verbType)
         {
             return verbType;
         }
 
-        public LexerType[] GetSupportedSubjectTypes()
+        public IEnumerable<LexerType> GetSupportedSubjectTypes()
         {
             return SupportedSubjectTypes;
         }
 
-        public bool IsMatch(object subject, object value)
+        public virtual bool IsMatch(object subject, object value)
         {
             var actualType = (LexerType) subject;
             var configType = (LexerType) value;

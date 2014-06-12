@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System.Collections.Generic;
+using System.ComponentModel.Composition;
 using System.Linq;
 using ImLazy.SDK.Lexer;
 
@@ -9,7 +10,7 @@ namespace ImLazy.Addins.Lexer.Verbs
     public class EqualVerb : IVerb
     {
         private static readonly LexerType[] SupportedSubjectTypes = { LexerTypes.String };
-        public string Name
+        public virtual string Name
         {
             get { return "EqualVerb"; }
         }
@@ -19,12 +20,12 @@ namespace ImLazy.Addins.Lexer.Verbs
             return verbType;
         }
 
-        public LexerType[] GetSupportedSubjectTypes()
+        public IEnumerable<LexerType> GetSupportedSubjectTypes()
         {
             return SupportedSubjectTypes;
         }
 
-        public bool IsMatch(object subject, object value)
+        public virtual bool IsMatch(object subject, object value)
         {
             var strValue = value as string;
             if (strValue == null) return subject.Equals(value);

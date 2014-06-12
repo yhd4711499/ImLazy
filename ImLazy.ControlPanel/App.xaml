@@ -16,7 +16,7 @@
             <converters:PathToImageConverter x:Key="PathToImageConverter"></converters:PathToImageConverter>
             <converters:ShortPathConverter x:Key="ShortPathConverter"></converters:ShortPathConverter>
             <converters:GetFolderConverter x:Key="GetFolderConverter"></converters:GetFolderConverter>
-            
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Themes/Generic/Default.xaml"/>
             </ResourceDictionary.MergedDictionaries>

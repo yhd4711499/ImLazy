@@ -1,10 +1,12 @@
-﻿namespace ImLazy.SDK.Lexer
+﻿using System.Collections.Generic;
+
+namespace ImLazy.SDK.Lexer
 {
     public interface IVerb : ILexer
     {
         LexerType GetObjectType(LexerType verbType);
 
-        LexerType[] GetSupportedSubjectTypes();
+        IEnumerable<LexerType> GetSupportedSubjectTypes();
         /// <summary>
         /// 是否符合条件
         /// </summary>

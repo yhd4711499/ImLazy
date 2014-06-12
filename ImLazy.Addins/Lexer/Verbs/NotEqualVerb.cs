@@ -4,12 +4,12 @@ using ImLazy.SDK.Lexer;
 namespace ImLazy.Addins.Lexer.Verbs
 {
     [Export(typeof(IVerb))]
-    [ExportMetadata("Name", "ImLazy.Addins.Lexer.Verbs.FolderNotContainsVerb")]
-    class FolderNotContainsVerb : FolderContainsVerb
+    [ExportMetadata("Name", "ImLazy.Addins.Lexer.Verbs.NotEqualVerb")]
+    public class NotEqualVerb : EqualVerb
     {
         public override string Name
         {
-            get { return "FolderNotContainsVerb"; }
+            get { return "NotEqualVerb"; }
         }
 
         public override bool IsMatch(object subject, object value)

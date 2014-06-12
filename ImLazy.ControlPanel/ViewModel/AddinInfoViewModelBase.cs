@@ -67,8 +67,7 @@ namespace ImLazy.ControlPanel.ViewModel
 
         public virtual void Save()
         {
-            if (MainView != null)
-                AddinInfo.Save(MainView.Configuration);
+            AddinInfo.Save(MainView != null ? MainView.Configuration : null);
         }
     }
 }

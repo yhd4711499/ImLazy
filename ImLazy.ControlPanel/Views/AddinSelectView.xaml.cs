@@ -53,9 +53,12 @@ namespace ImLazy.ControlPanel.Views
             else
                 items = App.Locator.Main.Actions;
 
+            var addinType = _dataContext.AddinInfo.AddinType;
+
             // Set ItemsSource and selection for ComboBoxAddin.
             ComboBoxAddin.ItemsSource = items;
-            var selectedVm = items.FirstOrDefault(_ => _.AddinInfo.AddinType == _dataContext.AddinInfo.AddinType);
+
+            var selectedVm = items.FirstOrDefault(_ => _.AddinInfo.AddinType == addinType);
             if (selectedVm != null)
             {
                 // Select the specified item

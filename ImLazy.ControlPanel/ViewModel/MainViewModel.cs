@@ -120,14 +120,7 @@ namespace ImLazy.ControlPanel.ViewModel
             get
             {
                 return _walkthroughAllCommnad
-                       ?? (_walkthroughAllCommnad = new RelayCommand(
-                           async () =>
-                           {
-                               var results = await Executor.Instance.Walkthrough(Folders.Select(_=>_.Folder).ToArray());
-                               var view = new WalkthroughResultsView();
-                               view.SetResults(results);
-                               WindowUtil.CreateWindow(view, "Walkthrough".Local()).ShowDialog();
-                           },
+                       ?? (_walkthroughAllCommnad = new RelayCommand(() => WindowUtil.CreateWindow(new WalkthroughResultsView(), "Walkthrough".Local()).ShowDialog(),
                            () => true));
             }
         }

@@ -32,7 +32,7 @@
             <!-- basi info -->
             <StackPanel Orientation="Horizontal" Margin="{StaticResource DefaultMargin}">
                 <TextBlock TextWrapping="Wrap" Text="{Loc Name}" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" MinWidth="75"/>
+                <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="{Binding Name,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" MinWidth="150"/>
                 <CheckBox Margin="10,0,0,0" IsChecked="{Binding Enabled, Mode=TwoWay}" VerticalAlignment="Center" Content="{Loc Enabled}"/>
             </StackPanel>
         </StackPanel>

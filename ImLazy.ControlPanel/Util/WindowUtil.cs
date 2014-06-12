@@ -33,18 +33,20 @@ namespace ImLazy.ControlPanel.Util
             return w;
         }
 
-        public static Window CreateWindow(object content, string title)
+        public static Window CreateWindow(object content, string title, int width = 400 , int height = 500)
         {
             var w = new Window
             {
                 MaxHeight = 768,
                 MinHeight = 200,
-                Width = 600,
+                Height = height,
+                Width = width,
                 MinWidth = 500,
                 WindowStartupLocation = WindowStartupLocation.CenterScreen,
                 ShowActivated = true,
                 Title = title,
-                Content = content
+                Content = content,
+                ResizeMode = ResizeMode.CanMinimize
             };
             var sc = new ShortkeyCommand();
             sc.AddAction(Key.Escape, window => window.Close());

@@ -176,4 +176,25 @@
   <data name="ERR_0x00000002" xml:space="preserve">
     <value>正则表达式格式错误。</value>
   </data>
+  <data name="Installed" xml:space="preserve">
+    <value>已安装</value>
+  </data>
+  <data name="InstallFailed" xml:space="preserve">
+    <value>安装失败</value>
+  </data>
+  <data name="InstallPending" xml:space="preserve">
+    <value>正在安装...</value>
+  </data>
+  <data name="Uninstalled" xml:space="preserve">
+    <value>未安装</value>
+  </data>
+  <data name="UninstallFailed" xml:space="preserve">
+    <value>卸载失败</value>
+  </data>
+  <data name="UninstallPending" xml:space="preserve">
+    <value>正在卸载...</value>
+  </data>
+  <data name="Running" xml:space="preserve">
+    <value>正在运行...</value>
+  </data>
 </root>

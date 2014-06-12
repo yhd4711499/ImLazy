@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ServiceProcess;
+using ImLazy.Util;
 
 namespace ImLazy.Service
 {
@@ -8,6 +9,11 @@ namespace ImLazy.Service
         public ServiceStatus(ServiceStatusEnum status)
         {
             Construct(status);
+        }
+
+        public ServiceStatus(string statusString)
+        {
+            Construct(EnumHelper.Parse<ServiceStatusEnum>(statusString));
         }
 
         public ServiceStatus(ServiceControllerStatus status)
