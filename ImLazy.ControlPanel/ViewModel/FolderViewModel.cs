@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ImLazy.Data;
@@ -7,6 +8,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using ImLazy.Runtime;
 using ImLazy.ControlPanel.Util;
+
+// ReSharper disable MemberCanBePrivate.Global
 
 namespace ImLazy.ControlPanel.ViewModel
 {
@@ -20,9 +23,34 @@ namespace ImLazy.ControlPanel.ViewModel
     {
         public Folder Folder { get; private set; }
 
-// ReSharper disable once MemberCanBePrivate.Global
         public ObservableCollection<RuleViewModel> Rules { get; private set; }
 
+        /*
+        private RelayCommand _addFromAllRulesCommand;
+
+        /// <summary>
+        /// Gets the AddFromAllRulesCommand.
+        /// </summary>
+        public RelayCommand AddFromAllRulesCommand
+        {
+            get
+            {
+                return _addFromAllRulesCommand
+                       ?? (_addFromAllRulesCommand = new RelayCommand(
+                           () =>
+                           {
+                               var view = new SelectRuleView {FolderParent = this};
+                               var w = WindowUtil.CreateWindow(view, "SelectRule".Local());
+                               if (w.ShowDialog() != true) return;
+                               var rule = view.SelectedRuleViewModel.Rule;
+                               var ruleVm = new RuleViewModel(this, rule, RuleProperty.Create(Rules.Count, rule.Guid));
+                               Rules.Add(ruleVm);
+                               ruleVm.EditCommand.Execute(null);
+                           },
+                           () => true));
+            }
+        }
+        */
 
         private RelayCommand _addRuleCommand;
 
@@ -34,17 +62,17 @@ namespace ImLazy.ControlPanel.ViewModel
             get
             {
                 return _addRuleCommand
-                    ?? (_addRuleCommand = new RelayCommand(
-                                          () =>
-                                          {
-                                              var rule = Rule.Create();
-                                              var ruleVm = new RuleViewModel(this, rule, RuleProperty.Create(Rules.Count, rule.Guid));
-                                              var w = WindowUtil.CreateRuleWindow(ruleVm, "NewRule".Local());
-                                              if (w.ShowDialog() == true)
-                                              {
-                                                  Rules.Add(ruleVm);
-                                              }
-                                          }));
+                       ?? (_addRuleCommand = new RelayCommand(
+                           () =>
+                           {
+                               var rule = Rule.Create();
+                               var ruleVm = new RuleViewModel(this, rule, RuleProperty.Create(Rules.Count, rule.Guid));
+                               var w = WindowUtil.CreateRuleWindow(ruleVm, "NewRule".Local());
+                               if (w.ShowDialog() == true)
+                               {
+                                   Rules.Add(ruleVm);
+                               }
+                           }));
             }
         }
 
@@ -58,19 +86,19 @@ namespace ImLazy.ControlPanel.ViewModel
             get
             {
                 return _saveRuleCommand
-                    ?? (_saveRuleCommand = new RelayCommand<RuleViewModel>(
-                                          p =>
-                                          {
-                                              p.Save();
-                                              DataStorage.Instance.Rules[p.Rule.Guid] = p.Rule;
-                                              if (!Folder.RuleProperties.Any(_ => _.RuleGuid.Equals(p.Rule.Guid)))
-                                              {
-                                                  Folder.RuleProperties.Add(p.Property);
-                                              }
-                                              DataStorage.Instance.Save();
-                                              Executor.ClearCache(p.Rule.Guid);
-                                          },
-                                          p => true));
+                       ?? (_saveRuleCommand = new RelayCommand<RuleViewModel>(
+                           p =>
+                           {
+                               p.Save();
+                               DataStorage.Instance.Rules[p.Rule.Guid] = p.Rule;
+                               if (!Folder.RuleProperties.Any(_ => _.RuleGuid.Equals(p.Rule.Guid)))
+                               {
+                                   Folder.RuleProperties.Add(p.Property);
+                               }
+                               DataStorage.Instance.Save();
+                               Executor.ClearCache(p.Rule.Guid);
+                           },
+                           p => true));
             }
         }
 
@@ -106,18 +134,18 @@ namespace ImLazy.ControlPanel.ViewModel
             get
             {
                 return _moveDownRuleCommand
-                    ?? (_moveDownRuleCommand = new RelayCommand<RuleViewModel>(
-                                          p =>
-                                          {
-                                              var index = Rules.IndexOf(p);
-                                              Rules.Move(index, index + 1);
-                                              var tmp = Folder.RuleProperties[index].Priority;
-                                              Folder.RuleProperties[index].Priority =
-                                                  Folder.RuleProperties[index+1].Priority;
-                                              Folder.RuleProperties[index + 1].Priority = tmp;
-                                              DataStorage.Instance.Save();
-                                          },
-                                          p => p!=null && Rules.IndexOf(p) < Rules.Count - 1));
+                       ?? (_moveDownRuleCommand = new RelayCommand<RuleViewModel>(
+                           p =>
+                           {
+                               var index = Rules.IndexOf(p);
+                               Rules.Move(index, index + 1);
+                               var tmp = Folder.RuleProperties[index].Priority;
+                               Folder.RuleProperties[index].Priority =
+                                   Folder.RuleProperties[index + 1].Priority;
+                               Folder.RuleProperties[index + 1].Priority = tmp;
+                               DataStorage.Instance.Save();
+                           },
+                           p => p != null && Rules.IndexOf(p) < Rules.Count - 1));
             }
         }
 
@@ -131,20 +159,21 @@ namespace ImLazy.ControlPanel.ViewModel
             get
             {
                 return _moveUpRuleCommand
-                    ?? (_moveUpRuleCommand = new RelayCommand<RuleViewModel>(
-                                          p =>
-                                          {
-                                              var index = Rules.IndexOf(p);
-                                              Rules.Move(index, index - 1);
-                                              var tmp = Folder.RuleProperties[index].Priority;
-                                              Folder.RuleProperties[index].Priority =
-                                                  Folder.RuleProperties[index -1].Priority;
-                                              Folder.RuleProperties[index -1].Priority = tmp;
-                                              DataStorage.Instance.Save();
-                                          },
-                                          p => p != null && Rules.IndexOf(p) > 0));
+                       ?? (_moveUpRuleCommand = new RelayCommand<RuleViewModel>(
+                           p =>
+                           {
+                               var index = Rules.IndexOf(p);
+                               Rules.Move(index, index - 1);
+                               var tmp = Folder.RuleProperties[index].Priority;
+                               Folder.RuleProperties[index].Priority =
+                                   Folder.RuleProperties[index - 1].Priority;
+                               Folder.RuleProperties[index - 1].Priority = tmp;
+                               DataStorage.Instance.Save();
+                           },
+                           p => p != null && Rules.IndexOf(p) > 0));
             }
         }
+
         /// <summary>
         /// Initializes a new instance of the FolderViewModel class.
         /// </summary>
@@ -159,7 +188,7 @@ namespace ImLazy.ControlPanel.ViewModel
                 var items = (from rm in allRuls
                     let property = f.RuleProperties.FirstOrDefault(rp => rp.RuleGuid.Equals(rm.Rule.Guid))
                     where property != null
-                    select new RuleViewModel(this, rm.Rule, property)).OrderBy(_=>_.Property.Priority);
+                    select new RuleViewModel(this, rm.Rule, property)).OrderBy(_ => _.Property.Priority);
                 Rules = new ObservableCollection<RuleViewModel>(items);
             }
             else
@@ -169,9 +198,22 @@ namespace ImLazy.ControlPanel.ViewModel
             Rules.CollectionChanged += Rules_CollectionChanged;
         }
 
-        void Rules_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        public void CopyRule(Rule rule)
         {
-            if(e.NewItems!=null)
+            if (Rules.Any(_=>_.Name == rule.Name)) return;
+
+            var ruleClone = (Rule)rule.Clone();
+            ruleClone.Guid = Guid.NewGuid();
+            var newRuleVm = new RuleViewModel(this, ruleClone,
+                RuleProperty.Create(Rules.Count, ruleClone.Guid));
+
+            Rules.Add(newRuleVm);
+            SaveRuleCommand.Execute(newRuleVm);
+        }
+
+        private void Rules_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null)
                 e.NewItems.OfType<RuleViewModel>().ForEach(r => Executor.Instance.RuleCacheMap.Put(r.Rule.Guid, r.Rule));
             if (e.OldItems != null)
                 e.OldItems.OfType<RuleViewModel>().ForEach(r => Executor.Instance.RuleCacheMap.Remove(r.Rule.Guid));

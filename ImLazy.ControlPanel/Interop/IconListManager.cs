@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Etier.IconHelper
@@ -9,10 +10,10 @@ namespace Etier.IconHelper
 	/// </summary>
 	public class IconListManager
 	{
-		private Hashtable _extensionList = new Hashtable();
-		private System.Collections.ArrayList _imageLists = new ArrayList();			//will hold ImageList objects
-		private IconHelper.IconReader.IconSize _iconSize;
-		bool ManageBothSizes = false; //flag, used to determine whether to create two ImageLists.
+		private readonly Hashtable _extensionList = new Hashtable();
+		private readonly ArrayList _imageLists = new ArrayList();			//will hold ImageList objects
+		private readonly IconReader.IconSize _iconSize;
+	    readonly bool ManageBothSizes = false; //flag, used to determine whether to create two ImageLists.
 
 		/// <summary>
 		/// Creates an instance of <c>IconListManager</c> that will add icons to a single <c>ImageList</c> using the
@@ -20,7 +21,7 @@ namespace Etier.IconHelper
 		/// </summary>
 		/// <param name="imageList"><c>ImageList</c> to add icons to.</param>
 		/// <param name="iconSize">Size to use (either 32 or 16 pixels).</param>
-		public IconListManager(System.Windows.Forms.ImageList imageList, IconReader.IconSize iconSize )
+		public IconListManager(ImageList imageList, IconReader.IconSize iconSize )
 		{
 			// Initialise the members of the class that will hold the image list we're
 			// targeting, as well as the icon size (32 or 16)
@@ -34,7 +35,7 @@ namespace Etier.IconHelper
 		/// </summary>
 		/// <param name="smallImageList">The <c>ImageList</c> that will hold small icons.</param>
 		/// <param name="largeImageList">The <c>ImageList</c> that will hold large icons.</param>
-		public IconListManager(System.Windows.Forms.ImageList smallImageList, System.Windows.Forms.ImageList largeImageList )
+		public IconListManager(ImageList smallImageList, ImageList largeImageList )
 		{
 			//add both our image lists
 			_imageLists.Add( smallImageList );
@@ -62,7 +63,7 @@ namespace Etier.IconHelper
 		public int AddFileIcon( string filePath )
 		{
 			// Check if the file exists, otherwise, throw exception.
-			if (!System.IO.File.Exists( filePath )) throw new System.IO.FileNotFoundException("File does not exist");
+			if (!File.Exists( filePath )) throw new FileNotFoundException("File does not exist");
 			
 			// Split it down so we can get the extension
 			string[] splitPath = filePath.Split(new Char[] {'.'});

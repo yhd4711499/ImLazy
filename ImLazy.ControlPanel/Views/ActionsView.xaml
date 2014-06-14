@@ -29,8 +29,7 @@
                     BorderThickness="0"
 	                ItemsSource="{Binding }"
     		        ItemTemplate="{StaticResource ActionItemTemplate}"
-    		        HorizontalContentAlignment="Stretch">
-                </ItemsControl>
+    		        HorizontalContentAlignment="Stretch" />
             </ScrollViewer>
         </GroupBox>
     </Grid>

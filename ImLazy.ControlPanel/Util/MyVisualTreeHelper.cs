@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Media;
 
 namespace ImLazy.ControlPanel.Util
 {
@@ -62,7 +63,8 @@ namespace ImLazy.ControlPanel.Util
                 topParent = element;
                 if (element is T)
                     return element;
-                element = (FrameworkElement)element.Parent;
+                element = (FrameworkElement) VisualTreeHelper.GetParent(element);
+                    //(FrameworkElement)element.Parent;
             }
             return topParent;
         }

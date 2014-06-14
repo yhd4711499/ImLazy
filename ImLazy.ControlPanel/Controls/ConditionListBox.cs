@@ -13,7 +13,7 @@ namespace ImLazy.ControlPanel.Controls
     class ConditionListBox : ItemsControl
     {
         private ObservableCollection<ConditionCorpViewModel> _conditoins;
-        private Dictionary<ConditionCorpViewModel, ListBoxItem> map = new Dictionary<ConditionCorpViewModel, ListBoxItem>();
+        private readonly Dictionary<ConditionCorpViewModel, ListBoxItem> map = new Dictionary<ConditionCorpViewModel, ListBoxItem>();
         public ListBoxItem SelectedItem { [UsedImplicitly] get; private set; }
 
         public ConditionListBox()

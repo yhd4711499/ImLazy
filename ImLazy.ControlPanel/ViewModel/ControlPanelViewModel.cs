@@ -45,7 +45,7 @@ namespace ImLazy.ControlPanel.ViewModel
         /// </summary>
         public const string ExecutionStatusPropertyName = "ExecutionStatus";
 
-        private Status _executionStatus = new Status(ExecutionStatusPropertyName) { Message = "" };
+        private readonly Status _executionStatus = new Status(ExecutionStatusPropertyName) { Message = "" };
         /// <summary>
         /// 
         /// </summary>

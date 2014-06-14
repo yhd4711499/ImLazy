@@ -4,18 +4,28 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:viewModel="clr-namespace:ImLazy.ControlPanel.ViewModel"
+        xmlns:commands="clr-namespace:ImLazy.ControlPanel.Commands"
+        xmlns:interactions="clr-namespace:ImLazy.ControlPanel.Interactions"
         x:Class="ImLazy.ControlPanel.MainWindow"
         Title="ImLazy" Height="480" Width="590" MaxWidth="590" MinWidth="590" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <DataTemplate x:Key="FolderItemTemplate" DataType="viewModel:FolderViewModel">
-            <StackPanel Orientation="Horizontal">
-                <Image Width="32" Height="32" Source="{Binding Folder.FolderPath, Converter={StaticResource PathToImageConverter}}"></Image>
-                <TextBlock Text="{Binding Folder.FolderPath, Converter={StaticResource ShortPathConverter}}"></TextBlock>
+            <StackPanel
+                Orientation="Horizontal"
+                Drop="FolderItem_OnDrop"
+                MouseMove="FolderItem_OnMouseMove"
+                PreviewMouseLeftButtonDown="FolderItem_OnPreviewMouseLeftButtonDown">
+                <Image Width="32" Height="32" Source="{Binding Folder.FolderPath, Converter={StaticResource PathToImageConverter}}" />
+                <TextBlock Text="{Binding Folder.FolderPath, Converter={StaticResource ShortPathConverter}}" />
             </StackPanel>
         </DataTemplate>
 
         <DataTemplate x:Key="RuleItemTempalte" DataType="viewModel:RuleViewModel">
-            <Grid Background="Transparent">
+            <Grid Background="Transparent"
+                  Drop="RuleViewModel_OnDrop"
+                  MouseMove="RuleItem_OnMouseMove"
+                  DragOver="RuleListBox_OnDragOver"
+                  PreviewMouseLeftButtonDown="RuleItem_OnPreviewMouseLeftButtonDown">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -25,8 +35,7 @@
                     <TextBlock
         				Text="{Binding Path=Enabled, StringFormat=[{0}], Converter={StaticResource BooleanToStringConverter}}"
         				Foreground="{StaticResource ColorWarnning}"
-        				Visibility="{Binding Enabled, Converter={StaticResource InvertBooleanToVisibilityConverter}}">
-                    </TextBlock>
+        				Visibility="{Binding Enabled, Converter={StaticResource InvertBooleanToVisibilityConverter}}" />
                 </StackPanel>
                 <Button Content="..." HorizontalAlignment="Left" Width="15" Grid.Column="1" Style="{StaticResource SimbolButtonStyle}">
                     <i:Interaction.Triggers>
@@ -35,18 +44,6 @@
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </Button>
-                <!--
-                It's a little tricky here. The "MouseDoubleClick" event can only be triggered when the InvokeCommandAction
-                is attached to a Control (Grid is not a Control). So I used a ContentControl here to act
-                as a container for InvokeCommandAction.
-                -->
-                <ContentControl Grid.Column="0" Content="">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseDoubleClick">
-                            <i:InvokeCommandAction Command="{Binding EditCommand, Mode=OneWay}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                </ContentControl>
             </Grid>
         </DataTemplate>
     </Window.Resources>
@@ -66,39 +63,47 @@
                         <Grid>
                             <ListBox
 								SelectedIndex="0"
-								x:Name="ListBox" 
+								x:Name="FolderListBox"
+                                AllowDrop="True"
 								ItemsSource="{Binding Folders}"
                                 ItemTemplate="{StaticResource FolderItemTemplate}"
-								Margin="0,0,0,24"/>
-                            <Button
-								Content="+" 
-								VerticalAlignment="Bottom"
-								HorizontalAlignment="Left"
-								Command="{Binding AddFolderCommand}"
-								Style="{StaticResource SimbolButtonStyle}"/>
-                            <Button 
-								Margin="40,0,0,0"
-								Content="-" 
-								VerticalAlignment="Bottom"
-								HorizontalAlignment="Left"
-								Command="{Binding DeleteFolderCommand}" 
-								CommandParameter="{Binding SelectedItem, ElementName=ListBox}"
-								Style="{StaticResource SimbolButtonStyle}"/>
-                            <Button
-								Margin="80,0,0,0"
-								Content="-" 
-								VerticalAlignment="Bottom"
-								HorizontalAlignment="Left"
-								Command="{Binding WalkthroughCommnad}" 
-								CommandParameter="{Binding SelectedItem, ElementName=ListBox}"
-								Style="{StaticResource SimbolButtonStyle}"/>
-                            <Button
-								Margin="120,0,0,0"
-								Content="-" 
-								VerticalAlignment="Bottom"
-								HorizontalAlignment="Left"
-								Command="{Binding WalkthroughAllCommnad}"
-								Style="{StaticResource SimbolButtonStyle}"/>
+								Margin="0,0,0,24">
+                                <ListBox.Resources>
+                                    <interactions:Triggers x:Key="Triggers" x:Shared="False">
+                                        <i:EventTrigger EventName="MouseDoubleClick">
+                                            <i:InvokeCommandAction Command="commands:CommonCommands.ShellExecuteCommand" CommandParameter="{Binding .Folder.FolderPath}"></i:InvokeCommandAction>
+                                        </i:EventTrigger>
+                                    </interactions:Triggers>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="interactions:SupplementaryInteraction.Triggers" Value="{StaticResource Triggers}"></Setter>
+                                    </Style>
+                                </ListBox.Resources>
+                            </ListBox>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                                <StackPanel.Resources>
+                                    <Style TargetType="Button" BasedOn="{StaticResource SimbolButtonStyle}">
+                                        <Setter Property="Margin" Value="20,0,0,0" />
+                                    </Style>
+                                </StackPanel.Resources>
+
+                                <Button
+								    Content="+" 
+								    VerticalAlignment="Bottom"
+								    HorizontalAlignment="Left"
+                                    Margin="0"
+								    Command="{Binding AddFolderCommand}"/>
+                                <Button
+								    Content="-" 
+								    Command="{Binding DeleteFolderCommand}" 
+								    CommandParameter="{Binding SelectedItem, ElementName=FolderListBox}"/>
+                                <Button
+								    Content="-"
+								    Command="{Binding WalkthroughCommnad}" 
+								    CommandParameter="{Binding SelectedItem, ElementName=FolderListBox}"/>
+                                <Button
+								    Content="-"
+								    Command="{Binding WalkthroughAllCommnad}"/>
+                            </StackPanel>
                         </Grid>
                     </GroupBox>
                     <GroupBox Header="{Loc Rules}"
@@ -106,45 +111,51 @@
                         <Grid>
                             <!-- ReSharper disable Xaml.BindingWithContextNotResolved -->
                             <ListBox
-								x:Name="LstRules" 
+								x:Name="RuleListBox"
+                                AllowDrop="True"
 								ItemsSource="{Binding Rules}" 
-								ItemTemplate="{DynamicResource RuleItemTempalte}" 
+								ItemTemplate="{StaticResource RuleItemTempalte}" 
 								HorizontalContentAlignment="Stretch" 
-								Margin="0,0,0,24" 
-								DataContext="{Binding SelectedItem, ElementName=ListBox}">
+								Margin="0,0,0,24"
+                                DragOver="RuleListBox_OnDragOver"
+								DataContext="{Binding SelectedItem, ElementName=FolderListBox}">
+                                <ListBox.Resources>
+                                    <interactions:Triggers x:Key="Triggers" x:Shared="False">
+                                        <i:EventTrigger EventName="MouseDoubleClick">
+                                            <i:InvokeCommandAction Command="{Binding EditCommand, Mode=OneWay}"/>
+                                        </i:EventTrigger>
+                                    </interactions:Triggers>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="interactions:SupplementaryInteraction.Triggers" Value="{StaticResource Triggers}"></Setter>
+                                    </Style>
+                                </ListBox.Resources>
                             </ListBox>
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" DataContext="{Binding DataContext, ElementName=RuleListBox}" >
+                                <StackPanel.Resources>
+                                    <Style TargetType="Button" BasedOn="{StaticResource SimbolButtonStyle}">
+                                        <Setter Property="Margin" Value="20,0,0,0" />
+                                    </Style>
+                                </StackPanel.Resources>
                                 <Button 
-                            		Content="+" 
-                            		VerticalAlignment="Bottom"
-                            		HorizontalAlignment="Left" 
-                            		Command="{Binding AddRuleCommand}"
-                            		DataContext="{Binding DataContext, ElementName=LstRules}"
-                            		Style="{StaticResource SimbolButtonStyle}"/>
+                            		Content="+"
+                                    Margin="0,0,0,0"
+                            		Command="{Binding AddRuleCommand}"/>
+                                <Button
+                                    Visibility="Collapsed"
+                            		Content="..."
+                            		Command="{Binding AddFromAllRulesCommand}"/>
                                 <Button 
-                            		Content="-" 
-                            		VerticalAlignment="Bottom" 
-                            		HorizontalAlignment="Left" 
-                            		DataContext="{Binding DataContext, ElementName=LstRules}" 
+                            		Content="-"
                             		Command="{Binding DeleteRuleCommand}" 
-                            		CommandParameter="{Binding SelectedItem, ElementName=LstRules}"
-                            		Style="{StaticResource SimbolButtonStyle}" Margin="20,0,0,0"/>
+                            		CommandParameter="{Binding SelectedItem, ElementName=RuleListBox}"/>
                                 <Button 
-                            		Content="↑" 
-                            		VerticalAlignment="Bottom" 
-                            		HorizontalAlignment="Left" 
-                            		DataContext="{Binding DataContext, ElementName=LstRules}" 
+                            		Content="↑"
                             		Command="{Binding MoveUpRuleCommand}" 
-                            		CommandParameter="{Binding SelectedItem, ElementName=LstRules}"
-                            		Style="{StaticResource SimbolButtonStyle}" Margin="20,0,0,0"/>
+                            		CommandParameter="{Binding SelectedItem, ElementName=RuleListBox}"/>
                                 <Button 
-                            		Content="↓" 
-                            		VerticalAlignment="Bottom" 
-                            		HorizontalAlignment="Left" 
-                            		DataContext="{Binding DataContext, ElementName=LstRules}" 
+                            		Content="↓"
                             		Command="{Binding MoveDownRuleCommand}" 
-                            		CommandParameter="{Binding SelectedItem, ElementName=LstRules}"
-                            		Style="{StaticResource SimbolButtonStyle}" Margin="20,0,0,0"/>
+                            		CommandParameter="{Binding SelectedItem, ElementName=RuleListBox}"/>
                             </StackPanel>
                         </Grid>
                         <!-- ReSharper restore Xaml.BindingWithContextNotResolved -->

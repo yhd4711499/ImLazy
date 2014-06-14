@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using Etier.IconHelper;
 
@@ -20,7 +21,7 @@ namespace ImLazy.ControlPanel.Converters
             if (bitmap == null)
                 throw new ArgumentNullException("bitmap");
 
-            return System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+            return Imaging.CreateBitmapSourceFromHBitmap(
                 bitmap.GetHbitmap(),
                 IntPtr.Zero,
                 Int32Rect.Empty,

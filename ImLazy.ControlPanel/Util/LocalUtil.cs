@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using ImLazy.ControlPanel.Properties;
 
 namespace ImLazy.ControlPanel.Util
@@ -16,6 +19,17 @@ namespace ImLazy.ControlPanel.Util
                 return null;
             var s = Resources.ResourceManager.GetString(key);
             return s ?? String.Format("[{0}]", key);
+        }
+
+        public static string Local(this IEnumerable<string> keys)
+        {
+            if (keys == null) return null;
+            var sb = new StringBuilder();
+            foreach (var key in keys)
+            {
+                sb.Append(key.Local());
+            }
+            return sb.ToString();
         }
 
         /// <summary>

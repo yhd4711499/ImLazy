@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ImLazy.Data;
 using log4net;
@@ -105,7 +106,10 @@ namespace ImLazy.Runtime
                             Log.DebugFormat("{0} : {1} has no changes since last execution and is skipped.", rp.RuleGuid, fe);
                             continue;
                         }
-                        Records[rp.RuleGuid, fe] = lastWriteTime;
+                        lock (Records)
+                        {
+                            Records[rp.RuleGuid, fe] = lastWriteTime;
+                        }
                     }
 
                     // Get the rule by guid
@@ -127,8 +131,11 @@ namespace ImLazy.Runtime
                     // Execution the actions
                     ExecuteAction(rule, fe);
 
-                    // Remove record to avoid memory leak
-                    Records.Remove(rp.RuleGuid, fe);
+                    lock (Records)
+                    {
+                        // Remove record to avoid memory leak
+                        Records.Remove(rp.RuleGuid, fe);
+                    }
                 }
             });
             return results;
@@ -210,6 +217,8 @@ namespace ImLazy.Runtime
         /// </summary>
         private class FileRuleCombinationCache : Dictionary<Guid, Dictionary<string, int>>
         {
+            readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.NoRecursion);
+
             /// <summary>
             /// 
             /// </summary>
@@ -224,7 +233,9 @@ namespace ImLazy.Runtime
                     if (!TryGetValue(propertyGuid, out pairs))
                     {
                         pairs = new Dictionary<string, int>();
+                        _lock.EnterWriteLock();
                         this[propertyGuid] = pairs;
+                        _lock.ExitWriteLock();
                     }
                     pairs[filePath] = value;
                 }
@@ -232,7 +243,9 @@ namespace ImLazy.Runtime
 
             public void Remove(Guid propertyGuid, string filePath)
             {
+                _lock.EnterWriteLock();
                 this[propertyGuid].Remove(filePath);
+                _lock.ExitWriteLock();
             }
 
             /// <summary>

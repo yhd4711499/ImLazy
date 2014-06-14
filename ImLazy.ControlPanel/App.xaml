@@ -13,9 +13,9 @@
             <converters:BooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" True="Collapsed" False="Visible"/>
             <converters:StatusConverter x:Key="StatusConverter" ErrorColor="Red" NormalColor="Black"/>
             <converters:BooleanToStringConverter x:Key="BooleanToStringConverter" True="Enabled" False="Disabled"/>
-            <converters:PathToImageConverter x:Key="PathToImageConverter"></converters:PathToImageConverter>
-            <converters:ShortPathConverter x:Key="ShortPathConverter"></converters:ShortPathConverter>
-            <converters:GetFolderConverter x:Key="GetFolderConverter"></converters:GetFolderConverter>
+            <converters:PathToImageConverter x:Key="PathToImageConverter" />
+            <converters:ShortPathConverter x:Key="ShortPathConverter" />
+            <converters:GetFolderConverter x:Key="GetFolderConverter" />
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Themes/Generic/Default.xaml"/>

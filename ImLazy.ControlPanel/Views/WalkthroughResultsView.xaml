@@ -1,69 +1,109 @@
-﻿<UserControl x:Class="ImLazy.ControlPanel.Views.WalkthroughResultsView"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:data="clr-namespace:ImLazy.Data;assembly=ImLazy"
-             mc:Ignorable="d" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:interactions="clr-namespace:ImLazy.ControlPanel.Interactions"
+             xmlns:commands="clr-namespace:ImLazy.ControlPanel.Commands"
+             x:Class="ImLazy.ControlPanel.Views.WalkthroughResultsView"
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <Style x:Key="ContainerStyle" TargetType="{x:Type GroupItem}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding Name}"></TextBlock>
-                            <ItemsPresenter />
-                        </StackPanel>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
+        	<Setter Property="Template">
+        		<Setter.Value>
+        			<ControlTemplate>
+        				<StackPanel >
+                            <ContentControl>
+                            	<i:Interaction.Triggers>
+                            		<i:EventTrigger EventName="MouseDoubleClick">
+                            			<i:InvokeCommandAction Command="commands:CommonCommands.ShellExecuteCommand"
+                                                               CommandParameter="{Binding Name}"/>
+                            		</i:EventTrigger>
+                            	</i:Interaction.Triggers>
+                                <TextBlock Text="{Binding Name}" />
+                            </ContentControl>
+        					
+        					<ItemsPresenter />
+        				</StackPanel>
+        			</ControlTemplate>
+        		</Setter.Value>
+        	</Setter>
         </Style>
     </UserControl.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <ListBox
-            x:Name="ListBox"
-            HorizontalContentAlignment="Stretch"
-            Grid.RowSpan="1"
-            Grid.ColumnSpan="2"
-            Margin="{StaticResource DefaultMargin}">
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<ListBox
+			x:Name="ListBox"
+			HorizontalContentAlignment="Stretch"
+			Grid.RowSpan="1"
+			Grid.ColumnSpan="2"
+			Margin="{StaticResource DefaultMargin}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListBox.Resources>
+                <interactions:Triggers x:Key="Triggers" x:Shared="False">
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="commands:CommonCommands.ShellExecuteCommand" 
+                                               CommandParameter="{Binding EntryName}"/>
+                    </i:EventTrigger>
+                </interactions:Triggers>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="interactions:SupplementaryInteraction.Triggers" Value="{StaticResource Triggers}"></Setter>
+                </Style>
+            </ListBox.Resources>
+            
             <ListBox.GroupStyle>
                 <GroupStyle ContainerStyle="{StaticResource ContainerStyle}"/>
-            </ListBox.GroupStyle>
-            <ListBox.ItemTemplate>
-                <DataTemplate DataType="data:WalkthroughResult">
-                    <Grid>
-                        <Image
-                            Width="32" Height="32"
-                            Source="{Binding EntryName, Converter={StaticResource PathToImageConverter}}"
-                            HorizontalAlignment="Left"/>
-                        <TextBlock Margin="40,0,0,0" Text="{Binding EntryName, Converter={StaticResource ShortPathConverter}}"/>
-                        <TextBlock Text="{Binding RuleName}" HorizontalAlignment="Right" Margin="0,0,8,0"></TextBlock>
+			</ListBox.GroupStyle>
+            
+			<ListBox.ItemTemplate>
+				<DataTemplate DataType="data:WalkthroughResult">
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+                        
+						<Image
+							Grid.Column="0"
+							Width="32" Height="32"
+							Source="{Binding EntryName, Converter={StaticResource PathToImageConverter}}"
+							HorizontalAlignment="Left"/>
+						<TextBlock
+							Grid.Column="1"
+							TextTrimming="CharacterEllipsis"
+							Margin="8,0,8,0"
+							Text="{Binding EntryName, Converter={StaticResource ShortPathConverter}}"/>
+                        <TextBlock
+							Grid.Column="2"
+							Text="{Binding RuleName}"
+							Margin="0,0,8,0" />
                     </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
 
-        <Button
-            Grid.Row="1"
-            Grid.Column="0"
-            Height="25"
-            Content="Execute"
-            Click="ButtonBase_OnClick"
-            Margin="{StaticResource DefaultMargin}"/>
-        <Button
-            Grid.Row="1"
-            Grid.Column="1"
-            Content="Refresh"
-            Click="RefreshButton_OnClick"
-            Margin="{StaticResource DefaultMargin}"/>
-    </Grid>
+		<Button
+			Grid.Row="1"
+			Grid.Column="0"
+			Height="25"
+			Content="{Loc ExecuteAll}"
+			Click="ButtonBase_OnClick"
+			Margin="{StaticResource DefaultMargin}"/>
+		<Button
+			Grid.Row="1"
+			Grid.Column="1"
+			Content="{Loc Refresh}"
+			Click="RefreshButton_OnClick"
+			Margin="{StaticResource DefaultMargin}"/>
+	</Grid>
 </UserControl>

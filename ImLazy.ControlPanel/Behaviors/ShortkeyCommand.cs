@@ -8,7 +8,7 @@ namespace ImLazy.ControlPanel.Behaviors
 {
     class ShortkeyCommand : Behavior<Window>
     {
-        private Dictionary<Key, Action<Window>> _dictionary;
+        private readonly Dictionary<Key, Action<Window>> _dictionary;
 
         public void AddAction(Key key, Action<Window> action)
         {
@@ -32,7 +32,7 @@ namespace ImLazy.ControlPanel.Behaviors
             base.OnDetaching();
         }
 
-        void AssociatedObject_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        void AssociatedObject_KeyDown(object sender, KeyEventArgs e)
         {
             Action<Window> action;
             if (!_dictionary.TryGetValue(e.Key, out action)) return;

@@ -197,4 +197,16 @@
   <data name="Running" xml:space="preserve">
     <value>正在运行...</value>
   </data>
+  <data name="ExecuteAll" xml:space="preserve">
+    <value>全部执行</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>刷新</value>
+  </data>
+  <data name="Results" xml:space="preserve">
+    <value>结果</value>
+  </data>
+  <data name="WalkthroughResults" xml:space="preserve">
+    <value>演练结果</value>
+  </data>
 </root>

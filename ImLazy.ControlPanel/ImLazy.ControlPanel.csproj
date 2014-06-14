@@ -16,7 +16,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
-    <ExpressionBlendVersion>12.0.41002.1</ExpressionBlendVersion>
+    <ExpressionBlendVersion>12.0.41212.0</ExpressionBlendVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -51,6 +51,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Expression.Interactions" />
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
@@ -77,6 +78,7 @@
     <Compile Include="Behaviors\CloseParentWindowBehavior.cs" />
     <Compile Include="Behaviors\ShortkeyCommand.cs" />
     <Compile Include="Commands\AwaitableDelegateCommand.cs" />
+    <Compile Include="Commands\CommonCommands.cs" />
     <Compile Include="Controls\ConditionBranchView.xaml.cs">
       <DependentUpon>ConditionBranchView.xaml</DependentUpon>
     </Compile>
@@ -93,6 +95,10 @@
     <Compile Include="Converters\Status.cs" />
     <Compile Include="Converters\StatusConverter.cs" />
     <Compile Include="Converters\StringConverterBase.cs" />
+    <Compile Include="Interactions\Behaviors.cs" />
+    <Compile Include="Interactions\ShellExecuteAction.cs" />
+    <Compile Include="Interactions\SupplementaryInteraction.cs" />
+    <Compile Include="Interactions\Triggers.cs" />
     <Compile Include="Interop\ComDlgResources.cs" />
     <Compile Include="Interop\COMGuids.cs" />
     <Compile Include="Interop\ErrorHelper.cs" />
@@ -134,6 +140,9 @@
     </Compile>
     <Compile Include="Views\ActionsView.xaml.cs">
       <DependentUpon>ActionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectRuleView.xaml.cs">
+      <DependentUpon>SelectRuleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ConditionEditView.xaml.cs">
       <DependentUpon>ConditionEditView.xaml</DependentUpon>
@@ -198,6 +207,10 @@
     <Page Include="Views\ActionsView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SelectRuleView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\ConditionEditView.xaml">
       <SubType>Designer</SubType>

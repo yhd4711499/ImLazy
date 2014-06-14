@@ -20,7 +20,7 @@ namespace ImLazy.Service
 
         public static void Install()
         {
-            CmdUtil.Run(new ProcessStartInfo
+            ShellUtil.Run(new ProcessStartInfo
             {
                 UseShellExecute = false,
                 FileName = "Install.bat",
@@ -30,7 +30,7 @@ namespace ImLazy.Service
 
         public static void Uninstall()
         {
-            CmdUtil.Run(new ProcessStartInfo
+            ShellUtil.Run(new ProcessStartInfo
             {
                 UseShellExecute = false,
                 FileName = "Uninstall.bat",

@@ -25,9 +25,9 @@
             </Grid.RowDefinitions>
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="{Loc Status}" Margin="0,0,8,0"/>
                 <TextBlock Grid.Column="1" TextWrapping="Wrap" Margin="0,0,8,0" Text="{Binding Status}" Foreground="{Binding Status,Converter={StaticResource StatusConverter}}"/>

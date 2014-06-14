@@ -118,6 +118,12 @@ namespace ImLazy.ControlPanel.ViewModel
                            {
                                if (string.IsNullOrEmpty(Rule.Name))
                                    return false;
+                               if (
+                                   FolderParent.Rules.Any(
+                                       _ =>
+                                           _.Name.Equals(Rule.Name, StringComparison.InvariantCultureIgnoreCase) &&
+                                           !_.Property.RuleGuid.Equals(Rule.Guid)))
+                                   return false;
                                return true;
                            }));
             }

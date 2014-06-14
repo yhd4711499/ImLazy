@@ -33,7 +33,7 @@ namespace ImLazy.ControlPanel.Util
             return w;
         }
 
-        public static Window CreateWindow(object content, string title, int width = 400 , int height = 500)
+        public static Window CreateWindow(object content, string title, int width = 500 , int height = 500)
         {
             var w = new Window
             {

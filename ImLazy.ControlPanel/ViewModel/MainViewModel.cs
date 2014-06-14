@@ -104,7 +104,7 @@ namespace ImLazy.ControlPanel.ViewModel
                                var results = await Executor.Instance.Walkthrough(p.Folder);
                                var view = new WalkthroughResultsView();
                                view.SetResults(results);
-                               WindowUtil.CreateWindow(view, "Walkthrough".Local()).ShowDialog();
+                               WindowUtil.CreateWindow(view, "WalkthroughResults".Local(), 550).ShowDialog();
                            },
                            p => p != null));
             }
@@ -120,11 +120,32 @@ namespace ImLazy.ControlPanel.ViewModel
             get
             {
                 return _walkthroughAllCommnad
-                       ?? (_walkthroughAllCommnad = new RelayCommand(() => WindowUtil.CreateWindow(new WalkthroughResultsView(), "Walkthrough".Local()).ShowDialog(),
+                       ?? (_walkthroughAllCommnad = new RelayCommand(() =>
+                           WindowUtil.CreateWindow(new WalkthroughResultsView(), "WalkthroughResults".Local(), 550).ShowDialog(),
                            () => true));
             }
         }
-        
+
+        private RelayCommand<RuleViewModel> _deleteRuleCommand;
+
+        /// <summary>
+        /// Gets the DeleteRuleCommand.
+        /// </summary>
+        public RelayCommand<RuleViewModel> DeleteRuleCommand
+        {
+            get
+            {
+                return _deleteRuleCommand
+                       ?? (_deleteRuleCommand = new RelayCommand<RuleViewModel>(
+                           ruleVm =>
+                           {
+                               Rules.Remove(ruleVm);
+                               DataStorage.Instance.Rules.Remove(ruleVm.Property.RuleGuid);
+                           },
+                           ruleVm => ruleVm != null));
+            }
+        }
+
         #endregion
 
         /// <summary>

@@ -62,7 +62,7 @@
     <Compile Include="Lexer\ISubject.cs" />
     <Compile Include="Lexer\IVerb.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\CmdUtil.cs" />
+    <Compile Include="Util\ShellUtil.cs" />
     <Compile Include="Util\CodingUtil.cs" />
   </ItemGroup>
   <ItemGroup>

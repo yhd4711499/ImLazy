@@ -20,7 +20,7 @@
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <StackPanel.Resources>
                         <Style TargetType="Button" BasedOn="{StaticResource SimbolButtonStyle}">
-                            <Setter Property="Margin" Value="{StaticResource DefaultMargin}"></Setter>
+                            <Setter Property="Margin" Value="{StaticResource DefaultMargin}" />
                         </Style>
                     </StackPanel.Resources>
                     <Button Content="+" VerticalAlignment="Top" Command="{Binding Parent.NewConditionLeafCommand}" />
