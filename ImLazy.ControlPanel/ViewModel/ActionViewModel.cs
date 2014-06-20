@@ -4,7 +4,7 @@ namespace ImLazy.ControlPanel.ViewModel
 {
     public class ActionViewModel : AddinInfoViewModelBase
     {
-        public ActionViewModel(ActionAddinInfo addinInfo, RuleViewModel parent)
+        public ActionViewModel(IAddinInfo addinInfo, RuleViewModel parent)
             : base(addinInfo, parent)
         {
         }

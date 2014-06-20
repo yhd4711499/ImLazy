@@ -1,14 +1,32 @@
 ﻿using System;
+using System.Collections.Generic;
+using ImLazy.Entities;
 
 namespace ImLazy.Data
 {
     [Serializable]
     public class ActionAddinInfo : AddinInfo
     {
-//        protected override IActionAddin GetAddin(string name)
-//        {
-//            var _ = AddinHost.Instance.ActionAddins.FirstOrDefault(l => l.Metadata.LocalName.Equals(AddinName));
-//            return _ != null ? _.Value : null;
-//        }
+        public override void Save(ModelContainer container)
+        {
+            var entity = container.AddinInfoEntitySet.Add(new ActionAddinInfoEntity
+            {
+                AddinType = AddinType,
+            });
+
+            container.SaveChanges();
+
+            Config.ForEach(_ => entity.Configs.Add(new ConfigEntity
+            {
+                Key = _.Key,
+                Value = _.Value == null ? null : _.Value.ToString()
+            }));
+            container.SaveChanges();
+        }
+
+        protected override AddinInfoEntity GetDerivedEntity()
+        {
+            return new ActionAddinInfoEntity();
+        }
     }
 }

@@ -55,6 +55,10 @@
     <Compile Include="Actions\CopyAction.cs" />
     <Compile Include="Actions\DeleteAction.cs" />
     <Compile Include="Actions\FileActionBase.cs" />
+    <Compile Include="Actions\RenameAction.cs" />
+    <Compile Include="Actions\RunCmdScriptAction.cs" />
+    <Compile Include="Actions\RunPowerShellScriptAction.cs" />
+    <Compile Include="Actions\RunScriptActionBase.cs" />
     <Compile Include="Conditions\FileTypeConditionAddin.cs" />
     <Compile Include="Conditions\LexerConditionAddin.cs" />
     <Compile Include="Conditions\LexerConditionAddinView.xaml.cs">
@@ -69,10 +73,12 @@
     </Compile>
     <Compile Include="ContentProviderAddin.cs" />
     <Compile Include="ContentViews\ComboxContent.cs" />
-    <Compile Include="ContentViews\BoolContent.cs" />
     <Compile Include="ContentViews\DateTimeContent.cs" />
     <Compile Include="ContentViews\LongContent.cs" />
     <Compile Include="ContentViews\RegexTextContent.cs" />
+    <Compile Include="ContentViews\ScriptContent.xaml.cs">
+      <DependentUpon>ScriptContent.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ContentViews\TextContent.cs" />
     <Compile Include="ContentViews\TimeSpanContent.cs" />
     <Compile Include="Lexer\Objects\FileTypeObject.cs" />
@@ -150,6 +156,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Conditions\SimpleMetadataConditionAddinView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ContentViews\ScriptContent.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

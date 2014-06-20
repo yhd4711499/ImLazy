@@ -36,6 +36,16 @@ namespace ImLazy.Runtime
         }
 
         /// <summary>
+        /// 放入缓存，将会替换已有的同名缓存
+        /// </summary>
+        /// <param name="id">Id</param>
+        /// <param name="obj">对象</param>
+        public void Put(int id, T obj)
+        {
+            _cache[id.ToString()] = obj;
+        }
+
+        /// <summary>
         /// 获取缓存
         /// </summary>
         /// <param name="type"><see cref="IAddin"/>的类型</param>

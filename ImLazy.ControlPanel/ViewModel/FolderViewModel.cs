@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.IO;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using ImLazy.Data;
@@ -24,6 +25,57 @@ namespace ImLazy.ControlPanel.ViewModel
         public Folder Folder { get; private set; }
 
         public ObservableCollection<RuleViewModel> Rules { get; private set; }
+
+
+        /// <summary>
+        /// Exist属性的名称
+        /// </summary>
+        public const string ExistPropertyName = "Exist";
+        private bool _exist;
+        /// <summary>
+        /// 文件夹是否存在
+        /// </summary>
+        public bool Exist
+        {
+            get
+            {
+                return _exist;
+            }
+            set
+            {
+                if (_exist == value) return;
+                _exist = value;
+                RaisePropertyChanged(ExistPropertyName);
+            }
+        }
+
+        /// <summary>
+        /// The <see cref="Enabled" /> property's name.
+        /// </summary>
+        public const string EnabledPropertyName = "Enabled";
+
+        /// <summary>
+        /// Sets and gets the Enabled property.
+        /// Changes to that property's value raise the PropertyChanged event. 
+        /// </summary>
+        public bool Enabled
+        {
+            get
+            {
+                return Folder.Enabled;
+            }
+
+            set
+            {
+                if (Folder.Enabled == value)
+                {
+                    return;
+                }
+                Folder.Enabled = value;
+                RaisePropertyChanged(EnabledPropertyName);
+                DataStorage.Instance.Save();
+            }
+        }
 
         /*
         private RelayCommand _addFromAllRulesCommand;
@@ -51,6 +103,24 @@ namespace ImLazy.ControlPanel.ViewModel
             }
         }
         */
+
+        private RelayCommand<bool> _setEnabledCommand;
+
+        /// <summary>
+        /// Gets the SetEnabledCommand.
+        /// </summary>
+        public RelayCommand<bool> SetEnabledCommand
+        {
+            get
+            {
+                return _setEnabledCommand
+                       ?? (_setEnabledCommand = new RelayCommand<bool>(
+                           p =>
+                           {
+                               Enabled = p;
+                           }));
+            }
+        }
 
         private RelayCommand _addRuleCommand;
 
@@ -180,6 +250,7 @@ namespace ImLazy.ControlPanel.ViewModel
         public FolderViewModel(Folder f, IEnumerable<RuleViewModel> allRuls)
         {
             Folder = f;
+            Exist = Directory.Exists(f.FolderPath);
             if (allRuls != null)
             {
                 // Due to some unknown reasons, "orderby" in LINQ didn't work.

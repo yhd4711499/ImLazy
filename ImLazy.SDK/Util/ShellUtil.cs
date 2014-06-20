@@ -27,11 +27,13 @@ namespace ImLazy.SDK.Util
             try
             {
                 //Asynchronously start the Thread to process the Execute command request.
-                Thread objThread = new Thread(new ParameterizedThreadStart(ExecuteCommandSync));
+                var objThread = new Thread((o)=>ExecuteCommandSync(o))
+                {
+                    IsBackground = true,
+                    Priority = ThreadPriority.AboveNormal
+                };
                 //Make the thread as background thread.
-                objThread.IsBackground = true;
                 //Set the Priority of the thread.
-                objThread.Priority = ThreadPriority.AboveNormal;
                 //Start the thread.
                 objThread.Start(command);
             }
@@ -54,7 +56,7 @@ namespace ImLazy.SDK.Util
         /// <span class="code-SummaryComment"></summary></span>
         /// <span class="code-SummaryComment"><param name="command">string command</param></span>
         /// <span class="code-SummaryComment"><returns>string, as output of the command.</returns></span>
-        public static void ExecuteCommandSync(object command)
+        public static string ExecuteCommandSync(object command, string exe = "cmd")
         {
             try
             {
@@ -63,7 +65,7 @@ namespace ImLazy.SDK.Util
                 // Incidentally, /c tells cmd that we want it to execute the command that follows,
                 // and then exit.
                 var procStartInfo =
-                    new System.Diagnostics.ProcessStartInfo("cmd", "/c " + command)
+                    new ProcessStartInfo(exe, "/c " + command)
                     {
                         RedirectStandardOutput = true,
                         UseShellExecute = false,
@@ -76,13 +78,15 @@ namespace ImLazy.SDK.Util
                 // Now we create a process, assign its ProcessStartInfo and start it
                 var proc = new Process {StartInfo = procStartInfo};
                 proc.Start();
+
                 // Get the output into a string
                 var result = proc.StandardOutput.ReadToEnd();
                 // Display the command output.
-                Console.WriteLine(result);
+                return result;
             }
             catch (Exception objException)
             {
+                return "error";
                 // Log the exception
             }
         }

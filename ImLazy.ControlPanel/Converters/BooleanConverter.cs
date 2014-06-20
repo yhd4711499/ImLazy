@@ -7,6 +7,10 @@ namespace ImLazy.ControlPanel.Converters
 {
     public class BooleanConverter<T> : IValueConverter
     {
+        public BooleanConverter()
+        {
+            
+        }
         public BooleanConverter(T trueValue, T falseValue)
         {
             True = trueValue;

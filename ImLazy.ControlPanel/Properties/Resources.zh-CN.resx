@@ -209,4 +209,16 @@
   <data name="WalkthroughResults" xml:space="preserve">
     <value>演练结果</value>
   </data>
+  <data name="Exist" xml:space="preserve">
+    <value>存在</value>
+  </data>
+  <data name="NotExist" xml:space="preserve">
+    <value>不存在</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>开启</value>
+  </data>
 </root>

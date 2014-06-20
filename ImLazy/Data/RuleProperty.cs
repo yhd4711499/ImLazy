@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Xml.Serialization;
+using ImLazy.Entities;
 
 namespace ImLazy.Data
 {
     [Serializable]
-    public class RuleProperty: DataItemBase ,IEquatable<RuleProperty>, IComparable<RuleProperty>
+    public class RuleProperty: DataItemBase<RulePropertyEntity> ,IEquatable<RuleProperty>, IComparable<RuleProperty>
     {
         /// <summary>
         /// Item with lower Priority value is actual prior. 
@@ -18,6 +19,7 @@ namespace ImLazy.Data
         public Guid RuleGuid { get; set; }
         [XmlAttribute]
         public bool Enabled { get; set; }
+
         [Obsolete("Don't use it in code. Use RuleProperty.Create(int) instead.")]
         public RuleProperty()
         {
@@ -57,6 +59,27 @@ namespace ImLazy.Data
         public int CompareTo(RuleProperty other)
         {
             return Priority.CompareTo(other.Priority);
+        }
+
+        public override RulePropertyEntity GetEntity()
+        {
+            return new RulePropertyEntity
+            {
+                RuleId = RuleGuid,
+                Priority = Priority,
+                Enabled = Enabled,
+            };
+        }
+
+        public override void Save(ModelContainer container)
+        {
+        }
+
+        public override void FromEntity(RulePropertyEntity entity, ModelContainer context)
+        {
+            RuleGuid = entity.RuleId;
+            Priority = entity.Priority;
+            Enabled = entity.Enabled;
         }
     }
 }

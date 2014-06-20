@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
+using ImLazy.Entities;
+using ImLazy.Util;
 
 namespace ImLazy.Data
 {
     [Serializable]
-    public class Rule : DataItemBase, IEquatable<Rule>
+    public class Rule : DataItemBase<RuleEntity>, IEquatable<Rule>
     {
         [XmlAttribute]
         public Guid Guid { get; set; }
+        /*[XmlIgnore]
+        public int Id { get; private set; }*/
         [XmlAttribute]
         public String Name { get; set; }
 
@@ -26,7 +31,7 @@ namespace ImLazy.Data
         {
             var r = new Rule
             {
-                Guid = Guid.NewGuid(),
+                //Guid = Guid.NewGuid(),
                 ConditionBranch = new ConditionBranch(),
                 Actions = new List<ActionAddinInfo>(),
             };
@@ -38,6 +43,42 @@ namespace ImLazy.Data
         public bool Equals(Rule other)
         {
             return Guid.Equals(other.Guid);
+        }
+
+        public override RuleEntity GetEntity()
+        {
+            var rule = new RuleEntity
+            {
+                Id = Guid,
+                Name = Name
+            };
+            Actions.ForEach(ac => rule.Actions.Add((ActionAddinInfoEntity)ac.GetEntity()));
+
+            rule.ConditionBranch = (ConditionBranchEntity)ConditionBranch.GetEntity();
+            return rule;
+        }
+
+        public override void Save(ModelContainer container)
+        {
+            container.RuleEntitySet.Add(GetEntity());
+        }
+
+        public override void FromEntity(RuleEntity entity, ModelContainer context)
+        {
+            Name = entity.Name;
+            Guid = entity.Id;
+            var actionEntities = entity.Actions;
+            var addinInfos = actionEntities.Select(_ =>
+            {
+                var addinInfo = new ActionAddinInfo();
+                addinInfo.FromEntity(_, context);
+                return addinInfo;
+            });
+            Actions = new List<ActionAddinInfo>();
+            Actions.AddRange(addinInfos);
+
+            ConditionBranch = new ConditionBranch();
+            ConditionBranch.FromEntity(entity.ConditionBranch, context);
         }
     }
 }

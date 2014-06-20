@@ -10,13 +10,26 @@
     <Application.Resources>
         <ResourceDictionary>
             <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:ImLazy.ControlPanel.ViewModel" />
-            <converters:BooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" True="Collapsed" False="Visible"/>
+            
             <converters:StatusConverter x:Key="StatusConverter" ErrorColor="Red" NormalColor="Black"/>
-            <converters:BooleanToStringConverter x:Key="BooleanToStringConverter" True="Enabled" False="Disabled"/>
             <converters:PathToImageConverter x:Key="PathToImageConverter" />
             <converters:ShortPathConverter x:Key="ShortPathConverter" />
             <converters:GetFolderConverter x:Key="GetFolderConverter" />
+            
+            <!-- bool converters -->
+            <converters:BooleanToVisibilityConverter x:Key="InvertBooleanToVisibilityConverter" True="Collapsed" False="Visible"/>
             <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:BooleanToStringConverter x:Key="BooleanToEnableStringConverter" True="Enabled" False="Disabled"/>
+            <converters:BooleanToStringConverter x:Key="BooleanToExistStringConverter" True="Exist" False="NotExist"/>
+            <converters:BoolToEverythingConverter x:Key="BooleanToExistColorConverter">
+                <converters:BoolToEverythingConverter.True>
+                    <SolidColorBrush Color="Black" />
+                </converters:BoolToEverythingConverter.True>
+                <converters:BoolToEverythingConverter.False>
+                    <SolidColorBrush Color="Gray" />
+                </converters:BoolToEverythingConverter.False>
+            </converters:BoolToEverythingConverter>
+            
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Themes/Generic/Default.xaml"/>
             </ResourceDictionary.MergedDictionaries>

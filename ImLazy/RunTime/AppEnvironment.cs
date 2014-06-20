@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Data.Entity;
+using System.IO;
+using System.Reflection;
+using ImLazy.Entities;
 using Microsoft.Win32;
 
 namespace ImLazy.Runtime
@@ -13,6 +17,17 @@ namespace ImLazy.Runtime
             try
             {
                 ReadRegistry();
+                // Create directory for the database.
+                string dataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ImLazy");
+                if (!Directory.Exists(dataDirectory))
+                {
+                    Directory.CreateDirectory(dataDirectory);
+                }
+
+                // Set |DataDirectory| macro to our own path. This macro is used within the connection string.
+                AppDomain.CurrentDomain.SetData("DataDirectory", dataDirectory);
+
+                Database.SetInitializer(new DropCreateDatabaseIfModelChanges<ModelContainer>()); 
 
             }
             catch (Exception)

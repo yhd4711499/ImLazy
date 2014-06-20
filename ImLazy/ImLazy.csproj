@@ -11,6 +11,21 @@
     <AssemblyName>ImLazy</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <PublishUrl>发布\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,6 +48,9 @@
     <Reference Include="CuttingEdge.Conditions">
       <HintPath>..\..\..\..\..\Development\DotNet\Libraries\CuttingEdge_Conditions\CuttingEdge.Conditions.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.5.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
@@ -41,8 +59,14 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Data.SqlServerCe, Version=4.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
@@ -63,11 +87,22 @@
     <Compile Include="Data\IAddinInfo.cs" />
     <Compile Include="Data\IBranch.cs" />
     <Compile Include="Data\ICorp.cs" />
+    <Compile Include="Data\IEntityFillter.cs" />
     <Compile Include="Data\ILeaf.cs" />
     <Compile Include="Data\ConditionBranch.cs" />
     <Compile Include="Data\Rule.cs" />
     <Compile Include="Data\RuleProperty.cs" />
     <Compile Include="Data\WalkthroughResult.cs" />
+    <Compile Include="Entities\ActionAddinInfoEntity.cs" />
+    <Compile Include="Entities\AddinInfoEntity.cs" />
+    <Compile Include="Entities\ConditionBranchEntity.cs" />
+    <Compile Include="Entities\ConditionCorpEntity.cs" />
+    <Compile Include="Entities\ConditionLeafEntity.cs" />
+    <Compile Include="Entities\ConfigEntity.cs" />
+    <Compile Include="Entities\ModelContainer.cs" />
+    <Compile Include="Entities\RulePropertyEntity.cs" />
+    <Compile Include="Entities\FolderEntity.cs" />
+    <Compile Include="Entities\RuleEntity.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -89,6 +124,7 @@
     <Compile Include="Runtime\LexerAddinHost.cs" />
     <Compile Include="Runtime\LogManager.cs" />
     <Compile Include="Util\ConfigurationHelper.cs" />
+    <Compile Include="Util\DatabaseUtil.cs" />
     <Compile Include="Util\DataCreationUtil.cs" />
     <Compile Include="Util\EnumHelper.cs" />
     <Compile Include="Util\FolderUtil.cs" />
@@ -106,6 +142,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +163,26 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.zh-CN.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

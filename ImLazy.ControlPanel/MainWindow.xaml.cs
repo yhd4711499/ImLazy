@@ -3,7 +3,6 @@ using System.Collections;
 using System.Windows;
 using System.Windows.Input;
 using ImLazy.ControlPanel.ViewModel;
-using ImLazy.Data;
 
 namespace ImLazy.ControlPanel
 {

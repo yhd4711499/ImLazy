@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ImLazy.Entities;
 
 namespace ImLazy.Util
 {
@@ -16,6 +17,16 @@ namespace ImLazy.Util
             return default(T);
         }
 
+        public static string TryGetValue<T>(this Dictionary<string, string> dic, string key)
+        {
+            if (dic == null)
+                return null;
+            string v;
+            if (dic.TryGetValue(key, out v)) return v;
+            //Log.WarnFormat("Config ({0}) not found! Return null or default instead.", key);
+            return null;
+        }
+
         public static string TryGetValue(this Dictionary<string, string> dic, string key)
         {
             string v;
@@ -26,6 +37,13 @@ namespace ImLazy.Util
         {
             object v;
             return !dic.TryGetValue(key, out v) ? null : v;
+        }
+
+        public static ICollection<ConfigEntity> ToEntities(this Dictionary<string, object> dic)
+        {
+            var entities = new List<ConfigEntity>(dic.Count);
+            dic.ForEach(pair => entities.Add(new ConfigEntity{Key = pair.Key, Value = pair.Value == null? null : pair.Value.ToString()}));
+            return entities;
         }
     }
 }

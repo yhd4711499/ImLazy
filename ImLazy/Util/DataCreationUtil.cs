@@ -102,5 +102,12 @@ namespace ImLazy.Util
             var c = AddinInfoFactory.Create<TWrapper>(lazy.Value);
             return c;
         }
+
+        public static T FromEntity<T,TEntity>(TEntity entity) where T : DataItemBase<TEntity>,new()
+        {
+            var item = new T();
+            item.FromEntity(entity, null);
+            return item;
+        }
     }
 }

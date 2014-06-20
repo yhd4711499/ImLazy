@@ -1,11 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.Validation;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using ImLazy.SDK.Base.Contracts;
 using ImLazy.Data;
 using ImLazy.Util;
+using Rule = ImLazy.Data.Rule;
 
 namespace ImLazy.Runtime
 {
@@ -30,12 +34,37 @@ namespace ImLazy.Runtime
                 {
                     if (_instance == null)
                     {
-                        _instance = DataCreationUtil.TryCreateFromFile<DataStorage>(FilePath);
+                        try
+                        {
+                            _instance = DataCreationUtil.TryCreateFromFile<DataStorage>(FilePath);
+                            /*_instance = Create();
+                            var container = new ModelContainer();
+                            foreach (var ruleEntity in container.RuleEntitySet)
+                            {
+                                var rule = DataCreationUtil.FromEntity<Rule, RuleEntity>(ruleEntity);
+                                _instance.Rules[rule.Guid] = rule;
+                            }
+                            foreach (var folderEntity in container.FolderEntitySet)
+                            {
+                                _instance.Folders.Add(DataCreationUtil.FromEntity<Folder, FolderEntity>(folderEntity));
+                            }*/
+                            
+                            
+                            /*_instance = DataCreationUtil.TryCreateFromFile<DataStorage>(FilePath);
+                            var container = new ModelContainer();
+                            _instance.Rules.ForEach(_ => _.Value.Save(container));
+                            _instance.Folders.ForEach(_ => _.Save(container));
+                            container.SaveChanges();*/
+                        }
+                        catch (DbEntityValidationException e)
+                        {
+                            Debug.WriteLine(e.StackTrace);
+                        }
+                        
                     }
                     if (_instance != null)
                     {
                         _instance.Rules.ForEach(_ => Executor.Instance.RuleCacheMap.Put(_.Key, _.Value));
-                        _instance.Folders.ForEach(f=>f.RuleProperties.Sort());
                     }
                     else
                         _instance = Create();
@@ -81,16 +110,16 @@ namespace ImLazy.Runtime
         #region Data
 
         [XmlIgnore]
-// ReSharper disable MemberCanBePrivate.Global
+        [NotMapped]
         public List<ConditionCorp> Conditions { get; set; }
 
         [XmlIgnore]
+        [NotMapped]
         public List<ActionAddinInfo> Actions { get; set; }
 
         public SerializableDictionary<Guid, Rule> Rules { get; set; }
 
         public List<Folder> Folders { get; set; }
-// ReSharper restore MemberCanBePrivate.Global
 
         #endregion
 

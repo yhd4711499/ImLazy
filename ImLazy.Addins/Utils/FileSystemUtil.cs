@@ -4,6 +4,24 @@ namespace ImLazy.Addins.Utils
 {
     internal static class FileSystemUtil
     {
+        public static void RenameFileOrFolder(string source, string dest)
+        {
+            var dir = Path.GetDirectoryName(source);
+            if(dir == null) return;
+
+            var newPath = Path.Combine(dir, dest);
+            if(source.Equals(newPath)) return;
+
+            if (Directory.Exists(source))
+            {
+                Directory.Move(source, newPath);
+            }
+            else
+            {
+                File.Move(source, newPath);
+            }
+        }
+
         public static void CopyFileOrFolder(string source, string dest)
         {
             if (Directory.Exists(source))

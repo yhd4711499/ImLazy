@@ -15,7 +15,7 @@ namespace ImLazy.Addins
         {
             {typeof(string).FullName, ()=> new TextContent()},
             {typeof(long).FullName, ()=> new LongContent()},
-            {typeof(bool).FullName, ()=> new BoolContent()}
+            /*{typeof(bool).FullName, ()=> new BoolContent()}*/
         };
 
         public IEditView CreateMainView(SerializableDictionary<string, object> config)

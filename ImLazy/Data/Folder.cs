@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Xml.Serialization;
+using ImLazy.Entities;
 
 namespace ImLazy.Data
 {
-    public class Folder : DataItemBase
+    public class Folder : DataItemBase<FolderEntity>
     {
         private string _folderPath;
 
@@ -13,6 +15,9 @@ namespace ImLazy.Data
         /// </summary>
 // ReSharper disable once MemberCanBePrivate.Global
         public List<RuleProperty> RuleProperties { get; set; }
+
+        [XmlAttribute]
+        public bool Enabled { get; set; }
 
         [XmlAttribute]
         public String FolderPath
@@ -32,7 +37,8 @@ namespace ImLazy.Data
         {
             return new Folder
             {
-                RuleProperties = new List<RuleProperty>()
+                RuleProperties = new List<RuleProperty>(),
+                Enabled = true
             };
         }
 
@@ -43,6 +49,38 @@ namespace ImLazy.Data
         public override string ToString()
         {
             return FolderPath;
+        }
+
+        public override FolderEntity GetEntity()
+        {
+            var entity = new FolderEntity
+            {
+                Enabled = Enabled,
+                FolderPath = FolderPath,
+            };
+            RuleProperties.ForEach(rp => entity.RuleProperties.Add(rp.GetEntity()));
+            return entity;
+        }
+
+        public override void Save(ModelContainer container)
+        {
+            container.FolderEntitySet.Add(GetEntity());
+            container.SaveChanges();
+        }
+
+        public override void FromEntity(FolderEntity entity, ModelContainer context)
+        {
+            Enabled = entity.Enabled;
+            FolderPath = entity.FolderPath;
+
+            var properties = entity.RuleProperties.Select(_ =>
+            {
+                var rp = new RuleProperty();
+                rp.FromEntity(_, context);
+                return rp;
+            });
+            RuleProperties = new List<RuleProperty>();
+            RuleProperties.AddRange(properties);
         }
     }
 }

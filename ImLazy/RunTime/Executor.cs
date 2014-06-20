@@ -24,7 +24,6 @@ namespace ImLazy.Runtime
         {
             "desktop.ini",
             "Thumbs.db",
-            ".td"
         };
 
         public CacheMap<ImLazyFunc> ConditionCacheMap
@@ -87,14 +86,20 @@ namespace ImLazy.Runtime
         /// <param name="walkthrough"></param>
         private IEnumerable<WalkthroughResult> Do(Folder folder, bool walkthrough = false)
         {
-            var entries = from entry in Directory.EnumerateFileSystemEntries(folder.FolderPath)
+            var results = new List<WalkthroughResult>();
+
+            if (!Directory.Exists(folder.FolderPath)) return results;
+
+            var entries = (from entry in Directory.EnumerateFileSystemEntries(folder.FolderPath)
                 let fileName = Path.GetFileName(entry)
                 where fileName != null && !_execludsions.Any(fileName.Contains)
-                select entry;
-            var results = new List<WalkthroughResult>();
+                select entry).ToList();
+
+            var range = folder.RuleProperties.Where(_ => _.Enabled).ToArray();
+
             entries.AsParallel().ForEach(fe =>
             {
-                foreach (var rp in folder.RuleProperties.Where(_=>_.Enabled))
+                foreach (var rp in range)
                 {
                     if (!walkthrough)
                     {
@@ -149,7 +154,7 @@ namespace ImLazy.Runtime
                 var actionMethod = ActionCacheMap.Get(action.AddinType);
                 if (actionMethod == null)
                 {
-                    Log.WarnFormat("Action [name:{0}, type:{1}] not found!", action.Name, action.AddinType);
+                    Log.WarnFormat("Action [name:{0}, type:{1}] not found!", action.LocalName, action.AddinType);
                     return;
                 }
                 Log.Debug("Try performing action ...");

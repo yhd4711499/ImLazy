@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿/*
+using System.Collections.Generic;
 using System.Windows;
 using ImLazy.Addins.Lexer.Objects;
 using ImLazy.Addins.Utils;
@@ -47,3 +48,4 @@ namespace ImLazy.Addins.ContentViews
         }
     }
 }
+*/

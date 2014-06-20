@@ -10,14 +10,44 @@
         Title="ImLazy" Height="480" Width="590" MaxWidth="590" MinWidth="590" WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <DataTemplate x:Key="FolderItemTemplate" DataType="viewModel:FolderViewModel">
-            <StackPanel
-                Orientation="Horizontal"
-                Drop="FolderItem_OnDrop"
-                MouseMove="FolderItem_OnMouseMove"
-                PreviewMouseLeftButtonDown="FolderItem_OnPreviewMouseLeftButtonDown">
-                <Image Width="32" Height="32" Source="{Binding Folder.FolderPath, Converter={StaticResource PathToImageConverter}}" />
-                <TextBlock Text="{Binding Folder.FolderPath, Converter={StaticResource ShortPathConverter}}" />
-            </StackPanel>
+            <Grid Background="Transparent">
+                <StackPanel
+                    Orientation="Horizontal"
+                    Drop="FolderItem_OnDrop"
+                    MouseMove="FolderItem_OnMouseMove"
+                    PreviewMouseLeftButtonDown="FolderItem_OnPreviewMouseLeftButtonDown">
+                    <Image Width="32" Height="32" Source="{Binding Folder.FolderPath, Converter={StaticResource PathToImageConverter}}" />
+                    <TextBlock
+                        Text="{Binding Folder.FolderPath, Converter={StaticResource ShortPathConverter}}"
+                        Foreground="{Binding Exist, Converter={StaticResource BooleanToExistColorConverter}}"/>
+                    <TextBlock
+        		        Text="{Binding Path=Exist, StringFormat=[{0}], Converter={StaticResource BooleanToExistStringConverter}}"
+        		        Foreground="{StaticResource ColorWarnning}"
+        		        Visibility="{Binding Exist, Converter={StaticResource InvertBooleanToVisibilityConverter}}" />
+                    <TextBlock
+        		        Text="{Binding Path=Enabled, StringFormat=[{0}], Converter={StaticResource BooleanToEnableStringConverter}}"
+        		        Foreground="{StaticResource ColorWarnning}"
+        		        Visibility="{Binding Enabled, Converter={StaticResource InvertBooleanToVisibilityConverter}}" />
+                </StackPanel>
+                
+                <Grid.ContextMenu>
+                    <ContextMenu>
+                        <ContextMenu.Items>
+                            <MenuItem
+                                Header="{Loc Enable}"
+                                Visibility="{Binding Enabled,Converter={StaticResource InvertBooleanToVisibilityConverter}}"
+                                Command="{Binding SetEnabledCommand}"
+                                CommandParameter="True"/>
+                            <MenuItem
+                                Header="{Loc Disable}"
+                                Visibility="{Binding Enabled,Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Command="{Binding SetEnabledCommand}"
+                                CommandParameter="False"/>
+                        </ContextMenu.Items>
+                    </ContextMenu>
+
+                </Grid.ContextMenu>
+            </Grid>
         </DataTemplate>
 
         <DataTemplate x:Key="RuleItemTempalte" DataType="viewModel:RuleViewModel">
@@ -33,7 +63,7 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding Name}"/>
                     <TextBlock
-        				Text="{Binding Path=Enabled, StringFormat=[{0}], Converter={StaticResource BooleanToStringConverter}}"
+        				Text="{Binding Path=Enabled, StringFormat=[{0}], Converter={StaticResource BooleanToEnableStringConverter}}"
         				Foreground="{StaticResource ColorWarnning}"
         				Visibility="{Binding Enabled, Converter={StaticResource InvertBooleanToVisibilityConverter}}" />
                 </StackPanel>
@@ -66,6 +96,7 @@
 								x:Name="FolderListBox"
                                 AllowDrop="True"
 								ItemsSource="{Binding Folders}"
+                                HorizontalContentAlignment="Stretch"
                                 ItemTemplate="{StaticResource FolderItemTemplate}"
 								Margin="0,0,0,24">
                                 <ListBox.Resources>
