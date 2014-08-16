@@ -10,6 +10,6 @@ namespace ImLazy.Entities
         }
 
         public string Mode { get; set; }
-        public virtual ICollection<ConditionCorpEntity> SubConditions { get; set; } 
+        public virtual ICollection<ConditionCorpEntity> SubConditions { get; set; }
     }
 }

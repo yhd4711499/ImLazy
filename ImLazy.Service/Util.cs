@@ -15,7 +15,23 @@ namespace ImLazy.Service
     {
         public static Task DoAsync(Action action)
         {
-            return Task.Factory.StartNew(action);
+            return Task.Factory.StartNew(() =>
+            {
+                try
+                {
+                    action();
+                }
+                catch (Exception ex)
+                {
+                    var win32Ex = ex.InnerException as Win32Exception;
+                    if (win32Ex != null && win32Ex.NativeErrorCode == 5)
+                    {
+                        // not privilliged
+                        throw new NotPrivilligedException();
+                    }
+                    throw new UnknownException("", ex);
+                }
+            });
         }
 
         public static void Install()
@@ -42,69 +58,46 @@ namespace ImLazy.Service
         {
             var ctl = ServiceController.GetServices()
                .FirstOrDefault(s => s.ServiceName == Constaints.ServiceName);
-            if (ctl == null)
-                return new ServiceStatus(ServiceStatusEnum.Uninstalled);
-            return new ServiceStatus(ctl.Status);
+            return ctl == null ? new ServiceStatus(ServiceStatusEnum.Uninstalled) : new ServiceStatus(ctl.Status);
         }
 
         public static void Start()
         {
             var serviceController = new ServiceController(Constaints.ServiceName);
-            if (serviceController.Status == ServiceControllerStatus.Stopped)
+            if (serviceController.Status != ServiceControllerStatus.Stopped) return;
+            serviceController.Start();
+            while (serviceController.Status != ServiceControllerStatus.Running)
             {
-                try
-                {
-                    serviceController.Start();
-                }
-                catch (Exception ex)
-                {
-                    var win32Ex = ex.InnerException as Win32Exception;
-                    if (win32Ex != null && win32Ex.NativeErrorCode == 5)
-                    {
-                        // not privilliged
-                        throw new NotPrivilligedException();
-                    }
-                    throw;
-                }
-                
-                while (serviceController.Status != ServiceControllerStatus.Running)
-                {
-                    serviceController.Refresh();
-                    Thread.Sleep(100);
-                }
-                //LblStatus.Text = "服务已启动";
+                serviceController.Refresh();
+                Thread.Sleep(100);
             }
+            //LblStatus.Text = "服务已启动";
         }
 
         public static void Stop()
         {
             var serviceController = new ServiceController(Constaints.ServiceName);
-            if (serviceController.CanStop)
+            if (!serviceController.CanStop) return;
+            serviceController.Stop();
+            while (serviceController.Status != ServiceControllerStatus.Stopped)
             {
-                serviceController.Stop();
-                while (serviceController.Status != ServiceControllerStatus.Stopped)
-                {
-                    serviceController.Refresh();
-                    Thread.Sleep(100);
-                }
+                serviceController.Refresh();
+                Thread.Sleep(100);
             }
         }
 
         public static void Pause()
         {
             var serviceController = new ServiceController(Constaints.ServiceName);
-            if (serviceController.CanPauseAndContinue)
+            if (!serviceController.CanPauseAndContinue) return;
+            switch (serviceController.Status)
             {
-                if (serviceController.Status == ServiceControllerStatus.Running)
-                {
+                case ServiceControllerStatus.Running:
                     serviceController.Pause();
-                    //LblStatus.Text = "服务已暂停";
-                }
-                else if (serviceController.Status == ServiceControllerStatus.Paused)
-                {
+                    break;
+                case ServiceControllerStatus.Paused:
                     serviceController.Continue();
-                    //LblStatus.Text = "服务已继续";
-                }
+                    break;
             }
         }
 

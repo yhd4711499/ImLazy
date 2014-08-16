@@ -28,9 +28,10 @@ namespace System.Collections.Generic
             items.ForEach(_ =>
             {
                 sum++;
-                if (_ is IEnumerable)
+                var enumerable = _ as IEnumerable;
+                if (enumerable != null)
                 {
-                    sum += Sum((IEnumerable)_);
+                    sum += Sum(enumerable);
                 }
             });
             return sum;

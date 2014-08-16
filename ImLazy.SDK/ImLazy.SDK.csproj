@@ -47,8 +47,10 @@
     <Compile Include="Base\Contracts\IConditionAddinMetadata.cs" />
     <Compile Include="Base\Contracts\IEditView.cs" />
     <Compile Include="Base\Contracts\IEditViewBranch.cs" />
+    <Compile Include="Base\Contracts\IPlugin.cs" />
+    <Compile Include="Base\Contracts\IPluginMetadata.cs" />
     <Compile Include="Exceptions\BaseException.cs" />
-    <Compile Include="Exceptions\CheckException.cs" />
+    <Compile Include="Exceptions\CheckedException.cs" />
     <Compile Include="Exceptions\UnknownException.cs" />
     <Compile Include="Exceptions\ErrorCodeDefinitions.cs" />
     <Compile Include="Exceptions\NotPrivilligedException.cs" />

@@ -1,8 +1,8 @@
-using System;
 using System.Collections;
 using System.IO;
 using System.Windows.Forms;
 
+// ReSharper disable once CheckNamespace
 namespace Etier.IconHelper
 {
 	/// <summary>
@@ -13,7 +13,7 @@ namespace Etier.IconHelper
 		private readonly Hashtable _extensionList = new Hashtable();
 		private readonly ArrayList _imageLists = new ArrayList();			//will hold ImageList objects
 		private readonly IconReader.IconSize _iconSize;
-	    readonly bool ManageBothSizes = false; //flag, used to determine whether to create two ImageLists.
+	    readonly bool _manageBothSizes; //flag, used to determine whether to create two ImageLists.
 
 		/// <summary>
 		/// Creates an instance of <c>IconListManager</c> that will add icons to a single <c>ImageList</c> using the
@@ -42,17 +42,17 @@ namespace Etier.IconHelper
 			_imageLists.Add( largeImageList );
 
 			//set flag
-			ManageBothSizes = true;
+			_manageBothSizes = true;
 		}
 
 		/// <summary>
 		/// Used internally, adds the extension to the hashtable, so that its value can then be returned.
 		/// </summary>
-		/// <param name="Extension"><c>String</c> of the file's extension.</param>
-		/// <param name="ImageListPosition">Position of the extension in the <c>ImageList</c>.</param>
-		private void AddExtension( string Extension, int ImageListPosition )
+		/// <param name="extension"><c>String</c> of the file's extension.</param>
+		/// <param name="imageListPosition">Position of the extension in the <c>ImageList</c>.</param>
+		private void AddExtension( string extension, int imageListPosition )
 		{
-			_extensionList.Add( Extension, ImageListPosition );
+			_extensionList.Add( extension, imageListPosition );
 		}
 
 		/// <summary>
@@ -66,36 +66,33 @@ namespace Etier.IconHelper
 			if (!File.Exists( filePath )) throw new FileNotFoundException("File does not exist");
 			
 			// Split it down so we can get the extension
-			string[] splitPath = filePath.Split(new Char[] {'.'});
-			string extension = (string)splitPath.GetValue( splitPath.GetUpperBound(0) );
+			var splitPath = filePath.Split(new[] {'.'});
+			var extension = (string)splitPath.GetValue( splitPath.GetUpperBound(0) );
 				
 			//Check that we haven't already got the extension, if we have, then
 			//return back its index
 			if (_extensionList.ContainsKey( extension.ToUpper() ))
 			{
 				return (int)_extensionList[extension.ToUpper()];		//return existing index
-			} 
-			else 
-			{
-				// It's not already been added, so add it and record its position.
-
-				int pos = ((ImageList)_imageLists[0]).Images.Count;		//store current count -- new item's index
-
-				if (ManageBothSizes == true)
-				{
-					//managing two lists, so add it to small first, then large
-					((ImageList)_imageLists[0]).Images.Add( IconReader.GetFileIcon( filePath, IconReader.IconSize.Small, false ) );
-					((ImageList)_imageLists[1]).Images.Add( IconReader.GetFileIcon( filePath, IconReader.IconSize.Large, false ) );
-				} 
-				else
-				{
-					//only doing one size, so use IconSize as specified in _iconSize.
-					((ImageList)_imageLists[0]).Images.Add( IconReader.GetFileIcon( filePath, _iconSize, false ) );	//add to image list
-				}
-
-				AddExtension( extension.ToUpper(), pos );	// add to hash table
-				return pos;
 			}
+		    // It's not already been added, so add it and record its position.
+
+		    var pos = ((ImageList)_imageLists[0]).Images.Count;		//store current count -- new item's index
+
+		    if (_manageBothSizes)
+		    {
+		        //managing two lists, so add it to small first, then large
+		        ((ImageList)_imageLists[0]).Images.Add( IconReader.GetFileIcon( filePath, IconReader.IconSize.Small, false ) );
+		        ((ImageList)_imageLists[1]).Images.Add( IconReader.GetFileIcon( filePath, IconReader.IconSize.Large, false ) );
+		    } 
+		    else
+		    {
+		        //only doing one size, so use IconSize as specified in _iconSize.
+		        ((ImageList)_imageLists[0]).Images.Add( IconReader.GetFileIcon( filePath, _iconSize, false ) );	//add to image list
+		    }
+
+		    AddExtension( extension.ToUpper(), pos );	// add to hash table
+		    return pos;
 		}
 
 		/// <summary>

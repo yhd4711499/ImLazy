@@ -7,7 +7,6 @@ namespace ImLazy.Entities
         public ModelContainer()
             : base("ModelContainer")
         {
-
         }
 
         public DbSet<AddinInfoEntity> AddinInfoEntitySet { get; set; }

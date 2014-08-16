@@ -12,10 +12,7 @@
         <DataTemplate x:Key="FolderItemTemplate" DataType="viewModel:FolderViewModel">
             <Grid Background="Transparent">
                 <StackPanel
-                    Orientation="Horizontal"
-                    Drop="FolderItem_OnDrop"
-                    MouseMove="FolderItem_OnMouseMove"
-                    PreviewMouseLeftButtonDown="FolderItem_OnPreviewMouseLeftButtonDown">
+                    Orientation="Horizontal">
                     <Image Width="32" Height="32" Source="{Binding Folder.FolderPath, Converter={StaticResource PathToImageConverter}}" />
                     <TextBlock
                         Text="{Binding Folder.FolderPath, Converter={StaticResource ShortPathConverter}}"
@@ -107,6 +104,7 @@
                                     </interactions:Triggers>
                                     <Style TargetType="ListBoxItem">
                                         <Setter Property="interactions:SupplementaryInteraction.Triggers" Value="{StaticResource Triggers}"></Setter>
+                                        <EventSetter Event="Drop" Handler="FolderItem_OnDrop"></EventSetter>
                                     </Style>
                                 </ListBox.Resources>
                             </ListBox>
@@ -129,10 +127,12 @@
 								    CommandParameter="{Binding SelectedItem, ElementName=FolderListBox}"/>
                                 <Button
 								    Content="-"
+                                    Visibility="Collapsed"
 								    Command="{Binding WalkthroughCommnad}" 
 								    CommandParameter="{Binding SelectedItem, ElementName=FolderListBox}"/>
                                 <Button
-								    Content="-"
+								    Content="演练"
+                                    Width="55"
 								    Command="{Binding WalkthroughAllCommnad}"/>
                             </StackPanel>
                         </Grid>

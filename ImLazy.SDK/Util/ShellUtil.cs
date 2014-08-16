@@ -15,7 +15,7 @@ namespace ImLazy.SDK.Util
                 case 1060:
                     return new NotPrivilligedException();
             }
-            return new UnknownException();
+            return new UnknownException("未知的Cmd返回值", null);
         }
 
         /// <span class="code-SummaryComment"><summary></span>
@@ -98,7 +98,7 @@ namespace ImLazy.SDK.Util
                 StartInfo = startInfo
             };
             if (!process.Start())
-                throw new UnknownException();
+                throw new UnknownException("无法启动进程。", null);
             process.WaitForExit();
             if (process.ExitCode != 0)
                 throw GetCmdException(process.ExitCode);

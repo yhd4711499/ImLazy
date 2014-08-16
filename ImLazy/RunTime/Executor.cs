@@ -67,7 +67,7 @@ namespace ImLazy.Runtime
             return Task.Factory.StartNew<IEnumerable<WalkthroughResult>>(() =>
             {
                 var results = new List<WalkthroughResult>();
-                folders.ForEach(_ => results.AddRange(Do(_, true)));
+                folders.Where(_=>_.Enabled).ForEach(_ => results.AddRange(Do(_, true)));
                 return results;
             });
         }
@@ -76,7 +76,7 @@ namespace ImLazy.Runtime
         {
             // 每个目录都在各自的线程中运行
             var enumerable = folders as Folder[] ?? folders.ToArray();
-            enumerable.AsParallel().ForAll(_=>Do(_));
+            enumerable.Where(_=>_.Enabled).AsParallel().ForAll(_=>Do(_));
         }
 
         /// <summary>

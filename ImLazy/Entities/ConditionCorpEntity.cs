@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ImLazy.Entities
+﻿namespace ImLazy.Entities
 {
     public class ConditionCorpEntity : AddinInfoEntity
     {

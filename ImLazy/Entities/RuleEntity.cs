@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ImLazy.Entities
@@ -16,8 +15,8 @@ namespace ImLazy.Entities
         public string Name { get; set; }
         public int ConditionBranchId { get; set; }
         public virtual ICollection<ActionAddinInfoEntity> Actions { get; set; }
-        [ForeignKey("ConditionBranchId")]
 
+        [ForeignKey("ConditionBranchId")]
         public virtual ConditionBranchEntity ConditionBranch { get; set; }
     }
 }

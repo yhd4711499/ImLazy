@@ -15,12 +15,15 @@
                 Margin="{StaticResource DefaultMargin}" FontSize="36">ImLazy</TextBlock>
             <TextBlock
                 Margin="{StaticResource DefaultMargin}" HorizontalAlignment="Center">
-                Version 3.2
-                (build 0001)
+                Version: 0.0 (build 0001)
+            </TextBlock>
+            <TextBlock
+                Margin="{StaticResource DefaultMargin}" HorizontalAlignment="Center">
+                Author: Ornithopter
             </TextBlock>
             <Button 
                 Margin="{StaticResource DefaultMargin}"
-                Width="85">Visit website</Button>
+                Width="85" IsEnabled="False">Visit website</Button>
         </StackPanel>
     </Grid>
 </UserControl>

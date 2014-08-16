@@ -12,7 +12,7 @@ namespace System.Waf
 #if (DEBUG)
         private static bool debug = true;
 #else
-        private static bool debug = false;
+        private static bool debug;
 #endif
 
 

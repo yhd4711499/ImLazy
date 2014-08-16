@@ -8,7 +8,7 @@
 //using System.Threading.Tasks;
 //using System.Windows;
 
-//namespace ImLazy.Addins
+
 //{
 //    //[ExportMetadata("Parent", "ImLazy.Addins.FilePropertyConditionAddin")]
 //    //[ExportMetadata("Name", "ImLazy.Addins.ExtensionConditionAddin")]

@@ -31,7 +31,7 @@ namespace ImLazy.Data
         {
             var r = new Rule
             {
-                //Guid = Guid.NewGuid(),
+                Guid = Guid.NewGuid(),
                 ConditionBranch = new ConditionBranch(),
                 Actions = new List<ActionAddinInfo>(),
             };

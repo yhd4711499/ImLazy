@@ -3,6 +3,7 @@ using System.Collections;
 using System.Windows;
 using System.Windows.Input;
 using ImLazy.ControlPanel.ViewModel;
+using ImLazy.Runtime;
 
 namespace ImLazy.ControlPanel
 {
@@ -15,21 +16,19 @@ namespace ImLazy.ControlPanel
 	    {
 	        internal bool IsDragging;
 	        internal T Data;
-            internal int SourceIndex;
 	        internal Point StartPoint;
 	    }
 
-	    private readonly DragInfo<RuleViewModel> ruleInfo = new DragInfo<RuleViewModel>();
-	    private DragInfo<FolderViewModel> folderInfo = new DragInfo<FolderViewModel>();
+	    private readonly DragInfo<RuleViewModel> _ruleInfo = new DragInfo<RuleViewModel>();
 
-		public MainWindow()
+	    public MainWindow()
 		{
 			InitializeComponent();
 		}
 
 	    private void RuleViewModel_OnDrop(object sender, DragEventArgs e)
 	    {
-	        if (!ruleInfo.IsDragging)
+	        if (!_ruleInfo.IsDragging)
 	        {
 	            e.Effects = DragDropEffects.None;
 	            return;
@@ -39,13 +38,22 @@ namespace ImLazy.ControlPanel
 
             var dropTarge = ((FrameworkElement)sender).DataContext as RuleViewModel;
 
-            if (ruleInfo.Data == dropTarge) return;
+            // source and target are the same.
+            if (_ruleInfo.Data == dropTarge) return;
 
+            // insert.
 	        var index = itemsSource.IndexOf(dropTarge);
+            itemsSource.Remove(_ruleInfo.Data);
+            itemsSource.Insert(index, _ruleInfo.Data);
+            _ruleInfo.Data = null;
 
-            itemsSource.Remove(ruleInfo.Data);
-            itemsSource.Insert(index, ruleInfo.Data);
-            ruleInfo.Data = null;
+            // maintain orders.
+            var i = 0;
+            foreach (RuleViewModel ruleViewModel in itemsSource)
+            {
+                ruleViewModel.Property.Priority = i++;
+            }
+            DataStorage.Instance.Save();
 	    }
 
 	    private void RuleListBox_OnDragOver(object sender, DragEventArgs e)
@@ -56,27 +64,27 @@ namespace ImLazy.ControlPanel
 
 	    private void RuleItem_OnMouseMove(object sender, MouseEventArgs e)
 	    {
-            if(ruleInfo.IsDragging)return;
+            if(_ruleInfo.IsDragging)return;
             if(e.LeftButton != MouseButtonState.Pressed)return;
 
             var currentPos = e.GetPosition(sender as IInputElement);
 
-            if (((Math.Abs(currentPos.X - ruleInfo.StartPoint.X) < SystemParameters.MinimumHorizontalDragDistance) &&
-                (Math.Abs(currentPos.Y - ruleInfo.StartPoint.Y) < SystemParameters.MinimumVerticalDragDistance)))
+            if (((Math.Abs(currentPos.X - _ruleInfo.StartPoint.X) < SystemParameters.MinimumHorizontalDragDistance) &&
+                (Math.Abs(currentPos.Y - _ruleInfo.StartPoint.Y) < SystemParameters.MinimumVerticalDragDistance)))
                 return;
 
             var fe = (FrameworkElement)sender;
-	        ruleInfo.IsDragging = true;
-            DragDrop.DoDragDrop(fe, ruleInfo.Data, DragDropEffects.All);
-            ruleInfo.IsDragging = false;
+	        _ruleInfo.IsDragging = true;
+            DragDrop.DoDragDrop(fe, _ruleInfo.Data, DragDropEffects.All);
+            _ruleInfo.IsDragging = false;
 	    }
         private void RuleItem_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
 	    {
             var fe = (FrameworkElement)sender;
-            ruleInfo.Data = fe.DataContext as RuleViewModel;
-            if (ruleInfo.Data == null) return;
-            ruleInfo.SourceIndex = RuleListBox.SelectedIndex;
-            ruleInfo.StartPoint = e.GetPosition(sender as IInputElement);
+            _ruleInfo.Data = fe.DataContext as RuleViewModel;
+            if (_ruleInfo.Data == null) return;
+            //_ruleInfo.SourceIndex = RuleListBox.SelectedIndex;
+            _ruleInfo.StartPoint = e.GetPosition(sender as IInputElement);
 	    }
 
 	    private void FolderItem_OnDrop(object sender, DragEventArgs e)
@@ -86,17 +94,10 @@ namespace ImLazy.ControlPanel
 	        {
 	            return;
 	        }
+            e.Effects = DragDropEffects.Copy;
 	        var folderVm = ((FrameworkElement) sender).DataContext as FolderViewModel;
             if(folderVm == null)return;
 	        folderVm.CopyRule(data.Rule);
-	    }
-
-	    private void FolderItem_OnMouseMove(object sender, MouseEventArgs e)
-	    {
-	    }
-
-	    private void FolderItem_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-	    {
 	    }
 	}
 }
