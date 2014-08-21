@@ -41,7 +41,7 @@ namespace ImLazy.Addins.Lexer.Verbs
 
         public static string[] GetConfigArguments(string config)
         {
-            return config.Split(' ');
+            return config == null ? null : config.Split(' ');
         }
 
         public static DateTime FromConfigString(string config, DateTime baseDateTime)

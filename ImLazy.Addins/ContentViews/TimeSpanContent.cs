@@ -31,8 +31,11 @@ namespace ImLazy.Addins.ContentViews
             set
             {
                 var args = IsNotInTheLastVerb.GetConfigArguments(value.TryGetValue<string>(ConfigNames.ObjectValue));
-                _textBox.Text = args[0];
-                _unitComboBox.SelectItem(args[1]);
+                if (args != null)
+                {
+                    _textBox.Text = args[0];
+                    _unitComboBox.SelectItem(args[1]);
+                }
             }
         }
 
