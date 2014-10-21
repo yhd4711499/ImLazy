@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Data.Entity;
-using System.IO;
-using System.Reflection;
-using ImLazy.Entities;
 using Microsoft.Win32;
 
 namespace ImLazy.Runtime
@@ -17,8 +13,8 @@ namespace ImLazy.Runtime
             try
             {
                 ReadRegistry();
-                // Create directory for the database.
-                string dataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ImLazy");
+                /*// Create directory for the database.
+                var dataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ImLazy");
                 if (!Directory.Exists(dataDirectory))
                 {
                     Directory.CreateDirectory(dataDirectory);
@@ -27,7 +23,7 @@ namespace ImLazy.Runtime
                 // Set |DataDirectory| macro to our own path. This macro is used within the connection string.
                 AppDomain.CurrentDomain.SetData("DataDirectory", dataDirectory);
 
-                Database.SetInitializer(new DropCreateDatabaseIfModelChanges<ModelContainer>()); 
+                Database.SetInitializer(new DropCreateDatabaseIfModelChanges<ModelContainer>()); */
 
             }
             catch (Exception)
@@ -38,14 +34,14 @@ namespace ImLazy.Runtime
                 }
                 catch (Exception)
                 {
-                    LocalStorageFolder = "C:\\";
+                    LocalStorageFolder = AppDomain.CurrentDomain.BaseDirectory;
                 }
             }
         }
 
         private static void ReadRegistry()
         {
-            var r = Registry.LocalMachine.OpenSubKey("SOFTWARE", false).OpenSubKey("Ornithopter").OpenSubKey("ImLazy");
+            var r = Registry.LocalMachine.OpenSubKey("SOFTWARE", false).OpenSubKey("Ornithopter", false).OpenSubKey("ImLazy", false);
             LocalStorageFolder = (string)r.GetValue("mainExePath");
         }
 

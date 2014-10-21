@@ -97,6 +97,8 @@ namespace ImLazy.Runtime
 
             var range = folder.RuleProperties.Where(_ => _.Enabled).ToArray();
 
+            var nonExistRules = new HashSet<RuleProperty>();
+
             entries.AsParallel().ForEach(fe =>
             {
                 foreach (var rp in range)
@@ -122,6 +124,7 @@ namespace ImLazy.Runtime
                     if (rule == null)
                     {
                         Log.WarnFormat("Target rule [{0}] not found!", rp.RuleGuid);
+                        nonExistRules.Add(rp);
                         continue;
                     }
 
@@ -143,6 +146,15 @@ namespace ImLazy.Runtime
                     }
                 }
             });
+
+            // remove non-exsited rules.
+            if (nonExistRules.Count != 0)
+            {
+                folder.RuleProperties.RemoveAll(nonExistRules.Contains);
+                DataStorage.Instance.Save();
+                Log.WarnFormat("Non-exsited rules are removed.");
+            }
+            
             return results;
         }
 
