@@ -3,6 +3,7 @@ using ImLazy.ControlPanel.ViewModel;
 using ImLazy.Runtime;
 using log4net;
 using LogManager = ImLazy.Runtime.LogManager;
+using System.Windows;
 
 namespace ImLazy.ControlPanel
 {
@@ -20,7 +21,16 @@ namespace ImLazy.ControlPanel
         static App()
         {
             Log.Info("Controal panel started.");
-            AppEnvironment.InitRegistry(AppDomain.CurrentDomain.BaseDirectory);
+            try
+            {
+                AppEnvironment.InitRegistry(AppDomain.CurrentDomain.BaseDirectory);
+            }
+            catch (Exception e)
+            {
+                Log.Error("InitRegistry failed : ", e);
+                MessageBox.Show("初次使用本软件，请以管理员身份运行。\nPlease run as administrator at first run of this app.");
+                Environment.Exit(-1);
+            }
         }
 
         ~App()
