@@ -133,6 +133,10 @@
       <Project>{1a58b251-454e-48e1-b62d-4ede0b8222ee}</Project>
       <Name>ImLazy.SDK</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WpfDialogManagement\WpfDialogManagement.csproj">
+      <Project>{104d608c-81ef-4110-b0fa-6e78166f93d0}</Project>
+      <Name>WpfDialogManagement</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WpfLocalization\WpfLocalization.csproj">
       <Project>{2e907436-577c-4769-90f4-87aba03fe24a}</Project>
       <Name>WpfLocalization</Name>

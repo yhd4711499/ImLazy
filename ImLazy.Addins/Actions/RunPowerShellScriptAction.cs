@@ -12,11 +12,6 @@ namespace ImLazy.Addins.Actions
     [Export(typeof(IActionAddin))]
     class RunPowerShellScriptAction : RunScriptActionBase
     {
-        public override IEditView CreateMainView(SerializableDictionary<string, object> config)
-        {
-            return new ScriptContent {Configuration = config};
-        }
-
         protected override string GetScriptExt()
         {
             return ".ps1";
@@ -30,6 +25,11 @@ namespace ImLazy.Addins.Actions
         protected override string Execute(string scriptFilePath, string targetFilePath)
         {
             return ShellUtil.ExecuteCommandSync(String.Format("\"{0}\" \"{1}\"", scriptFilePath, targetFilePath), "powershell");
+        }
+
+        protected override string GetSyntaxName()
+        {
+            return "power_shell";
         }
     }
 }

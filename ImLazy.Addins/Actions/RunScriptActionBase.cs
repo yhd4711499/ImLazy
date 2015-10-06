@@ -6,6 +6,7 @@ using ImLazy.SDK.Base.Contracts;
 using ImLazy.Util;
 using log4net;
 using LogManager = ImLazy.Runtime.LogManager;
+using ImLazy.Addins.ContentViews;
 
 namespace ImLazy.Addins.Actions
 {
@@ -14,10 +15,11 @@ namespace ImLazy.Addins.Actions
         private static readonly ILog Log = LogManager.GetLogger(typeof (RunScriptActionBase));
         public virtual IEditView CreateMainView(SerializableDictionary<string, object> config)
         {
-            throw new NotImplementedException();
+            return new ScriptContent { Configuration = config, ScriptExt = GetScriptExt()};
         }
 
         protected abstract string GetScriptExt();
+        protected abstract string GetSyntaxName();
 
         public abstract string LocalName { get; }
 

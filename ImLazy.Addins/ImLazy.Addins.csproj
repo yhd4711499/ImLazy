@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.AvalonEdit, Version=5.0.1.0, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
+      <HintPath>..\packages\AvalonEdit.5.0.2\lib\Net40\ICSharpCode.AvalonEdit.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
@@ -56,6 +60,7 @@
     <Compile Include="Actions\DeleteAction.cs" />
     <Compile Include="Actions\FileActionBase.cs" />
     <Compile Include="Actions\RenameAction.cs" />
+    <Compile Include="Actions\RunCSharpScriptAction.cs" />
     <Compile Include="Actions\RunCmdScriptAction.cs" />
     <Compile Include="Actions\RunPowerShellScriptAction.cs" />
     <Compile Include="Actions\RunScriptActionBase.cs" />
@@ -139,6 +144,10 @@
       <Project>{9e2ccb85-22b1-4aae-9dc0-1d23e6156825}</Project>
       <Name>ImLazy</Name>
       <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\WpfDialogManagement\WpfDialogManagement.csproj">
+      <Project>{104d608c-81ef-4110-b0fa-6e78166f93d0}</Project>
+      <Name>WpfDialogManagement</Name>
     </ProjectReference>
     <ProjectReference Include="..\WpfLocalization\WpfLocalization.csproj">
       <Project>{2E907436-577C-4769-90F4-87ABA03FE24A}</Project>

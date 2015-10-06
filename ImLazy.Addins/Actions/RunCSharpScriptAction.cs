@@ -8,28 +8,29 @@ using ImLazy.SDK.Util;
 
 namespace ImLazy.Addins.Actions
 {
-    [ExportMetadata("Type", typeof(RunCmdScriptAction))]
+    [ExportMetadata("Type", typeof(RunCSharpScriptAction))]
     [Export(typeof(IActionAddin))]
-    class RunCmdScriptAction : RunScriptActionBase
+    class RunCSharpScriptAction : RunScriptActionBase
     {
         protected override string GetScriptExt()
         {
-            return ".bat";
+            return ".cs";
         }
 
         public override string LocalName
         {
-            get { return "RunCmdScriptAction".Local(); }
+            get { return "RunCSharpScriptAction".Local(); }
         }
 
         protected override string Execute(string scriptFilePath, string targetFilePath)
         {
+            // TODO: csharp parser.
             return ShellUtil.ExecuteCommandSync(String.Format("\"{0}\" {1}", scriptFilePath, targetFilePath));
         }
 
         protected override string GetSyntaxName()
         {
-            return "CMD";
+            return "csharp";
         }
     }
 }

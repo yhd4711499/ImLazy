@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Win32;
+using System.IO;
 
 namespace ImLazy.Runtime
 {
@@ -66,6 +67,16 @@ namespace ImLazy.Runtime
                 }
             }
             
+        }
+
+        /// <summary>
+        /// get the syntax rule file path for given syntax
+        /// </summary>
+        /// <param name="syntax"></param>
+        /// <returns></returns>
+        public static string GetSyntaxHighlightingRulePath(string syntax)
+        {
+            return Path.Combine("syntax", syntax);
         }
     }
     // ReSharper restore PossibleNullReferenceException
