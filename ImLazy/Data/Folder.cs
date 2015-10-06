@@ -64,8 +64,8 @@ namespace ImLazy.Data
 
         public override void Save(ModelContainer container)
         {
-            container.FolderEntitySet.Add(GetEntity());
-            container.SaveChanges();
+            /*container.FolderEntitySet.Add(GetEntity());
+            container.SaveChanges();*/
         }
 
         public override void FromEntity(FolderEntity entity, ModelContainer context)

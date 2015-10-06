@@ -11,7 +11,7 @@ namespace ImLazy.Data
         //public ConditionCorp Parent { get; set; }
         public override void Save(ModelContainer container)
         {
-            var entity = container.AddinInfoEntitySet.Add(new ConditionCorpEntity
+            /*var entity = container.AddinInfoEntitySet.Add(new ConditionCorpEntity
             {
                 AddinType = AddinType,
             });
@@ -22,7 +22,7 @@ namespace ImLazy.Data
                 Key = _.Key,
                 Value = _.Value == null ? null : _.Value.ToString()
             }));
-            container.SaveChanges();
+            container.SaveChanges();*/
             //base.Save(container, parentId);
         }
 

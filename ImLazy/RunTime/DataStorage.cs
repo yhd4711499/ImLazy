@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity.Validation;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -56,7 +55,7 @@ namespace ImLazy.Runtime
                             _instance.Folders.ForEach(_ => _.Save(container));
                             container.SaveChanges();*/
                         }
-                        catch (DbEntityValidationException e)
+                        catch (Exception e)
                         {
                             Debug.WriteLine(e.StackTrace);
                         }

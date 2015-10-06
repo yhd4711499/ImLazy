@@ -90,7 +90,7 @@ namespace ImLazy.Data
 
         public override void Save(ModelContainer container)
         {
-            var branch = (ConditionBranchEntity) container.AddinInfoEntitySet.Add(new ConditionBranchEntity
+            /*var branch = (ConditionBranchEntity) container.AddinInfoEntitySet.Add(new ConditionBranchEntity
             {
                 AddinType = AddinType,
                 Mode = Mode.ToString()
@@ -107,7 +107,7 @@ namespace ImLazy.Data
 
             container.SaveChanges();
 
-            SubConditions.ForEach(_=>_.Save(container));
+            SubConditions.ForEach(_=>_.Save(container));*/
         }
 
         public int Sum()

@@ -60,7 +60,7 @@ namespace ImLazy.Data
 
         public override void Save(ModelContainer container)
         {
-            container.RuleEntitySet.Add(GetEntity());
+            /*container.RuleEntitySet.Add(GetEntity());*/
         }
 
         public override void FromEntity(RuleEntity entity, ModelContainer context)

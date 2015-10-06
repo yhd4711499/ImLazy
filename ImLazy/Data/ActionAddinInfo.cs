@@ -9,7 +9,7 @@ namespace ImLazy.Data
     {
         public override void Save(ModelContainer container)
         {
-            var entity = container.AddinInfoEntitySet.Add(new ActionAddinInfoEntity
+            /*var entity = container.AddinInfoEntitySet.Add(new ActionAddinInfoEntity
             {
                 AddinType = AddinType,
             });
@@ -21,7 +21,7 @@ namespace ImLazy.Data
                 Key = _.Key,
                 Value = _.Value == null ? null : _.Value.ToString()
             }));
-            container.SaveChanges();
+            container.SaveChanges();*/
         }
 
         protected override AddinInfoEntity GetDerivedEntity()
